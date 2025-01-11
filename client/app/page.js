@@ -1,24 +1,43 @@
 'use client';
 
+import Link from 'next/link';
 import { useState } from 'react';
 
 export default function Home() {
   const [isActive, setIsActive] = useState(false);
   return (
     <main className="h-screen w-screen relative overflow-hidden">
-      <div className={`absolute top-0 h-full transition-all duration-600 ease-in-out ${isActive ? 'translate-x-full opacity-100 z-5' : 'translate-x-0 opacity-100 z-5'} left-0 w-1/2`}>
+      <div className={`absolute top-0 h-full transition-all duration-600 ease-in-out ${isActive ? 'translate-x-full opacity-100 z-10' : 'translate-x-0 opacity-100 z-5'} left-0 w-1/2`}>
         <form className="bg-white flex flex-col items-center justify-center h-full px-10">
           <h1 className="text-3xl font-bold mb-4">Create Account</h1>
           <span className="text-base mb-4">Let's organize your next big project</span>
           <span className="text-base mb-4">First, the <b>basics</b></span>
 
-          <input type="text" placeholder="Company's Name" className="w-3/4 bg-gray-100 border-none rounded-lg px-4 py-2 text-base mb-3 outline-none" />
-          <input type="email" placeholder="Company's E-mail" className="w-3/4 bg-gray-100 border-none rounded-lg px-4 py-2 text-base mb-3 outline-none" />
-          <input type="password" placeholder="Enter Password" className="w-3/4 bg-gray-100 border-none rounded-lg px-4 py-2 text-base mb-3 outline-none" />
-          <input type="password" placeholder="Confirm Password" className="w-3/4 bg-gray-100 border-none rounded-lg px-4 py-2 text-base mb-3 outline-none" />
-          <button className="bg-gradient-to-r from-[#FF8A00] to-[#FFD700] text-white text-sm px-12 py-3 rounded-lg font-semibold tracking-wider uppercase mt-3 cursor-pointer">
-            Sign Up
-          </button>
+          <input
+            type="text"
+            placeholder="Company's Name"
+            className="signup-input w-3/4 bg-gray-100 border-none rounded-lg px-4 py-2 text-base mb-3 outline-none"
+          />
+          <input
+            type="email"
+            placeholder="Company's E-mail"
+            className="signup-input w-3/4 bg-gray-100 border-none rounded-lg px-4 py-2 text-base mb-3 outline-none"
+          />
+          <input
+            type="password"
+            placeholder="Enter Password"
+            className="signup-input w-3/4 bg-gray-100 border-none rounded-lg px-4 py-2 text-base mb-3 outline-none"
+          />
+          <input
+            type="password"
+            placeholder="Confirm Password"
+            className="signup-input w-3/4 bg-gray-100 border-none rounded-lg px-4 py-2 text-base mb-3 outline-none"
+          />
+          <Link href="/signup">
+            <button className="bg-gradient-to-r from-[#FF8A00] to-[#FFD700] text-white text-sm px-12 py-3 rounded-lg font-semibold tracking-wider uppercase mt-3 cursor-pointer">
+              Sign Up
+            </button>
+          </Link>
         </form>
       </div>
 
@@ -26,8 +45,16 @@ export default function Home() {
         <form className="bg-white flex flex-col items-center justify-center h-full px-10">
           <h1 className="text-3xl font-bold mb-4">Log In</h1>
           <span className="text-base mb-4">Login With Email & Password</span>
-          <input type="email" placeholder="Enter E-mail" className="w-3/4 bg-gray-100 border-none rounded-lg px-4 py-2 text-base mb-3 outline-none" />
-          <input type="password" placeholder="Enter Password" className="w-3/4 bg-gray-100 border-none rounded-lg px-4 py-2 text-base mb-3 outline-none" />
+          <input
+            type="email"
+            placeholder="Enter E-mail"
+            className="login-input w-3/4 bg-gray-100 border-none rounded-lg px-4 py-2 text-base mb-3 outline-none"
+          />
+          <input
+            type="password"
+            placeholder="Enter Password"
+            className="login-input w-3/4 bg-gray-100 border-none rounded-lg px-4 py-2 text-base mb-3 outline-none"
+          />
           <a href="#" className="text-sm font-bold text-gray-800 underline mt-4 mb-3">Forget Password?</a>
           <button className="bg-gradient-to-r from-[#FF8A00] to-[#FFD700] text-white text-sm px-12 py-3 rounded-lg font-semibold tracking-wider uppercase mt-3 cursor-pointer">
             Log In
@@ -63,6 +90,23 @@ export default function Home() {
           </div>
         </div>
       </div>
+
+      {/* Inline styles for input field styles */}
+      <style jsx>{`
+        .signup-input, .login-input {
+          background-color: #f7fafc !important; /* Lighter background */
+          border: 1px solid #d1d5db !important; /* Gray border */
+          color: #333 !important; /* Dark text */
+          position: relative; /* Added to ensure proper stacking */
+          z-index: 10 !important; /* Ensures inputs are on top of other elements */
+          pointer-events: auto !important; /* Ensures inputs are clickable */
+        }
+
+        .signup-input:focus, .login-input:focus {
+          outline: none !important; /* Removes outline on focus */
+          border-color: #FF8A00 !important; /* Add a custom border color on focus */
+        }
+      `}</style>
     </main>
   );
 }
