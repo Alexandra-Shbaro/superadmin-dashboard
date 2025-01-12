@@ -9,7 +9,6 @@ const StepOne = ({ onNext }) => {
     const [companySize, setCompanySize] = useState('');
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-offWhite">
-
             {/* Progress Step */}
             <div className="flex items-center space-x-4 mb-8">
                 <div className="w-6 h-6 rounded-full bg-logoOrange text-offWhite flex items-center justify-center">1</div>
@@ -18,7 +17,7 @@ const StepOne = ({ onNext }) => {
                 <div className="w-16 h-0.5 bg-lightGrey"></div>
                 <div className="w-6 h-6 rounded-full bg-mediumGrey text-offWhite flex items-center justify-center">3</div>
             </div>
-
+            <h1 className="font-bold text-lg">Company Core Details</h1>
             {/* Form Section */}
             <div className="bg-offWhite shadow-md rounded-lg p-8 w-[500px] mx-auto"> {/* Wider form */}
                 <div className="mb-4">
