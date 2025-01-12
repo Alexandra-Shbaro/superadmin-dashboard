@@ -12,20 +12,35 @@ export default function Home() {
     password: '',
     confirmPassword: '',
   });
-  const allFieldsFilled = Object.values(formValues).every((value) => value.trim() !== '');
+
+  const [passwordsMatch, setPasswordsMatch] = useState(true);
+
+  const allFieldsFilled =
+    Object.values(formValues).every((value) => value.trim() !== '') && passwordsMatch;
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormValues((prevValues) => ({
       ...prevValues,
       [name]: value,
     }));
+
+    if (name === 'password' || name === 'confirmPassword') {
+      setPasswordsMatch(
+        name === 'password'
+          ? value === formValues.confirmPassword
+          : value === formValues.password
+      );
+    }
   };
 
   const [loginValues, setLoginValues] = useState({
     loginEmail: '',
     loginPassword: '',
   });
+
   const areLoginFieldsFilled = Object.values(loginValues).every((value) => value.trim() !== '');
+
   const handleLoginChange = (e) => {
     const { name, value } = e.target;
     setLoginValues((prevValues) => ({
@@ -40,7 +55,9 @@ export default function Home() {
         <form className="bg-white flex flex-col items-center justify-center h-full px-10">
           <h1 className="text-3xl font-bold mb-4">Create Account</h1>
           <span className="text-base mb-4">Let's organize your next big project</span>
-          <span className="text-base mb-4">First, the <b>basics</b></span>
+          <span className="text-base mb-4">
+            First, the <b>basics</b>
+          </span>
 
           <input
             type="text"
@@ -74,6 +91,9 @@ export default function Home() {
             value={formValues.confirmPassword}
             onChange={handleChange}
           />
+          {!passwordsMatch && (
+            <p className="text-red-500 text-sm mt-2">Passwords do not match.</p>
+          )}
           <Link href={allFieldsFilled ? '/signup' : '#'}>
             <button
               className={`bg-gradient-to-r from-[#FF8A00] to-[#FFD700] text-white text-sm px-12 py-3 rounded-lg font-semibold tracking-wider uppercase mt-3 cursor-pointer ${allFieldsFilled ? '' : 'opacity-50 cursor-not-allowed'

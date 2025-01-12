@@ -6,10 +6,18 @@ const StepTwo = ({ onNext }) => {
     const [companyNumber, setCompanyNumber] = useState('');
     const [businessWebsite, setBusinessWebsite] = useState('');
 
-    const isFormValid = companyEmail && companyNumber && businessWebsite;  // Check if all fields are filled
+    const isFormValid = companyEmail && companyNumber && businessWebsite;  
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-offWhite">
+            <div className="text-center">
+                <img
+                    src="/lumilogo.svg" 
+                    alt="Lumi Logo"
+                    className="mx-auto w-42 h-20 mb-10" 
+                />
+                <p className="text-mediumGrey">Finish setting up your profile</p>
+            </div>
             <div className="flex items-center space-x-4 mb-8">
                 <div className="w-6 h-6 rounded-full bg-mediumGrey text-offWhite flex items-center justify-center">1</div>
                 <div className="w-16 h-0.5 bg-lightGrey"></div>

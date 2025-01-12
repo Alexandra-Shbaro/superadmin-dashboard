@@ -7,10 +7,18 @@ const StepThree = ({ onNext }) => {
     const [companyVision, setCompanyVision] = useState('')
     const [companyMission, setCompanyMission] = useState('')
 
-    const isFormValid = companyAbout && companyVision && companyMission; 
+    const isFormValid = companyAbout && companyVision && companyMission;  
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-offWhite">
+            <div className="text-center">
+                <img
+                    src="/lumilogo.svg" 
+                    alt="Lumi Logo"
+                    className="mx-auto w-42 h-20 mb-10" 
+                />
+                <p className="text-mediumGrey">Finish setting up your profile</p>
+            </div>
             <div className="flex items-center space-x-4 mb-8">
                 <div className="w-6 h-6 rounded-full bg-mediumGrey text-offWhite flex items-center justify-center">1</div>
                 <div className="w-16 h-0.5 bg-lightGrey"></div>
@@ -23,7 +31,6 @@ const StepThree = ({ onNext }) => {
 
             <div className="bg-offWhite shadow-md rounded-lg p-8 w-full max-w-4xl mx-auto">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {/* Left column */}
                     <div className="h-full">
                         <div className="space-y-2">
                             <label className="block text-mediumGrey font-medium">About The Company</label>
@@ -46,7 +53,7 @@ const StepThree = ({ onNext }) => {
                                 placeholder="Vision"
                             />
                         </div>
-                        
+
                         <div className="space-y-2">
                             <label className="block text-mediumGrey font-medium">Mission</label>
                             <textarea
@@ -60,10 +67,10 @@ const StepThree = ({ onNext }) => {
                 </div>
 
                 <div className="mt-6">
-                    <button 
-                        onClick={onNext} 
+                    <button
+                        onClick={onNext}
                         className={`w-full py-3 ${isFormValid ? 'bg-logoOrange' : 'bg-gray-400 cursor-not-allowed'} text-offWhite rounded-md hover:bg-logoYellow transition-all`}
-                        disabled={!isFormValid} 
+                        disabled={!isFormValid}
                     >
                         Next
                     </button>
