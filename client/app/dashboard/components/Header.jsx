@@ -8,11 +8,11 @@ export function Header() {
             </div>
             <div className="flex justify-end w-full">
                 <div className="flex max-w-xl px-8">
-                    <div className="relative w-full">
-                        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
+                    <div className="content-center relative w-full">
+                        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-offWhite" />
                         <input
                             placeholder="Search..."
-                            className="w-full rounded-md border border-gray-400 bg-gray-200/90 py-1.5 pl-10 pr-4 text-sm text-gray-700 placeholder:text-gray-500 focus:border-gray-500 focus:outline-none focus:ring-1 focus:ring-gray-500"
+                            className="w-full rounded-md border border-softBlack bg-mediumGrey py-1.5 pl-10 pr-4 text-sm text-offWhite placeholder:text-offWhite focus:border-gray-500 focus:outline-none focus:ring-1 focus:ring-offWhite"
                         />
                     </div>
                 </div>
@@ -24,7 +24,7 @@ export function Header() {
                         <Mail className="h-5 w-5" />
                     </button>
                     <button className="rounded-full p-2 text-gray-700 hover:bg-gray-200/50">
-                        <Settings className="h-5 w-5" />
+                        <img src="/lumiIcon.png" alt="Settings" className="h-10 w-15" />
                     </button>
                 </div>
             </div>
