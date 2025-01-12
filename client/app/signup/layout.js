@@ -1,7 +1,7 @@
 export default function SignupLayout({ children }) {
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-offWhite p-4">
-            <div className="text-center mb-8">
+            <div className="text-center">
                 <img
                     src="/lumilogo.svg" // Replace this with the actual path to your logo
                     alt="Lumi Logo"

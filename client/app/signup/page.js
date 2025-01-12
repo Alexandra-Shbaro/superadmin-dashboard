@@ -1,4 +1,3 @@
-// Signup.js
 "use client";
 import { useState } from 'react';
 
@@ -9,7 +8,7 @@ export default function Signup() {
     const [companySize, setCompanySize] = useState('');
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-offWhite p-4">
+        <div className="flex flex-col items-center justify-center min-h-screen bg-offWhite">
 
             {/* Progress Step */}
             <div className="flex items-center space-x-4 mb-8">
@@ -21,7 +20,7 @@ export default function Signup() {
             </div>
 
             {/* Form Section */}
-            <div className="bg-offWhite shadow-md rounded-lg p-8 w-full max-w-lg">
+            <div className="bg-offWhite shadow-md rounded-lg p-8 w-[500px] mx-auto"> {/* Wider form */}
                 <div className="mb-4">
                     <label className="block text-mediumGrey font-medium">Company Name</label>
                     <input
@@ -96,7 +95,6 @@ export default function Signup() {
                     Next
                 </button>
             </div>
-
         </div>
     );
 }
