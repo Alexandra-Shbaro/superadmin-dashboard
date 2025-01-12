@@ -1,11 +1,13 @@
 "use client";
 import { useState } from 'react';
 
-
 const StepTwo = ({ onNext }) => {
     const [companyEmail, setCompanyEmail] = useState('');
     const [companyNumber, setCompanyNumber] = useState('');
     const [businessWebsite, setBusinessWebsite] = useState('');
+
+    const isFormValid = companyEmail && companyNumber && businessWebsite;  // Check if all fields are filled
+
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-offWhite">
             <div className="flex items-center space-x-4 mb-8">
@@ -44,10 +46,14 @@ const StepTwo = ({ onNext }) => {
                         value={businessWebsite} 
                         onChange={(e) => setBusinessWebsite(e.target.value)} 
                         className="mt-2 p-2 w-full border border-lightGrey rounded-md focus:outline-none focus:ring-2 focus:ring-logoOrange"
-                        placeholder="Enter your phone number"
+                        placeholder="Enter your business website"
                     />
                 </div>
-                <button onClick={onNext} className="w-full py-3 bg-logoOrange text-offWhite rounded-md hover:bg-logoYellow transition-all">
+                <button 
+                    onClick={onNext} 
+                    className={`w-full py-3 ${isFormValid ? 'bg-logoOrange' : 'bg-gray-400 cursor-not-allowed'} text-offWhite rounded-md hover:bg-logoYellow transition-all`}
+                    disabled={!isFormValid} 
+                >
                     Next
                 </button>
             </div>
@@ -56,4 +62,3 @@ const StepTwo = ({ onNext }) => {
 };
 
 export default StepTwo;
-

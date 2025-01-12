@@ -7,6 +7,9 @@ const StepOne = ({ onNext }) => {
     const [companyTagline, setCompanyTagline] = useState('');
     const [businessCategory, setBusinessCategory] = useState('');
     const [companySize, setCompanySize] = useState('');
+
+    const isFormValid = companyName && companyTagline && businessCategory && companySize;
+
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-offWhite">
             <div className="flex items-center space-x-4 mb-8">
@@ -78,7 +81,11 @@ const StepOne = ({ onNext }) => {
                     </select>
                 </div>
 
-                <button onClick={onNext} className="w-full py-3 bg-logoOrange text-offWhite rounded-md hover:bg-logoYellow transition-all">
+                <button 
+                    onClick={onNext} 
+                    className={`w-full py-3 ${isFormValid ? 'bg-logoOrange' : 'bg-gray-400 cursor-not-allowed'} text-offWhite rounded-md hover:${isFormValid ? 'bg-logoYellow' : ''} transition-all`} 
+                    disabled={!isFormValid}
+                >
                     Next
                 </button>
             </div>

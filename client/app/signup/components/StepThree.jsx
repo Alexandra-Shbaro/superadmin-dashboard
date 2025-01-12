@@ -7,9 +7,10 @@ const StepThree = ({ onNext }) => {
     const [companyVision, setCompanyVision] = useState('')
     const [companyMission, setCompanyMission] = useState('')
 
+    const isFormValid = companyAbout && companyVision && companyMission; 
+
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-offWhite">
-            {/* Progress indicators */}
             <div className="flex items-center space-x-4 mb-8">
                 <div className="w-6 h-6 rounded-full bg-mediumGrey text-offWhite flex items-center justify-center">1</div>
                 <div className="w-16 h-0.5 bg-lightGrey"></div>
@@ -35,7 +36,6 @@ const StepThree = ({ onNext }) => {
                         </div>
                     </div>
 
-                    {/* Right column */}
                     <div className="space-y-6">
                         <div className="space-y-2">
                             <label className="block text-mediumGrey font-medium">Vision</label>
@@ -59,11 +59,11 @@ const StepThree = ({ onNext }) => {
                     </div>
                 </div>
 
-                {/* Next button */}
                 <div className="mt-6">
                     <button 
-                        onClick={onNext}
-                        className="w-full py-3 bg-logoOrange text-offWhite rounded-md hover:bg-logoYellow transition-all"
+                        onClick={onNext} 
+                        className={`w-full py-3 ${isFormValid ? 'bg-logoOrange' : 'bg-gray-400 cursor-not-allowed'} text-offWhite rounded-md hover:bg-logoYellow transition-all`}
+                        disabled={!isFormValid} 
                     >
                         Next
                     </button>
