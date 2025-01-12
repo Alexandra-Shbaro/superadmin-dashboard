@@ -12,14 +12,14 @@ export function Sidebar() {
         <nav className="mt-4 space-y-1">
           <Link
             href="#"
-            className="flex items-center rounded-lg bg-[#5C5C5C] px-4 py-2 text-sm font-medium"
+            className="flex items-center rounded-lg px-4 py-2 text-sm font-medium text-[#E7E7E7] hover:bg-[#5C5C5C] "
           >
             <BarChart2 className="mr-3 h-5 w-5" />
             Workspace Management
           </Link>
           <Link
             href="#"
-            className="flex items-center rounded-lg px-4 py-2 text-sm font-medium text-[#E7E7E7] hover:bg-[#5C5C5C]"
+            className="flex items-center rounded-lg rounded-lg bg-[#5C5C5C] px-4 py-2 text-sm font-medium"
           >
             <Grid className="mr-3 h-5 w-5" /> 
             Dashboard
