@@ -1,5 +1,5 @@
-import Link from "next/link"
-import { BarChart2, Users, PieChart, FileText } from 'lucide-react'
+import Link from "next/link";
+import { BarChart2, Grid, Users, PieChart, FileText } from "lucide-react"; // Imported Grid icon
 
 export function Sidebar() {
   return (
@@ -9,13 +9,19 @@ export function Sidebar() {
         <span className="ml-3 text-sm font-semibold">Company Name</span>
       </div>
       <div className="mt-2 px-4">
-        <p className="px-2 text-xs text-[#E7E7E7]">Workspace Management</p>
         <nav className="mt-4 space-y-1">
           <Link
             href="#"
             className="flex items-center rounded-lg bg-[#5C5C5C] px-4 py-2 text-sm font-medium"
           >
             <BarChart2 className="mr-3 h-5 w-5" />
+            Workspace Management
+          </Link>
+          <Link
+            href="#"
+            className="flex items-center rounded-lg px-4 py-2 text-sm font-medium text-[#E7E7E7] hover:bg-[#5C5C5C]"
+          >
+            <Grid className="mr-3 h-5 w-5" /> {/* Updated icon to Grid */}
             Dashboard
           </Link>
           <Link
@@ -44,4 +50,3 @@ export function Sidebar() {
     </div>
   );
 }
-
