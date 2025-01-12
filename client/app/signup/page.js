@@ -1,3 +1,4 @@
+// Signup.js
 "use client";
 import { useState } from 'react';
 
@@ -9,15 +10,6 @@ export default function Signup() {
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-offWhite p-4">
-            <div className="text-center mb-8">
-                <img
-                    src="/lumilogo.svg" // Replace this with the actual path to your logo
-                    alt="Lumi Logo"
-                    className="mx-auto w-42 h-20 mb-10" // Adjust width (w-32) and height (h-32) as per your requirements
-                />
-
-                <p className="text-mediumGrey">Finish setting up your profile</p>
-            </div>
 
             {/* Progress Step */}
             <div className="flex items-center space-x-4 mb-8">
@@ -104,6 +96,7 @@ export default function Signup() {
                     Next
                 </button>
             </div>
+
         </div>
     );
 }
