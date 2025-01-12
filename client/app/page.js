@@ -129,13 +129,15 @@ export default function Home() {
           <a href="#" className="text-sm font-bold text-gray-800 underline mt-4 mb-3">
             Forget Password?
           </a>
-          <button
-            className={`bg-gradient-to-r from-[#FF8A00] to-[#FFD700] text-white text-sm px-12 py-3 rounded-lg font-semibold tracking-wider uppercase mt-3 cursor-pointer ${areLoginFieldsFilled ? '' : 'opacity-50 cursor-not-allowed'
-              }`}
-            disabled={!areLoginFieldsFilled}
-          >
-            Log In
-          </button>
+          <Link href="/dashboard">
+            <button
+              className={`bg-gradient-to-r from-[#FF8A00] to-[#FFD700] text-white text-sm px-12 py-3 rounded-lg font-semibold tracking-wider uppercase mt-3 cursor-pointer ${areLoginFieldsFilled ? '' : 'opacity-50 cursor-not-allowed'
+                }`}
+              disabled={!areLoginFieldsFilled}
+            >
+              Log In
+            </button>
+          </Link>
         </form>
       </div>
 
