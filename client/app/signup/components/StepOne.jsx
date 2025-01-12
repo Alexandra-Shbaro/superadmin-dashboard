@@ -3,12 +3,11 @@ import { useState } from 'react';
 
 
 const StepOne = ({ onNext }) => {
-    const [companyName, setCompanyName] = useState('');
     const [companyTagline, setCompanyTagline] = useState('');
     const [businessCategory, setBusinessCategory] = useState('');
     const [companySize, setCompanySize] = useState('');
 
-    const isFormValid = companyName && companyTagline && businessCategory && companySize;
+    const isFormValid = companyTagline && businessCategory && companySize;
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-offWhite">
@@ -21,16 +20,6 @@ const StepOne = ({ onNext }) => {
             </div>
             <h1 className="font-bold text-lg">Company Core Details</h1>
             <div className="bg-offWhite shadow-md rounded-lg p-8 w-[500px] mx-auto"> 
-                <div className="mb-4">
-                    <label className="block text-mediumGrey font-medium">Company Name</label>
-                    <input
-                        type="text"
-                        value={companyName}
-                        onChange={(e) => setCompanyName(e.target.value)}
-                        className="mt-2 p-2 w-full border border-lightGrey rounded-md focus:outline-none focus:ring-2 focus:ring-logoOrange"
-                        placeholder="Enter your company name"
-                    />
-                </div>
                 <div className="mb-4">
                     <label className="block text-mediumGrey font-medium">Company Tagline</label>
                     <input

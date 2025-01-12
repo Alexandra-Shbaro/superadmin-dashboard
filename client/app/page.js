@@ -5,6 +5,35 @@ import { useState } from 'react';
 
 export default function Home() {
   const [isActive, setIsActive] = useState(false);
+
+  const [formValues, setFormValues] = useState({
+    companyName: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+  });
+  const allFieldsFilled = Object.values(formValues).every((value) => value.trim() !== '');
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormValues((prevValues) => ({
+      ...prevValues,
+      [name]: value,
+    }));
+  };
+
+  const [loginValues, setLoginValues] = useState({
+    loginEmail: '',
+    loginPassword: '',
+  });
+  const areLoginFieldsFilled = Object.values(loginValues).every((value) => value.trim() !== '');
+  const handleLoginChange = (e) => {
+    const { name, value } = e.target;
+    setLoginValues((prevValues) => ({
+      ...prevValues,
+      [name]: value,
+    }));
+  };
+
   return (
     <main className="h-screen w-screen relative overflow-hidden">
       <div className={`absolute top-0 h-full transition-all duration-600 ease-in-out ${isActive ? 'translate-x-full opacity-100 z-10' : 'translate-x-0 opacity-100 z-5'} left-0 w-1/2`}>
@@ -15,26 +44,42 @@ export default function Home() {
 
           <input
             type="text"
+            name="companyName"
             placeholder="Company's Name"
             className="signup-input w-3/4 bg-gray-100 border-none rounded-lg px-4 py-2 text-base mb-3 outline-none"
+            value={formValues.companyName}
+            onChange={handleChange}
           />
           <input
             type="email"
+            name="email"
             placeholder="Company's E-mail"
             className="signup-input w-3/4 bg-gray-100 border-none rounded-lg px-4 py-2 text-base mb-3 outline-none"
+            value={formValues.email}
+            onChange={handleChange}
           />
           <input
             type="password"
+            name="password"
             placeholder="Enter Password"
             className="signup-input w-3/4 bg-gray-100 border-none rounded-lg px-4 py-2 text-base mb-3 outline-none"
+            value={formValues.password}
+            onChange={handleChange}
           />
           <input
             type="password"
+            name="confirmPassword"
             placeholder="Confirm Password"
             className="signup-input w-3/4 bg-gray-100 border-none rounded-lg px-4 py-2 text-base mb-3 outline-none"
+            value={formValues.confirmPassword}
+            onChange={handleChange}
           />
-          <Link href="/signup">
-            <button className="bg-gradient-to-r from-[#FF8A00] to-[#FFD700] text-white text-sm px-12 py-3 rounded-lg font-semibold tracking-wider uppercase mt-3 cursor-pointer">
+          <Link href={allFieldsFilled ? '/signup' : '#'}>
+            <button
+              className={`bg-gradient-to-r from-[#FF8A00] to-[#FFD700] text-white text-sm px-12 py-3 rounded-lg font-semibold tracking-wider uppercase mt-3 cursor-pointer ${allFieldsFilled ? '' : 'opacity-50 cursor-not-allowed'
+                }`}
+              disabled={!allFieldsFilled}
+            >
               Sign Up
             </button>
           </Link>
@@ -47,16 +92,28 @@ export default function Home() {
           <span className="text-base mb-4">Login With Email & Password</span>
           <input
             type="email"
+            name="loginEmail"
             placeholder="Enter E-mail"
             className="login-input w-3/4 bg-gray-100 border-none rounded-lg px-4 py-2 text-base mb-3 outline-none"
+            value={loginValues.loginEmail}
+            onChange={handleLoginChange}
           />
           <input
             type="password"
+            name="loginPassword"
             placeholder="Enter Password"
             className="login-input w-3/4 bg-gray-100 border-none rounded-lg px-4 py-2 text-base mb-3 outline-none"
+            value={loginValues.loginPassword}
+            onChange={handleLoginChange}
           />
-          <a href="#" className="text-sm font-bold text-gray-800 underline mt-4 mb-3">Forget Password?</a>
-          <button className="bg-gradient-to-r from-[#FF8A00] to-[#FFD700] text-white text-sm px-12 py-3 rounded-lg font-semibold tracking-wider uppercase mt-3 cursor-pointer">
+          <a href="#" className="text-sm font-bold text-gray-800 underline mt-4 mb-3">
+            Forget Password?
+          </a>
+          <button
+            className={`bg-gradient-to-r from-[#FF8A00] to-[#FFD700] text-white text-sm px-12 py-3 rounded-lg font-semibold tracking-wider uppercase mt-3 cursor-pointer ${areLoginFieldsFilled ? '' : 'opacity-50 cursor-not-allowed'
+              }`}
+            disabled={!areLoginFieldsFilled}
+          >
             Log In
           </button>
         </form>
@@ -91,7 +148,6 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Inline styles for input field styles */}
       <style jsx>{`
         .signup-input, .login-input {
           background-color: #f7fafc !important; /* Lighter background */
