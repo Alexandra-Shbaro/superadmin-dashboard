@@ -1,7 +1,6 @@
 import React from 'react';
 import { UserStats } from './components/UserStats';
 import { PhaseCard } from './components/PhaseCard';
-import { Button } from "@/components/ui/button";
 
 export default function DashboardPage() {
   const leftStats = [
@@ -30,12 +29,11 @@ export default function DashboardPage() {
   ];
 
   return (
-    <Layout>
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <nav className="flex space-x-1">
             {["Users", "Team", "Campaign", "Client", "Alerts"].map((tab) => (
-              <Button
+              <button
                 key={tab}
                 variant={tab === "Users" ? "secondary" : "ghost"}
                 className="rounded-none border-b-2 border-transparent px-4 py-2 text-sm"
@@ -44,7 +42,7 @@ export default function DashboardPage() {
                 }}
               >
                 {tab}
-              </Button>
+              </button>
             ))}
           </nav>
         </div>
@@ -52,16 +50,16 @@ export default function DashboardPage() {
         <div className="rounded-lg border border-[#E7E7E7] bg-[#FAFAFA] p-6">
           <div className="mb-6 flex items-center justify-between">
             <h2 className="text-xl font-semibold text-[#2C3333]">Users</h2>
-            <Button className="bg-gradient-to-r from-[#FF8A00] to-[#FFD700] hover:from-[#FFD700] hover:to-[#FF8A00] text-white">
+            <button className="bg-gradient-to-r from-[#FF8A00] to-[#FFD700] hover:from-[#FFD700] hover:to-[#FF8A00] text-white">
               Add New User
-            </Button>
+            </button>
           </div>
 
           <UserStats leftStats={leftStats} rightStats={rightStats} />
 
-          <Button variant="outline" className="mt-6 text-[#5C5C5C] border-[#E7E7E7] hover:bg-[#E7E7E7]">
+          <button variant="outline" className="mt-6 text-[#5C5C5C] border-[#E7E7E7] hover:bg-[#E7E7E7]">
             View All Users
-          </Button>
+          </button>
 
           <div className="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <PhaseCard title="Strategy Phase Users" managers={5} members={50} />
@@ -71,7 +69,6 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
-    </Layout>
   );
 }
 
