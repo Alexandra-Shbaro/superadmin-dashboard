@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from 'react'
-import { ChevronLeft, ChevronRight, Plus, ArrowLeft, Eye, Edit, Trash2 } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Plus, ArrowLeft, Eye, Edit, Trash2, X } from 'lucide-react'
 import CreateTeamForm from './CreateTeamForm'
 
 const Button = ({ children, className, ...props }) => (
@@ -14,20 +14,20 @@ const Button = ({ children, className, ...props }) => (
 )
 
 const initialTeams = [
-    { id: 1, name: "Team One", manager: "John Doe", status: "Active" },
-    { id: 2, name: "Team Two", manager: "Jane Doe", status: "Inactive" },
-    { id: 3, name: "Team Three", manager: "Jackson Doe", status: "Active" },
-    { id: 4, name: "Team Four", manager: "Jamie Doe", status: "Active" },
-    { id: 5, name: "Team Five", manager: "Sally Salloum", status: "Inactive" },
-    { id: 6, name: "Team Six", manager: "Dana Herb", status: "Active" },
-    { id: 7, name: "Team Six", manager: "Alexander Wang", status: "Active" },
-    { id: 8, name: "Team Seven", manager: "Carlie Bakhazi", status: "Inactive" },
-    { id: 9, name: "Team Eight", manager: "Elias Bakhzie", status: "Active" },
-    { id: 10, name: "Team Nine", manager: "Karen Wazen", status: "Active" },
-    { id: 11, name: "Team Ten", manager: "Selena Itani", status: "Inactive" },
-    { id: 12, name: "Team Eleven", manager: "Alex Doe", status: "Active" },
-    { id: 13, name: "Team Twelve", manager: "Adam Salloum", status: "Inactive" },
-    { id: 14, name: "Team Six", manager: "Fouad Daoud", status: "Active" },
+  { id: 1, name: "Team One", manager: "John Doe", status: "Active", description: "Core development team", department: "Engineering" },
+  { id: 2, name: "Team Two", manager: "Jane Doe", status: "Inactive", description: "UI/UX design team", department: "Design" },
+  { id: 3, name: "Team Three", manager: "Jackson Doe", status: "Active", description: "Marketing and PR team", department: "Marketing" },
+  { id: 4, name: "Team Four", manager: "Jamie Doe", status: "Active", description: "Customer support team", department: "Support" },
+  { id: 5, name: "Team Five", manager: "Sally Salloum", status: "Inactive", description: "Data analysis team", department: "Analytics" },
+  { id: 6, name: "Team Six", manager: "Dana Herb", status: "Active", description: "Quality assurance team", department: "QA" },
+  { id: 7, name: "Team Seven", manager: "Alexander Wang", status: "Active", description: "Product management team", department: "Product" },
+  { id: 8, name: "Team Eight", manager: "Carlie Bakhazi", status: "Inactive", description: "Sales team", department: "Sales" },
+  { id: 9, name: "Team Nine", manager: "Elias Bakhzie", status: "Active", description: "Human resources team", department: "HR" },
+  { id: 10, name: "Team Ten", manager: "Karen Wazen", status: "Active", description: "Finance team", department: "Finance" },
+  { id: 11, name: "Team Eleven", manager: "Selena Itani", status: "Inactive", description: "Legal team", department: "Legal" },
+  { id: 12, name: "Team Twelve", manager: "Alex Doe", status: "Active", description: "Operations team", department: "Operations" },
+  { id: 13, name: "Team Thirteen", manager: "Adam Salloum", status: "Inactive", description: "Research and development team", department: "R&D" },
+  { id: 14, name: "Team Fourteen", manager: "Fouad Daoud", status: "Active", description: "IT support team", department: "IT" },
 ];
 
 export default function TeamsListView({ onBack }) {
@@ -41,6 +41,8 @@ export default function TeamsListView({ onBack }) {
     );
     const [deleteIndex, setDeleteIndex] = useState(null);
     const [showCreateForm, setShowCreateForm] = useState(false);
+    const [currentTeam, setCurrentTeam] = useState(null);
+    const [isEditing, setIsEditing] = useState(false);
     const teamsPerPage = 10;
     const indexOfLastTeam = currentPage * teamsPerPage;
     const indexOfFirstTeam = indexOfLastTeam - teamsPerPage;
@@ -73,6 +75,26 @@ export default function TeamsListView({ onBack }) {
     const handleCreateSuccess = (newTeam) => {
         setTeams([...teams, newTeam]);
         setShowCreateForm(false);
+    };
+
+    const viewTeam = (team) => {
+        setCurrentTeam(team);
+        setIsEditing(false);
+    };
+
+    const editTeam = (team) => {
+        setCurrentTeam(team);
+        setIsEditing(true);
+    };
+
+    const closeModal = () => {
+        setCurrentTeam(null);
+        setIsEditing(false);
+    };
+
+    const saveTeam = (updatedTeam) => {
+        setTeams(teams.map(team => team.id === updatedTeam.id ? updatedTeam : team));
+        closeModal();
     };
 
     const totalPages = Math.ceil(teams.length / teamsPerPage);
@@ -128,13 +150,13 @@ export default function TeamsListView({ onBack }) {
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
                                     <button
-                                        onClick={() => {/* Add view function here */}}
+                                        onClick={() => viewTeam(team)}
                                         className="text-indigo-600 hover:text-indigo-900 mr-2"
                                     >
                                         <Eye className="w-5 h-5 inline" />
                                     </button>
                                     <button
-                                        onClick={() => {/* Add edit function here */}}
+                                        onClick={() => editTeam(team)}
                                         className="text-blue-600 hover:text-blue-900 mr-2"
                                     >
                                         <Edit className="w-5 h-5 inline" />
@@ -216,6 +238,152 @@ export default function TeamsListView({ onBack }) {
                     onClose={() => setShowCreateForm(false)}
                     onSuccess={handleCreateSuccess}
                 />
+            )}
+            {currentTeam && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div className="bg-white p-6 rounded-lg shadow-xl w-[600px] max-h-[90vh] overflow-y-auto">
+                        <div className="flex justify-between items-center mb-6">
+                            <h2 className="text-xl font-semibold">{isEditing ? 'Edit Team' : 'View Team'}</h2>
+                            <button onClick={closeModal} className="text-gray-500 hover:text-gray-700">
+                                <X className="w-5 h-5" />
+                            </button>
+                        </div>
+
+                        <form onSubmit={(e) => {
+                            e.preventDefault();
+                            if (isEditing) {
+                                const formData = new FormData(e.target);
+                                const updatedTeam = {
+                                    ...currentTeam,
+                                    name: formData.get('name'),
+                                    manager: formData.get('manager'),
+                                    status: formData.get('status'),
+                                    description: formData.get('description'),
+                                    department: formData.get('department')
+                                };
+                                saveTeam(updatedTeam);
+                            }
+                        }} className="space-y-4">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                    Team Name
+                                </label>
+                                {isEditing ? (
+                                    <input
+                                        type="text"
+                                        name="name"
+                                        defaultValue={currentTeam.name}
+                                        required
+                                        className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                                    />
+                                ) : (
+                                    <p className="text-gray-900">{currentTeam.name}</p>
+                                )}
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                    Team Manager
+                                </label>
+                                {isEditing ? (
+                                    <input
+                                        type="text"
+                                        name="manager"
+                                        defaultValue={currentTeam.manager}
+                                        required
+                                        className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                                    />
+                                ) : (
+                                    <p className="text-gray-900">{currentTeam.manager}</p>
+                                )}
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                    Status
+                                </label>
+                                {isEditing ? (
+                                    <select
+                                        name="status"
+                                        defaultValue={currentTeam.status}
+                                        required
+                                        className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                                    >
+                                        <option value="Active">Active</option>
+                                        <option value="Inactive">Inactive</option>
+                                    </select>
+                                ) : (
+                                    <p className="text-gray-900">{currentTeam.status}</p>
+                                )}
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                    Description
+                                </label>
+                                {isEditing ? (
+                                    <textarea
+                                        name="description"
+                                        defaultValue={currentTeam.description}
+                                        required
+                                        className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                                    />
+                                ) : (
+                                    <p className="text-gray-900">{currentTeam.description}</p>
+                                )}
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                    Department
+                                </label>
+                                {isEditing ? (
+                                    <input
+                                        type="text"
+                                        name="department"
+                                        defaultValue={currentTeam.department}
+                                        required
+                                        className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                                    />
+                                ) : (
+                                    <p className="text-gray-900">{currentTeam.department}</p>
+                                )}
+                            </div>
+                            <div className="flex justify-end gap-3 pt-4">
+                                {isEditing ? (
+                                    <>
+                                        <button
+                                            type="button"
+                                            onClick={closeModal}
+                                            className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50"
+                                        >
+                                            Cancel
+                                        </button>
+                                        <button
+                                            type="submit"
+                                            className="px-4 py-2 bg-logoOrange text-white rounded-md text-sm font-medium hover:bg-orange-600"
+                                        >
+                                            Save Changes
+                                        </button>
+                                    </>
+                                ) : (
+                                    <>
+                                        <button
+                                            type="button"
+                                            onClick={closeModal}
+                                            className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50"
+                                        >
+                                            Close
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onClick={() => setIsEditing(true)}
+                                            className="px-4 py-2 bg-logoOrange text-white rounded-md text-sm font-medium hover:bg-orange-600"
+                                        >
+                                            Edit Team
+                                        </button>
+                                    </>
+                                )}
+                            </div>
+                        </form>
+                    </div>
+                </div>
             )}
         </div>
     );
