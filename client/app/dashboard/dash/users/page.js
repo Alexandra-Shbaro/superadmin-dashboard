@@ -4,9 +4,6 @@ import { useState } from 'react';
 import { UserStats } from './components/UserStats';
 import { PhaseCard } from './components/PhaseCard';
 
-import UsersPage from './components/ViewAllUsers';
-
-import Link from 'next/link';
 import { Plus, Eye } from "lucide-react";
 
 
@@ -38,8 +35,6 @@ export default function DashboardPage() {
         { title: "Performance & Execution Manager", count: 2 },
     ];
 
-    const [showViewAllUsers, setShowViewAllUsers] = useState(false);
-
     return (
         <div className="space-y-6">
             <div className="border border-[#E7E7E7] bg-[#FAFAFA] p-6">
@@ -53,20 +48,14 @@ export default function DashboardPage() {
 
                 <UserStats leftStats={leftStats} rightStats={rightStats} />
 
-                {!showViewAllUsers ? (
+                
                     // Show the button when showViewAllUsers is false
                     <button
-                        className="flex items-center gap-2 px-4 py-2 text-white text-base bg-logoOrange rounded-lg hover:bg-orange-500 transition duration-300"
-                        onClick={() => setShowViewAllUsers(true)} // Set state to true when clicked
+                        className="flex items-center gap-2 px-4 py-2 text-white text-base bg-logoOrange rounded-lg hover:bg-orange-500 transition duration-300 mt-5"
                     >
                         <Eye className="w-5 h-5" />
                         View All Users
                     </button>
-                ) : (
-                    // Show the ViewAllUsers component when showViewAllUsers is true
-                    <UsersPage />
-                )}
-
 
                 {/* Phase Boxes */}
                 <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
