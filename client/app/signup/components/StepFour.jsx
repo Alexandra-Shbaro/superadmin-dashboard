@@ -1,4 +1,5 @@
 "use client";
+import Link from 'next/link';
 
 const StepFour = ({ onNext }) => {
 
@@ -51,7 +52,7 @@ const StepFour = ({ onNext }) => {
         </div>
 
         <div className="flex justify-end">
-          <Link href="/dashboard">
+          <Link href="/dashboard/dash">
             <button
               onClick={onNext}
               className="bg-logoOrange text-white px-8 py-3 rounded-lg shadow-lg hover:bg-logoYellow transition-colors duration-300 flex items-center gap-2 text-lg"

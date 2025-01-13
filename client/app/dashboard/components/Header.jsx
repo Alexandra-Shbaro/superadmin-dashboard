@@ -1,10 +1,31 @@
-import { Search, Bell, Mail, Settings } from 'lucide-react'
+'use client';
 
-export function Header() {
+import { Search, Bell, Mail, Settings } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
+
+const Header = () => {
+    const pathname = usePathname(); // Gets the current route
+    const [headerText, setHeaderText] = useState('Default Page');
+
+    useEffect(() => {
+        const pathToTextMap = {
+            '/workspace': 'Workspace Management',
+            '/dash': 'Dashboard',
+            '/analytics': 'Analytics',
+            '/campaigns': 'Campaigns',
+            '/reports': 'Reports',
+        };
+
+        setHeaderText(pathToTextMap[pathname] || 'Default Page');
+    }, [pathname]);
+
     return (
         <header className="flex h-16 items-center bg-gray-200 px-6 w-full">
-            <div className="flex justify-start items-center ">
-                <h1 className="text-lg font-semibold text-gray-800 text-nowrap">Workspace Management</h1>
+            <div className="flex justify-start items-center">
+                <h1 className="text-lg font-semibold text-gray-800 text-nowrap">
+                    {headerText}
+                </h1>
             </div>
             <div className="flex justify-end w-full">
                 <div className="flex max-w-xl px-8">
@@ -29,6 +50,7 @@ export function Header() {
                 </div>
             </div>
         </header>
-    )
-}
+    );
+};
 
+export default Header;
