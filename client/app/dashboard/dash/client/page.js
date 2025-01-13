@@ -2,7 +2,10 @@
 
 import { useState } from 'react'
 import { ChevronLeft, ChevronRight, Plus, ArrowUpDown, Eye, Edit, Trash2 } from 'lucide-react'
-import CreateClientForm from './components/CreateClientForm'
+import CreateClientForm from './components/create-client-form'
+import ViewClient from './components/ViewClient'
+import EditClientModal from './components/edit-client-modal'
+import DeleteClientModal from './components/delete-client-modal'
 
 const Button = ({ children, className, ...props }) => (
     <button
@@ -49,6 +52,9 @@ export default function ClientManagement() {
     const [showCreateForm, setShowCreateForm] = useState(false);
     const [sortField, setSortField] = useState(null);
     const [sortDirection, setSortDirection] = useState('asc');
+    const [viewClient, setViewClient] = useState(null);
+    const [editClient, setEditClient] = useState(null);
+    const [deleteClient, setDeleteClient] = useState(null);
 
     const clientsPerPage = 10;
     const indexOfLastClient = currentPage * clientsPerPage;
@@ -98,20 +104,16 @@ export default function ClientManagement() {
     };
 
     const handleView = (client) => {
-        // Add view logic here
-        console.log('View client:', client);
-    };
+    setViewClient(client);
+};
 
-    const handleEdit = (client) => {
-        // Add edit logic here
-        console.log('Edit client:', client);
-    };
+const handleEdit = (client) => {
+    setEditClient(client);
+};
 
-    const handleDelete = (clientId) => {
-        if (window.confirm('Are you sure you want to delete this client?')) {
-            setClients(clients.filter(client => client.id !== clientId));
-        }
-    };
+const handleDelete = (client) => {
+    setDeleteClient(client);
+};
 
     return (
         <div className="p-6 space-y-6 bg-gray-100 min-h-screen">
@@ -241,6 +243,32 @@ export default function ClientManagement() {
                 <CreateClientForm
                     onClose={() => setShowCreateForm(false)}
                     onSuccess={handleCreateSuccess}
+                />
+            )}
+            {viewClient && (
+                <ViewClientModal
+                    client={viewClient}
+                    onClose={() => setViewClient(null)}
+                />
+            )}
+            {editClient && (
+                <EditClientModal
+                    client={editClient}
+                    onClose={() => setEditClient(null)}
+                    onSuccess={(updatedClient) => {
+                        setClients(clients.map(c => c.id === updatedClient.id ? updatedClient : c));
+                        setEditClient(null);
+                    }}
+                />
+            )}
+            {deleteClient && (
+                <DeleteClientModal
+                    client={deleteClient}
+                    onClose={() => setDeleteClient(null)}
+                    onConfirm={() => {
+                        setClients(clients.filter(c => c.id !== deleteClient.id));
+                        setDeleteClient(null);
+                    }}
                 />
             )}
         </div>
