@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { ChevronLeft, ChevronRight, Plus, ArrowLeft, Eye, Edit, Trash2 } from 'lucide-react'
+import CreateTeamForm from './CreateTeamForm'
 
 const Button = ({ children, className, ...props }) => (
     <button
@@ -39,6 +40,7 @@ export default function TeamsListView({ onBack }) {
         }), {})
     );
     const [deleteIndex, setDeleteIndex] = useState(null);
+    const [showCreateForm, setShowCreateForm] = useState(false);
     const teamsPerPage = 10;
     const indexOfLastTeam = currentPage * teamsPerPage;
     const indexOfFirstTeam = indexOfLastTeam - teamsPerPage;
@@ -68,6 +70,11 @@ export default function TeamsListView({ onBack }) {
         }
     };
 
+    const handleCreateSuccess = (newTeam) => {
+        setTeams([...teams, newTeam]);
+        setShowCreateForm(false);
+    };
+
     const totalPages = Math.ceil(teams.length / teamsPerPage);
 
     return (
@@ -79,7 +86,10 @@ export default function TeamsListView({ onBack }) {
                     </button>
                     <h1 className="text-xl font-semibold text-softBlack">Teams</h1>
                 </div>
-                <Button className="p-2 text-white text-sm bg-logoOrange rounded-lg hover:bg-orange-500 transition duration-300 flex items-center">
+                <Button 
+                    onClick={() => setShowCreateForm(true)}
+                    className="p-2 text-white text-sm bg-logoOrange rounded-lg hover:bg-orange-500 transition duration-300 flex items-center"
+                >
                     <Plus className="mr-2 h-4 w-4" />
                     New Team
                 </Button>
@@ -191,13 +201,21 @@ export default function TeamsListView({ onBack }) {
                             </button>
                             <button
                                 onClick={deleteTeam}
-                                className="px-4 py-2 bg-logoOrange text-white rounded-md text-sm font-medium hover:bg-red-700"
+                                className="px-4 py-2 bg-red-600 text-white rounded-md text-sm font-medium hover:bg-red-700"
                             >
                                 Delete
                             </button>
                         </div>
                     </div>
                 </div>
+            )}
+
+            {/* Create Team Form Popup */}
+            {showCreateForm && (
+                <CreateTeamForm
+                    onClose={() => setShowCreateForm(false)}
+                    onSuccess={handleCreateSuccess}
+                />
             )}
         </div>
     );

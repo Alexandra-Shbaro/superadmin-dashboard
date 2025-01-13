@@ -1,8 +1,9 @@
-"use client";
+"use client"
 
-import { useState } from 'react';
-import { Plus, ChevronLeft, ChevronRight } from 'lucide-react';
-import TeamsListView from './components/TeamsListview';
+import { useState } from 'react'
+import { Plus, ChevronLeft, ChevronRight } from 'lucide-react'
+import TeamsListView from './components/TeamsListview'
+import CreateTeamForm from './components/CreateTeamForm'
 
 // Custom Button component
 const Button = ({ children, className, ...props }) => (
@@ -102,6 +103,7 @@ export default function TeamManagement() {
     const [currentPage, setCurrentPage] = useState(1)
     const [requestedPage, setRequestedPage] = useState(1)
     const [showTeamsList, setShowTeamsList] = useState(false)
+    const [showCreateForm, setShowCreateForm] = useState(false)
 
     if (showTeamsList) {
         return <TeamsListView onBack={() => setShowTeamsList(false)} />
@@ -111,7 +113,10 @@ export default function TeamManagement() {
         <div className="p-6 space-y-6 bg-gray-100 min-h-screen">
             <div className="flex justify-between items-center">
                 <h1 className="text-xl font-semibold text-softBlack">Teams Management</h1>
-                <Button className="p-2 text-white text-sm bg-logoOrange rounded-lg hover:bg-orange-500 transition duration-300 flex items-center">
+                <Button 
+                    onClick={() => setShowCreateForm(true)} 
+                    className="p-2 text-white text-sm bg-logoOrange rounded-lg hover:bg-orange-500 transition duration-300 flex items-center"
+                >
                     <Plus className="mr-2 h-4 w-4" />
                     New Team
                 </Button>
@@ -239,6 +244,15 @@ export default function TeamManagement() {
                     </div>
                 </div>
             </Card>
+            {showCreateForm && (
+                <CreateTeamForm
+                    onClose={() => setShowCreateForm(false)}
+                    onSuccess={() => {
+                        setShowCreateForm(false)
+                        // Optionally refresh teams data here
+                    }}
+                />
+            )}
         </div>
     )
 }
