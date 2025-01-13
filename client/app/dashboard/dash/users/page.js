@@ -4,10 +4,12 @@ import { useState } from 'react';
 import { UserStats } from './components/UserStats';
 import { PhaseCard } from './components/PhaseCard';
 import UsersTable from './components/UsersTable';
+import CreateUserForm from './components/CreateUserForm';
 import { Plus, Eye } from 'lucide-react';
 
 export default function DashboardPage() {
     const [showAllUsers, setShowAllUsers] = useState(false);
+    const [showCreateForm, setShowCreateForm] = useState(false);
     
     const leftStats = [
         { title: "Total Users", count: 750 },
@@ -35,13 +37,34 @@ export default function DashboardPage() {
         { title: "Performance & Execution Manager", count: 2 },
     ];
 
+    const handleCreateUser = () => {
+        setShowCreateForm(true);
+    };
+
+    const handleCreateUserSuccess = () => {
+        setShowCreateForm(false);
+        // You might want to refresh the user list here
+    };
+
+    const handleCancelCreateUser = () => {
+        setShowCreateForm(false);
+    };
+
     return (
         <div className="space-y-6">
-            {!showAllUsers ? (
+            {showCreateForm ? (
+                <CreateUserForm
+                    onClose={handleCancelCreateUser}
+                    onSuccess={handleCreateUserSuccess}
+                />
+            ) : !showAllUsers ? (
                 <div className="border border-[#E7E7E7] bg-[#FAFAFA] p-6">
                     <div className="mb-6 flex items-center justify-between">
                         <h2 className="text-xl font-semibold text-[#2C3333]">Users</h2>
-                        <button className="flex items-center gap-2 px-4 py-2 text-white text-base bg-logoOrange rounded-lg hover:bg-orange-500 transition duration-300">
+                        <button 
+                            onClick={handleCreateUser}
+                            className="flex items-center gap-2 px-4 py-2 text-white text-base bg-logoOrange rounded-lg hover:bg-orange-500 transition duration-300"
+                        >
                             <Plus className="w-5 h-5" />
                             Add New User
                         </button>
@@ -65,7 +88,10 @@ export default function DashboardPage() {
                     </div>
                 </div>
             ) : (
-                <UsersTable onBack={() => setShowAllUsers(false)} />
+                <UsersTable 
+                    onBack={() => setShowAllUsers(false)} 
+                    onCreateUser={handleCreateUser}
+                />
             )}
         </div>
     );

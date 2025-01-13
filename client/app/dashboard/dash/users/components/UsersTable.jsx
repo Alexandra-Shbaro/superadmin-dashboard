@@ -2,9 +2,11 @@
 
 import { useState } from 'react';
 import { ChevronLeft, ChevronRight, Plus, ArrowLeft, Trash2, X } from 'lucide-react';
+import CreateUserForm from './CreateUserForm';
 
-export default function UsersTable({ onBack }) {
+export default function UsersTable({ onBack, onCreateUser }) {
   const [currentPage, setCurrentPage] = useState(1);
+  const [showCreateForm, setShowCreateForm] = useState(false);
   const [users, setUsers] = useState([
     { name: "Jane Doe", role: "UX/UI Designer", status: "Inactive" },
     { name: "Jackson Doe", role: "Project Manager", status: "Active" },
@@ -51,7 +53,10 @@ export default function UsersTable({ onBack }) {
           </button>
           <h2 className="text-xl font-semibold text-[#2C3333]">Users</h2>
         </div>
-        <button className="flex items-center gap-2 px-4 py-2 text-white text-base bg-logoOrange rounded-lg hover:bg-orange-500 transition duration-300">
+        <button 
+          onClick={onCreateUser}
+          className="flex items-center gap-2 px-4 py-2 text-white text-base bg-logoOrange rounded-lg hover:bg-orange-500 transition duration-300"
+        >
           <Plus className="w-5 h-5" />
           New User
         </button>
