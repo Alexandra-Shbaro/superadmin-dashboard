@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { ChevronLeft, ChevronRight, Plus, ArrowUpDown, Eye, Edit, Trash2 } from 'lucide-react'
-import CreateClientForm from './components/create-client-form'
+import CreateClientForm from './components/CreateClientForm'
 import ViewClient from './components/ViewClient'
 import EditClient from './components/EditClient'
 import DeleteClient from './components/DeleteClient'
