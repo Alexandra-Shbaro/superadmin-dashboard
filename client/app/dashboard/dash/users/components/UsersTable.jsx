@@ -83,7 +83,7 @@ export default function UsersTable({ onBack }) {
                   <div className="text-sm text-gray-500">{user.role}</div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center justify-between">
                     <button
                       onClick={() => toggleStatus(index)}
                       className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
@@ -96,7 +96,7 @@ export default function UsersTable({ onBack }) {
                     </button>
                     <button
                       onClick={() => confirmDelete(index)}
-                      className="text-red-600 hover:text-red-900"
+                      className="text-red-600 hover:text-red-900 ml-2"
                     >
                       <Trash2 className="w-5 h-5" />
                     </button>
