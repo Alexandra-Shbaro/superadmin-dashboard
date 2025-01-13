@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { ChevronLeft, ChevronRight, Plus, ArrowUpDown } from 'lucide-react'
 import CreateCampaignForm from './components/create-campaign-form'
+import CampaignView from './components/campaign-view'
 
 // Custom Button component
 const Button = ({ children, className, ...props }) => (
@@ -74,6 +75,7 @@ const SortableHeader = ({ children }) => (
 export default function CampaignManagement() {
     const [currentPage, setCurrentPage] = useState(1)
     const [showCreateForm, setShowCreateForm] = useState(false)
+    const [selectedCampaign, setSelectedCampaign] = useState(null)
 
     return (
         <div className="p-6 space-y-6 bg-gray-100 min-h-screen">
@@ -113,7 +115,11 @@ export default function CampaignManagement() {
                         </thead>
                         <tbody className="divide-y divide-gray-200">
                             {currentCampaigns.map((campaign, index) => (
-                                <tr key={index} className="hover:bg-gray-50">
+                                <tr 
+                                    key={index} 
+                                    className="hover:bg-gray-50 cursor-pointer"
+                                    onClick={() => setSelectedCampaign(campaign)}
+                                >
                                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                         {campaign.name}
                                     </td>
@@ -214,6 +220,13 @@ export default function CampaignManagement() {
                         setShowCreateForm(false)
                         // Optionally refresh campaigns data here
                     }}
+                />
+            )}
+
+            {selectedCampaign && (
+                <CampaignView
+                    campaign={selectedCampaign}
+                    onClose={() => setSelectedCampaign(null)}
                 />
             )}
         </div>
