@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from 'react';
-import { ChevronLeft, ChevronRight, Plus, ArrowLeft, Trash2 } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Plus, ArrowLeft, Trash2, X } from 'lucide-react';
 
 export default function UsersTable({ onBack }) {
   const [currentPage, setCurrentPage] = useState(1);
@@ -17,6 +17,7 @@ export default function UsersTable({ onBack }) {
     { name: "George Bakhtri", role: "Graphic Designer", status: "Active" },
     { name: "Dana Herb", role: "Information Architect", status: "Inactive" },
   ]);
+  const [deleteIndex, setDeleteIndex] = useState(null);
 
   const toggleStatus = (index) => {
     const newUsers = [...users];
@@ -24,10 +25,19 @@ export default function UsersTable({ onBack }) {
     setUsers(newUsers);
   };
 
-  const deleteUser = (index) => {
-    if (window.confirm("Are you sure you want to delete this user?")) {
-      const newUsers = users.filter((_, i) => i !== index);
+  const confirmDelete = (index) => {
+    setDeleteIndex(index);
+  };
+
+  const cancelDelete = () => {
+    setDeleteIndex(null);
+  };
+
+  const deleteUser = () => {
+    if (deleteIndex !== null) {
+      const newUsers = users.filter((_, i) => i !== deleteIndex);
       setUsers(newUsers);
+      setDeleteIndex(null);
     }
   };
 
@@ -61,9 +71,6 @@ export default function UsersTable({ onBack }) {
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Status
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Actions
-              </th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
@@ -76,24 +83,24 @@ export default function UsersTable({ onBack }) {
                   <div className="text-sm text-gray-500">{user.role}</div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <button
-                    onClick={() => toggleStatus(index)}
-                    className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                      user.status === "Active" 
-                        ? "bg-green-100 text-green-800 hover:bg-green-200" 
-                        : "bg-red-100 text-red-800 hover:bg-red-200"
-                    }`}
-                  >
-                    {user.status}
-                  </button>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                  <button
-                    onClick={() => deleteUser(index)}
-                    className="text-red-600 hover:text-red-900"
-                  >
-                    <Trash2 className="w-5 h-5" />
-                  </button>
+                  <div className="flex items-center space-x-2">
+                    <button
+                      onClick={() => toggleStatus(index)}
+                      className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                        user.status === "Active" 
+                          ? "bg-green-100 text-green-800 hover:bg-green-200" 
+                          : "bg-red-100 text-red-800 hover:bg-red-200"
+                      }`}
+                    >
+                      {user.status}
+                    </button>
+                    <button
+                      onClick={() => confirmDelete(index)}
+                      className="text-red-600 hover:text-red-900"
+                    >
+                      <Trash2 className="w-5 h-5" />
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}
@@ -135,6 +142,30 @@ export default function UsersTable({ onBack }) {
           </button>
         </div>
       </div>
+
+      {/* Delete Confirmation Popup */}
+      {deleteIndex !== null && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white p-6 rounded-lg shadow-xl">
+            <h3 className="text-lg font-semibold mb-4">Confirm Delete</h3>
+            <p className="mb-4">Are you sure you want to delete this user?</p>
+            <div className="flex justify-end space-x-2">
+              <button
+                onClick={cancelDelete}
+                className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={deleteUser}
+                className="px-4 py-2 bg-red-600 text-white rounded-md text-sm font-medium hover:bg-red-700"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
