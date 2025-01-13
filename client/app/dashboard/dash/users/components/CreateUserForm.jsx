@@ -64,39 +64,61 @@ export default function CreateUserForm({ user, isReadOnly, onClose, onSuccess })
     onSuccess();
   };
 
-  const renderInput = (name, label, type = "text", options = null) => (
-    <div>
-      <label className="block text-sm font-medium text-gray-700 mb-1">
-        {label}
-      </label>
-      {options ? (
-        <select
-          name={name}
-          value={formData[name]}
-          onChange={handleChange}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
-          required
-          disabled={isReadOnly}
-        >
-          <option value="">Select {label.toLowerCase()}</option>
-          {options.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
-      ) : (
-        <input
-          type={type}
-          name={name}
-          value={formData[name]}
-          onChange={handleChange}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
-          placeholder={label}
-          required
-          readOnly={isReadOnly}
-        />
-      )}
+  const renderField = (name, label, type = "text", options = null) => {
+    if (isReadOnly) {
+      return (
+        <div className="mb-4">
+          <p className="text-sm font-medium text-gray-500">{label}</p>
+          <p className="mt-1 text-sm text-gray-900">
+            {type === "select" 
+              ? options.find(opt => opt.value === formData[name])?.label || formData[name]
+              : formData[name]}
+          </p>
+        </div>
+      );
+    }
+
+    return (
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          {label}
+        </label>
+        {options ? (
+          <select
+            name={name}
+            value={formData[name]}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+            required
+          >
+            <option value="">Select {label.toLowerCase()}</option>
+            {options.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        ) : (
+          <input
+            type={type}
+            name={name}
+            value={formData[name]}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+            placeholder={label}
+            required
+          />
+        )}
+      </div>
+    );
+  };
+
+  const renderSection = (title, fields) => (
+    <div className="space-y-4">
+      <h3 className="text-lg font-semibold italic">{title}</h3>
+      <div className={`grid grid-cols-1 ${isReadOnly ? 'md:grid-cols-2' : 'md:grid-cols-3'} gap-4`}>
+        {fields.map(field => renderField(...field))}
+      </div>
     </div>
   );
 
@@ -112,80 +134,62 @@ export default function CreateUserForm({ user, isReadOnly, onClose, onSuccess })
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-8">
-            {/* Personal Information */}
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold italic">Personal Information</h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {renderInput("name", "Name")}
-                {renderInput("dateOfBirth", "Date of Birth", "date")}
-                {renderInput("lastName", "Last Name")}
-                {renderInput("area", "Area")}
-                {renderInput("personalEmail", "Personal Email", "email")}
-                {renderInput("street", "Street")}
-                {renderInput("phoneNumber", "Phone Number", "tel")}
-                {renderInput("building", "Building")}
-              </div>
-            </div>
+            {renderSection("Personal Information", [
+              ["name", "Name"],
+              ["lastName", "Last Name"],
+              ["dateOfBirth", "Date of Birth", "date"],
+              ["personalEmail", "Personal Email", "email"],
+              ["phoneNumber", "Phone Number", "tel"],
+              ["area", "Area"],
+              ["street", "Street"],
+              ["building", "Building"],
+            ])}
 
-            {/* Emergency Contact Information */}
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold italic">Emergency Contact Information</h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {renderInput("emergencyContact", "Emergency Contact")}
-                {renderInput("relationship", "Relationship", "select", [
-                  { value: "parent", label: "Parent" },
-                  { value: "spouse", label: "Spouse" },
-                  { value: "sibling", label: "Sibling" },
-                  { value: "friend", label: "Friend" },
-                  { value: "other", label: "Other" },
-                ])}
-                {renderInput("emergencyEmail", "Emergency Contact Email", "email")}
-                {renderInput("emergencyNumber", "Emergency Contact Number", "tel")}
-              </div>
-            </div>
+            {renderSection("Emergency Contact Information", [
+              ["emergencyContact", "Emergency Contact"],
+              ["relationship", "Relationship", "select", [
+                { value: "parent", label: "Parent" },
+                { value: "spouse", label: "Spouse" },
+                { value: "sibling", label: "Sibling" },
+                { value: "friend", label: "Friend" },
+                { value: "other", label: "Other" },
+              ]],
+              ["emergencyEmail", "Emergency Contact Email", "email"],
+              ["emergencyNumber", "Emergency Contact Number", "tel"],
+            ])}
 
-            {/* Professional Information */}
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold italic">Professional Information</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {renderInput("department", "Department", "select", [
-                  { value: "engineering", label: "Engineering" },
-                  { value: "design", label: "Design" },
-                  { value: "marketing", label: "Marketing" },
-                  { value: "sales", label: "Sales" },
-                  { value: "hr", label: "HR" },
-                ])}
-                {renderInput("role", "Role/Position", "select", [
-                  { value: "developer", label: "Developer" },
-                  { value: "designer", label: "Designer" },
-                  { value: "manager", label: "Manager" },
-                  { value: "director", label: "Director" },
-                ])}
-                {renderInput("employmentType", "Employment Type", "select", [
-                  { value: "full-time", label: "Full Time" },
-                  { value: "part-time", label: "Part Time" },
-                  { value: "contract", label: "Contract" },
-                  { value: "intern", label: "Intern" },
-                ])}
-                {renderInput("startDate", "Start Date", "date")}
-                {renderInput("workHours", "Work Hours")}
-              </div>
-            </div>
+            {renderSection("Professional Information", [
+              ["department", "Department", "select", [
+                { value: "engineering", label: "Engineering" },
+                { value: "design", label: "Design" },
+                { value: "marketing", label: "Marketing" },
+                { value: "sales", label: "Sales" },
+                { value: "hr", label: "HR" },
+              ]],
+              ["role", "Role/Position", "select", [
+                { value: "developer", label: "Developer" },
+                { value: "designer", label: "Designer" },
+                { value: "manager", label: "Manager" },
+                { value: "director", label: "Director" },
+              ]],
+              ["employmentType", "Employment Type", "select", [
+                { value: "full-time", label: "Full Time" },
+                { value: "part-time", label: "Part Time" },
+                { value: "contract", label: "Contract" },
+                { value: "intern", label: "Intern" },
+              ]],
+              ["startDate", "Start Date", "date"],
+              ["workHours", "Work Hours"],
+            ])}
 
-            {/* Account Details */}
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold italic">Account Details</h3>
-              <div className="grid grid-cols-1 gap-4">
-                {renderInput("username", "Username")}
-                {renderInput("email", "Email", "email")}
-                {!isReadOnly && (
-                  <>
-                    {renderInput("password", "Temporary Password", "password")}
-                    {renderInput("confirmPassword", "Confirm Password", "password")}
-                  </>
-                )}
-              </div>
-            </div>
+            {renderSection("Account Details", [
+              ["username", "Username"],
+              ["email", "Email", "email"],
+              ...(!isReadOnly ? [
+                ["password", "Temporary Password", "password"],
+                ["confirmPassword", "Confirm Password", "password"],
+              ] : []),
+            ])}
 
             <div className="flex justify-end gap-4">
               <button
