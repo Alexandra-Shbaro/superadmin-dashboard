@@ -94,37 +94,37 @@ const Header = () => {
                             )}
                         </button>
                         {showNotifications && (
-                            <div className="absolute right-0 mt-2 w-80 bg-white rounded-md shadow-lg overflow-hidden z-20">
-                                <div className="py-2">
-                                    <div className="flex justify-between items-center px-4 py-2 bg-gray-100">
-                                        <h3 className="text-sm font-semibold text-gray-700">Notifications</h3>
+                            <div className="absolute right-0 mt-2 w-80 bg-offWhite rounded-md shadow-lg overflow-hidden z-20">
+                                <div>
+                                    <div className="flex justify-between items-center px-4 py-2 bg-softBlack">
+                                        <h3 className="text-sm font-semibold text-offWhite">Notifications</h3>
                                         <button onClick={() => setShowNotifications(false)}>
-                                            <X className="h-4 w-4 text-gray-500" />
+                                            <X className="h-4 w-4 text-mediumGrey" />
                                         </button>
                                     </div>
                                     {notifications.length === 0 ? (
-                                        <p className="px-4 py-2 text-sm text-gray-500">No new notifications</p>
+                                        <p className="px-4 py-2 text-sm text-mediumGrey">No new notifications</p>
                                     ) : (
                                         <div className="max-h-64 overflow-y-auto">
                                             {notifications.map((notification) => (
                                                 <Link
                                                     key={notification.id}
                                                     href={`/alerts/${notification.id}`}
-                                                    className={`block px-4 py-2 hover:bg-gray-100 ${
-                                                        notification.status === 'unread' ? 'bg-blue-50' : ''
+                                                    className={`block px-4 py-2 hover:bg-lightGrey ${
+                                                        notification.status === 'unread' ? 'bg-logoYellow/20' : ''
                                                     }`}
                                                     onClick={() => handleNotificationClick(notification.id)}
                                                 >
-                                                    <p className="text-sm font-medium text-gray-900">{notification.action}</p>
-                                                    <p className="text-xs text-gray-500">
+                                                    <p className="text-sm font-medium text-softBlack">{notification.action}</p>
+                                                    <p className="text-xs text-mediumGrey">
                                                         {notification.requester} - {notification.timestamp}
                                                     </p>
                                                 </Link>
                                             ))}
                                         </div>
                                     )}
-                                    <div className="px-4 py-2 bg-gray-100">
-                                        <Link href="/alerts" className="text-sm text-logoOrange hover:text-logoOrange/80">
+                                    <div className="flex justify-between items-center px-4 py-2 bg-offWhite">
+                                        <Link href="/alerts" className="text-sm text-logoOrange hover:text-orange-500 transition-colors duration-200">
                                             View all notifications
                                         </Link>
                                     </div>
