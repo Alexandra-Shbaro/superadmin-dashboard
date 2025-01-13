@@ -2,7 +2,7 @@
 
 import { X } from 'lucide-react'
 
-export default function CampaignView({ campaign, onClose }) {
+export default function CampaignView({ campaign, onClose, onStatusChange }) {
     // This would normally come from props, using sample data for demonstration
     const campaignData = {
         title: "Holiday Marketing Campaign",
@@ -37,6 +37,11 @@ export default function CampaignView({ campaign, onClose }) {
             advertising: 10000,
             analyticsTools: 2000
         }
+    };
+
+    const handleClose = () => {
+        onStatusChange?.(campaign, 'Closed');
+        onClose();
     };
 
     return (
@@ -159,7 +164,7 @@ export default function CampaignView({ campaign, onClose }) {
                             Generate Report
                         </button>
                         <button
-                            onClick={onClose}
+                            onClick={handleClose}
                             className="px-4 py-2 bg-logoOrange hover:bg-orange-600 text-white rounded-md text-sm font-medium"
                         >
                             Close Campaign
