@@ -1,4 +1,4 @@
-import { UsersTable } from "./UsersTable"
+import { UsersTable } from "./UsersTable";
 // This would typically come from your database
 const MOCK_USERS = [
   { id: '1', name: 'John Doe', role: 'Technical Strategist', status: 'active' },
