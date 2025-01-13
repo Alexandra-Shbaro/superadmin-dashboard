@@ -1,31 +1,44 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import { useRouter } from "next/navigation"; 
 
 export function Navbar() {
+  const [activeTab, setActiveTab] = useState("Users");
+  const router = useRouter(); 
 
-    const [activeTab, setActiveTab] = useState("Users");
-    const handleTabClick = (tab) => {
-        setActiveTab(tab);
-        // Add any additional logic for tab switching here
+  const handleTabClick = (tab) => {
+    setActiveTab(tab);
+
+    const pathMap = {
+      Users: "/dashboard/users",
+      Team: "/dashboard/team",
+      Campaign: "/dashboard/campaign",
+      Client: "/dashboard/client",
+      Alerts: "/dashboard/alerts",
     };
 
-    return(
+    if (pathMap[tab]) {
+      router.push(pathMap[tab]); 
+    }
+  };
+
+  return (
     <div className="bg-gray-200 p-1 rounded-t-lg">
-        <nav className="flex">
-            {["Users", "Team", "Campaign", "Client", "Alerts"].map((tab) => (
-                <button
-                    key={tab}
-                    onClick={() => handleTabClick(tab)}
-                    className={`px-6 py-2 text-sm font-medium rounded-t-lg transition-colors
-                                ${activeTab === tab
-                            ? "bg-white text-gray-900"
-                            : "bg-gray-200 text-gray-600 hover:bg-gray-300"
-                        }`}
-                >
-                    {tab}
-                </button>
-            ))}
-        </nav>
+      <nav className="flex">
+        {["Users", "Team", "Campaign", "Client", "Alerts"].map((tab) => (
+          <button
+            key={tab}
+            onClick={() => handleTabClick(tab)}
+            className={`px-6 py-2 text-sm font-medium rounded-t-lg transition-colors ${
+              activeTab === tab
+                ? "bg-white text-gray-900"
+                : "bg-gray-200 text-gray-600 hover:bg-gray-300"
+            }`}
+          >
+            {tab}
+          </button>
+        ))}
+      </nav>
     </div>
-    )
+  );
 }

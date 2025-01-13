@@ -11,14 +11,19 @@ const Header = () => {
     useEffect(() => {
         const pathToTextMap = {
             '/workspace': 'Workspace Management',
-            '/dash': 'Dashboard',
+            '/dashboard': 'Dashboard',
             '/analytics': 'Analytics',
             '/campaigns': 'Campaigns',
             '/reports': 'Reports',
         };
 
-        setHeaderText(pathToTextMap[pathname] || 'Default Page');
+        // Find the matching path that starts with the given key
+        const matchingPath = Object.keys(pathToTextMap).find((key) => pathname.startsWith(key));
+
+        // Set the header text based on the matching path or default to 'Default Page'
+        setHeaderText(pathToTextMap[matchingPath] || 'Default Page');
     }, [pathname]);
+
 
     return (
         <header className="flex h-16 items-center bg-gray-200 px-6 w-full">
