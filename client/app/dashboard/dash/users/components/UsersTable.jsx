@@ -1,11 +1,11 @@
 "use client";
 
 import { useState } from 'react';
-import { ChevronLeft, ChevronRight, MoreHorizontal, Plus } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Plus, ArrowLeft, Trash2 } from 'lucide-react';
 
-export default function UsersTable() {
+export default function UsersTable({ onBack }) {
   const [currentPage, setCurrentPage] = useState(1);
-  const [users] = useState([
+  const [users, setUsers] = useState([
     { name: "Jane Doe", role: "UX/UI Designer", status: "Inactive" },
     { name: "Jackson Doe", role: "Project Manager", status: "Active" },
     { name: "James Doe", role: "Graphic Designer", status: "Active" },
@@ -18,17 +18,33 @@ export default function UsersTable() {
     { name: "Dana Herb", role: "Information Architect", status: "Inactive" },
   ]);
 
+  const toggleStatus = (index) => {
+    const newUsers = [...users];
+    newUsers[index].status = newUsers[index].status === "Active" ? "Inactive" : "Active";
+    setUsers(newUsers);
+  };
+
+  const deleteUser = (index) => {
+    if (window.confirm("Are you sure you want to delete this user?")) {
+      const newUsers = users.filter((_, i) => i !== index);
+      setUsers(newUsers);
+    }
+  };
+
   return (
-    <div className="bg-white rounded-lg shadow">
+    <div className="bg-white rounded-lg shadow p-6">
       {/* Header */}
-      <div className="p-6 border-b border-gray-200">
-        <div className="flex justify-between items-center">
-          <h2 className="text-xl font-semibold text-[#2C3333]">Users</h2>
-          <button className="flex items-center gap-2 px-4 py-2 text-white text-base bg-logoOrange rounded-lg hover:bg-orange-500 transition duration-300">
-            <Plus className="w-5 h-5" />
-            New User
+      <div className="mb-6 flex justify-between items-center">
+        <div className="flex items-center gap-4">
+          <button onClick={onBack} className="text-gray-600 hover:text-gray-900">
+            <ArrowLeft className="w-6 h-6" />
           </button>
+          <h2 className="text-xl font-semibold text-[#2C3333]">Users</h2>
         </div>
+        <button className="flex items-center gap-2 px-4 py-2 text-white text-base bg-logoOrange rounded-lg hover:bg-orange-500 transition duration-300">
+          <Plus className="w-5 h-5" />
+          New User
+        </button>
       </div>
 
       {/* Table */}
@@ -60,17 +76,23 @@ export default function UsersTable() {
                   <div className="text-sm text-gray-500">{user.role}</div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                    user.status === "Active" 
-                      ? "bg-green-100 text-green-800" 
-                      : "bg-red-100 text-red-800"
-                  }`}>
+                  <button
+                    onClick={() => toggleStatus(index)}
+                    className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                      user.status === "Active" 
+                        ? "bg-green-100 text-green-800 hover:bg-green-200" 
+                        : "bg-red-100 text-red-800 hover:bg-red-200"
+                    }`}
+                  >
                     {user.status}
-                  </span>
+                  </button>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                  <button className="text-gray-400 hover:text-gray-500">
-                    <MoreHorizontal className="w-5 h-5" />
+                  <button
+                    onClick={() => deleteUser(index)}
+                    className="text-red-600 hover:text-red-900"
+                  >
+                    <Trash2 className="w-5 h-5" />
                   </button>
                 </td>
               </tr>
@@ -80,12 +102,7 @@ export default function UsersTable() {
       </div>
 
       {/* Pagination */}
-      <div className="flex items-center justify-between px-6 py-3 border-t border-gray-200">
-        <div className="flex items-center">
-          <p className="text-sm text-gray-700">
-            Showing page <span className="font-medium">{currentPage}</span>
-          </p>
-        </div>
+      <div className="flex justify-center mt-4">
         <div className="flex items-center space-x-2">
           <button
             onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
