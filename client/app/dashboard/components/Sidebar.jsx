@@ -18,7 +18,7 @@ export function Sidebar() {
             Workspace Management
           </Link>
           <Link
-            href="#"
+            href="/dashboard/dash/users"
             className="flex items-center rounded-lg rounded-lg bg-[#5C5C5C] px-4 py-2 text-sm font-medium"
           >
             <Grid className="mr-3 h-5 w-5" /> 

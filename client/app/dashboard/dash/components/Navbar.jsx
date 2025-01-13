@@ -1,15 +1,33 @@
 "use client";
-import React, { useState } from "react";
-import { useRouter } from "next/navigation"; 
+import React, { useState, useEffect } from "react";
+import { useRouter, usePathname } from "next/navigation";
 
 export function Navbar() {
-  const [activeTab, setActiveTab] = useState("Users");
-  const router = useRouter(); 
+  const [activeTab, setActiveTab] = useState("");
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const tabs = ["Users", "Team", "Campaign", "Client", "Alerts"];
+
+  const pathMap = {
+    users: "Users",
+    team: "Team",
+    campaign: "Campaign",
+    client: "Client",
+    alerts: "Alerts",
+  };
+
+  useEffect(() => {
+    const pathSegments = pathname.split('/');
+    const lastSegment = pathSegments[pathSegments.length - 1].toLowerCase();
+    const matchedTab = pathMap[lastSegment] || "Users"; // Default to "Users" if no match
+    setActiveTab(matchedTab);
+  }, [pathname]);
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
 
-    const pathMap = {
+    const reversedPathMap = {
       Users: "/dashboard/dash/users",
       Team: "/dashboard/dash/team",
       Campaign: "/dashboard/dash/campaign",
@@ -17,15 +35,15 @@ export function Navbar() {
       Alerts: "/dashboard/dash/alerts",
     };
 
-    if (pathMap[tab]) {
-      router.push(pathMap[tab]); 
+    if (reversedPathMap[tab]) {
+      router.push(reversedPathMap[tab]);
     }
   };
 
   return (
     <div className="bg-gray-200 p-1 rounded-t-lg">
       <nav className="flex">
-        {["Users", "Team", "Campaign", "Client", "Alerts"].map((tab) => (
+        {tabs.map((tab) => (
           <button
             key={tab}
             onClick={() => handleTabClick(tab)}
@@ -42,3 +60,4 @@ export function Navbar() {
     </div>
   );
 }
+
