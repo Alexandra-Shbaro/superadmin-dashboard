@@ -1,35 +1,37 @@
 "use client";
 
 import { useState } from 'react';
-import { ChevronLeft, ChevronRight, Plus, ArrowLeft, Trash2, X } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Plus, ArrowLeft, Trash2, X, Edit, Eye } from 'lucide-react';
 import CreateUserForm from './CreateUserForm';
 
 export default function UsersTable({ onBack, onCreateUser }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [users, setUsers] = useState([
-    { name: "Jane Doe", role: "UX/UI Designer", status: "Inactive" },
-    { name: "Jackson Doe", role: "Project Manager", status: "Active" },
-    { name: "James Doe", role: "Graphic Designer", status: "Active" },
-    { name: "Jennifer Doe", role: "Information Architect", status: "Inactive" },
-    { name: "Alex Wang", role: "Content Strategist", status: "Active" },
-    { name: "Tracy Harmouth", role: "Technical Strategist", status: "Active" },
-    { name: "Karen Wilson", role: "UX/UI Designer", status: "Active" },
-    { name: "Carlie Rakhazi", role: "Project Manager", status: "Active" },
-    { name: "George Bakhtri", role: "Graphic Designer", status: "Active" },
-    { name: "Dana Herb", role: "Information Architect", status: "Inactive" },
+    { id: 1, name: "Jane Doe", role: "UX/UI Designer", status: "Inactive" },
+    { id: 2, name: "Jackson Doe", role: "Project Manager", status: "Active" },
+    { id: 3, name: "James Doe", role: "Graphic Designer", status: "Active" },
+    { id: 4, name: "Jennifer Doe", role: "Information Architect", status: "Inactive" },
+    { id: 5, name: "Alex Wang", role: "Content Strategist", status: "Active" },
+    { id: 6, name: "Tracy Harmouth", role: "Technical Strategist", status: "Active" },
+    { id: 7, name: "Karen Wilson", role: "UX/UI Designer", status: "Active" },
+    { id: 8, name: "Carlie Rakhazi", role: "Project Manager", status: "Active" },
+    { id: 9, name: "George Bakhtri", role: "Graphic Designer", status: "Active" },
+    { id: 10, name: "Dana Herb", role: "Information Architect", status: "Inactive" },
   ]);
   const [deleteIndex, setDeleteIndex] = useState(null);
   const [selectedUser, setSelectedUser] = useState(null);
   const [isEditMode, setIsEditMode] = useState(false);
 
-  const toggleStatus = (index) => {
+  const toggleStatus = (e, index) => {
+    e.stopPropagation();
     const newUsers = [...users];
     newUsers[index].status = newUsers[index].status === "Active" ? "Inactive" : "Active";
     setUsers(newUsers);
   };
 
-  const confirmDelete = (index) => {
+  const confirmDelete = (e, index) => {
+    e.stopPropagation();
     setDeleteIndex(index);
   };
 
@@ -45,8 +47,17 @@ export default function UsersTable({ onBack, onCreateUser }) {
     }
   };
 
-  const handleUserSelect = (user) => {
+  const handleUserSelect = (user, mode) => {
     setSelectedUser(user);
+    setIsEditMode(mode === 'edit');
+  };
+
+  const handleUpdateUser = (updatedUser) => {
+    const updatedUsers = users.map(user => 
+      user.id === updatedUser.id ? updatedUser : user
+    );
+    setUsers(updatedUsers);
+    setSelectedUser(null);
     setIsEditMode(false);
   };
 
@@ -83,14 +94,16 @@ export default function UsersTable({ onBack, onCreateUser }) {
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Status
               </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Actions
+              </th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {users.map((user, index) => (
               <tr 
-                key={index} 
-                className="hover:bg-gray-50 cursor-pointer" 
-                onClick={() => handleUserSelect(user)}
+                key={user.id} 
+                className="hover:bg-gray-50" 
               >
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="text-sm font-medium text-gray-900">{user.name}</div>
@@ -99,24 +112,36 @@ export default function UsersTable({ onBack, onCreateUser }) {
                   <div className="text-sm text-gray-500">{user.role}</div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="flex items-center justify-between">
-                    <button
-                      onClick={() => toggleStatus(index)}
-                      className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                        user.status === "Active" 
-                          ? "bg-green-100 text-green-800 hover:bg-green-200" 
-                          : "bg-red-100 text-red-800 hover:bg-red-200"
-                      }`}
-                    >
-                      {user.status}
-                    </button>
-                    <button
-                      onClick={() => confirmDelete(index)}
-                      className="text-red-600 hover:text-red-900 ml-2"
-                    >
-                      <Trash2 className="w-5 h-5" />
-                    </button>
-                  </div>
+                  <button
+                    onClick={(e) => toggleStatus(e, index)}
+                    className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                      user.status === "Active" 
+                        ? "bg-green-100 text-green-800 hover:bg-green-200" 
+                        : "bg-red-100 text-red-800 hover:bg-red-200"
+                    }`}
+                  >
+                    {user.status}
+                  </button>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
+                  <button
+                    onClick={() => handleUserSelect(user, 'view')}
+                    className="text-indigo-600 hover:text-indigo-900 mr-2"
+                  >
+                    <Eye className="w-5 h-5 inline" />
+                  </button>
+                  <button
+                    onClick={() => handleUserSelect(user, 'edit')}
+                    className="text-blue-600 hover:text-blue-900 mr-2"
+                  >
+                    <Edit className="w-5 h-5 inline" />
+                  </button>
+                  <button
+                    onClick={(e) => confirmDelete(e, index)}
+                    className="text-red-600 hover:text-red-900"
+                  >
+                    <Trash2 className="w-5 h-5 inline" />
+                  </button>
                 </td>
               </tr>
             ))}
@@ -161,7 +186,7 @@ export default function UsersTable({ onBack, onCreateUser }) {
 
       {/* Delete Confirmation Popup */}
       {deleteIndex !== null && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg shadow-xl">
             <h3 className="text-lg font-semibold mb-4">Confirm Delete</h3>
             <p className="mb-4">Are you sure you want to delete this user?</p>
@@ -187,23 +212,12 @@ export default function UsersTable({ onBack, onCreateUser }) {
         <CreateUserForm
           user={selectedUser}
           isReadOnly={!isEditMode}
-          onClose={() => setSelectedUser(null)}
-          onSuccess={() => {
+          onClose={() => {
             setSelectedUser(null);
-            // Refresh user list here
+            setIsEditMode(false);
           }}
+          onSuccess={handleUpdateUser}
         />
-      )}
-
-      {selectedUser && (
-        <div className="flex justify-end mt-4">
-          <button
-            onClick={() => setIsEditMode(!isEditMode)}
-            className="px-4 py-2 bg-blue-500 text-white rounded-md text-sm font-medium hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ml-2"
-          >
-            {isEditMode ? 'View' : 'Edit'}
-          </button>
-        </div>
       )}
     </div>
   );

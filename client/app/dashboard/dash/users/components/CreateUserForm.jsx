@@ -5,6 +5,7 @@ import { X } from 'lucide-react';
 
 export default function CreateUserForm({ user, isReadOnly, onClose, onSuccess }) {
   const [formData, setFormData] = useState({
+    id: "",
     name: "",
     lastName: "",
     personalEmail: "",
@@ -26,6 +27,7 @@ export default function CreateUserForm({ user, isReadOnly, onClose, onSuccess })
     email: "",
     password: "",
     confirmPassword: "",
+    status: "",
   });
 
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
@@ -48,12 +50,12 @@ export default function CreateUserForm({ user, isReadOnly, onClose, onSuccess })
     e.preventDefault();
     
     // Check if all fields are filled
-    const isFormValid = Object.values(formData).every(value => value.trim() !== "");
+    const isFormValid = Object.values(formData).every(value => value.toString().trim() !== "");
     
     if (isFormValid) {
       console.log(formData);
       setShowSuccessPopup(true);
-      // You might want to send this data to your backend here
+      onSuccess(formData);
     } else {
       alert("Please fill in all fields before submitting.");
     }
@@ -61,7 +63,7 @@ export default function CreateUserForm({ user, isReadOnly, onClose, onSuccess })
 
   const handleSuccessClose = () => {
     setShowSuccessPopup(false);
-    onSuccess();
+    onClose();
   };
 
   const renderField = (name, label, type = "text", options = null) => {
@@ -71,7 +73,7 @@ export default function CreateUserForm({ user, isReadOnly, onClose, onSuccess })
           <p className="text-sm font-medium text-gray-500">{label}</p>
           <p className="mt-1 text-sm text-gray-900">
             {type === "select" 
-              ? options.find(opt => opt.value === formData[name])?.label || formData[name]
+              ? options?.find(opt => opt.value === formData[name])?.label || formData[name]
               : formData[name]}
           </p>
         </div>
