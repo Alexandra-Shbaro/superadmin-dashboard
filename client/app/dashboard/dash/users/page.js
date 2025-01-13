@@ -65,7 +65,7 @@ export default function DashboardPage() {
                     </div>
                 </div>
             ) : (
-                <UsersTable />
+                <UsersTable onBack={() => setShowAllUsers(false)} />
             )}
         </div>
     );
