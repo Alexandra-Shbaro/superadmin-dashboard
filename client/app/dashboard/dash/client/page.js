@@ -1,8 +1,9 @@
 "use client"
 
 import { useState } from 'react'
-import { ChevronLeft, ChevronRight, Plus, ArrowUpDown } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Plus, ArrowUpDown, Eye, Edit, Trash2 } from 'lucide-react'
 import CreateClientForm from './components/CreateClientForm'
+
 const Button = ({ children, className, ...props }) => (
     <button
         className={`px-4 py-2 rounded-md text-sm font-medium ${className}`}
@@ -96,6 +97,22 @@ export default function ClientManagement() {
         setShowCreateForm(false);
     };
 
+    const handleView = (client) => {
+        // Add view logic here
+        console.log('View client:', client);
+    };
+
+    const handleEdit = (client) => {
+        // Add edit logic here
+        console.log('Edit client:', client);
+    };
+
+    const handleDelete = (clientId) => {
+        if (window.confirm('Are you sure you want to delete this client?')) {
+            setClients(clients.filter(client => client.id !== clientId));
+        }
+    };
+
     return (
         <div className="p-6 space-y-6 bg-gray-100 min-h-screen">
             <div className="flex justify-between items-center">
@@ -146,27 +163,38 @@ export default function ClientManagement() {
                                         {client.representative}
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap">
-                                        <span 
-                                            className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                                                client.status === 'Active' 
-                                                    ? 'bg-green-100 text-green-800'
-                                                    : 'bg-red-100 text-red-800'
+                                        <button
+                                            onClick={() => handleStatusChange(client.id)}
+                                            className={`px-2 py-1 text-xs font-semibold rounded-full ${
+                                                client.status === 'Active'
+                                                    ? 'bg-green-100 text-green-800 hover:bg-green-200'
+                                                    : 'bg-red-100 text-red-800 hover:bg-red-200'
                                             }`}
                                         >
                                             {client.status}
-                                        </span>
+                                        </button>
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        <button
-                                            onClick={() => handleStatusChange(client.id)}
-                                            className={`px-3 py-1 rounded-md text-sm font-medium ${
-                                                client.status === 'Active'
-                                                    ? 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                                                    : 'bg-logoOrange text-white hover:bg-orange-600'
-                                            }`}
-                                        >
-                                            {client.status === 'Active' ? 'Deactivate' : 'Activate'}
-                                        </button>
+                                        <div className="flex items-center gap-2">
+                                            <button
+                                                onClick={() => handleView(client)}
+                                                className="p-1 hover:bg-gray-100 rounded-full"
+                                            >
+                                                <Eye className="w-4 h-4 text-gray-500" />
+                                            </button>
+                                            <button
+                                                onClick={() => handleEdit(client)}
+                                                className="p-1 hover:bg-gray-100 rounded-full"
+                                            >
+                                                <Edit className="w-4 h-4 text-gray-500" />
+                                            </button>
+                                            <button
+                                                onClick={() => handleDelete(client.id)}
+                                                className="p-1 hover:bg-gray-100 rounded-full text-red-500"
+                                            >
+                                                <Trash2 className="w-4 h-4" />
+                                            </button>
+                                        </div>
                                     </td>
                                 </tr>
                             ))}
