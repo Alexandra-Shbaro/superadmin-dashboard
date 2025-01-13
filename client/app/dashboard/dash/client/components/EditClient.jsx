@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { X } from 'lucide-react'
 
-export default function EditClientModal({ client, onClose, onSuccess }) {
+export default function EditClient({ client, onClose, onSuccess }) {
     const [formData, setFormData] = useState({
         name: client.name,
         representative: client.representative,
