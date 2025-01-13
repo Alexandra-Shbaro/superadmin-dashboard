@@ -20,6 +20,8 @@ export default function UsersTable({ onBack, onCreateUser }) {
     { name: "Dana Herb", role: "Information Architect", status: "Inactive" },
   ]);
   const [deleteIndex, setDeleteIndex] = useState(null);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [isEditMode, setIsEditMode] = useState(false);
 
   const toggleStatus = (index) => {
     const newUsers = [...users];
@@ -41,6 +43,11 @@ export default function UsersTable({ onBack, onCreateUser }) {
       setUsers(newUsers);
       setDeleteIndex(null);
     }
+  };
+
+  const handleUserSelect = (user) => {
+    setSelectedUser(user);
+    setIsEditMode(false);
   };
 
   return (
@@ -80,7 +87,11 @@ export default function UsersTable({ onBack, onCreateUser }) {
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {users.map((user, index) => (
-              <tr key={index} className="hover:bg-gray-50">
+              <tr 
+                key={index} 
+                className="hover:bg-gray-50 cursor-pointer" 
+                onClick={() => handleUserSelect(user)}
+              >
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="text-sm font-medium text-gray-900">{user.name}</div>
                 </td>
@@ -169,6 +180,29 @@ export default function UsersTable({ onBack, onCreateUser }) {
               </button>
             </div>
           </div>
+        </div>
+      )}
+
+      {selectedUser && (
+        <CreateUserForm
+          user={selectedUser}
+          isReadOnly={!isEditMode}
+          onClose={() => setSelectedUser(null)}
+          onSuccess={() => {
+            setSelectedUser(null);
+            // Refresh user list here
+          }}
+        />
+      )}
+
+      {selectedUser && (
+        <div className="flex justify-end mt-4">
+          <button
+            onClick={() => setIsEditMode(!isEditMode)}
+            className="px-4 py-2 bg-blue-500 text-white rounded-md text-sm font-medium hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ml-2"
+          >
+            {isEditMode ? 'View' : 'Edit'}
+          </button>
         </div>
       )}
     </div>
