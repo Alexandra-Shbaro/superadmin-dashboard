@@ -10,11 +10,11 @@ export function Navbar() {
     setActiveTab(tab);
 
     const pathMap = {
-      Users: "/dashboard/users",
-      Team: "/dashboard/team",
-      Campaign: "/dashboard/campaign",
-      Client: "/dashboard/client",
-      Alerts: "/dashboard/alerts",
+      Users: "/dashboard/dash/users",
+      Team: "/dashboard/dash/team",
+      Campaign: "/dashboard/dash/campaign",
+      Client: "/dashboard/dash/client",
+      Alerts: "/dashboard/dash/alerts",
     };
 
     if (pathMap[tab]) {

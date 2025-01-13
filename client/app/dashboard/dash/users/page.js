@@ -58,12 +58,12 @@ export default function DashboardPage() {
                     onSuccess={handleCreateUserSuccess}
                 />
             ) : !showAllUsers ? (
-                <div className="border border-[#E7E7E7] bg-[#FAFAFA] p-6">
+                <div className="border border-[#E7E7E7] bg-[#FAFAFA] p-6 bg-gray-100">
                     <div className="mb-6 flex items-center justify-between">
-                        <h2 className="text-xl font-semibold text-[#2C3333]">Users</h2>
+                        <h2 className="text-xl font-semibold text-softBlack">Users</h2>
                         <button 
                             onClick={handleCreateUser}
-                            className="flex items-center gap-2 px-4 py-2 text-white text-base bg-logoOrange rounded-lg hover:bg-orange-500 transition duration-300"
+                            className="flex items-center gap-2 p-2 text-white text-sm bg-logoOrange rounded-lg hover:bg-orange-500 transition duration-300"
                         >
                             <Plus className="w-5 h-5" />
                             Add New User
@@ -74,7 +74,7 @@ export default function DashboardPage() {
 
                     <button
                         onClick={() => setShowAllUsers(true)}
-                        className="flex items-center gap-2 px-4 py-2 text-white text-base bg-logoOrange rounded-lg hover:bg-orange-500 transition duration-300 mt-5"
+                        className="flex items-center gap-2 p-2 text-white text-sm bg-logoOrange rounded-lg hover:bg-orange-500 transition duration-300 mt-5"
                     >
                         <Eye className="w-5 h-5" />
                         View All Users

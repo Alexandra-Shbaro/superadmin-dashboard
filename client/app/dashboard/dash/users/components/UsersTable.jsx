@@ -199,7 +199,7 @@ export default function UsersTable({ onBack, onCreateUser }) {
               </button>
               <button
                 onClick={deleteUser}
-                className="px-4 py-2 bg-red-600 text-white rounded-md text-sm font-medium hover:bg-red-700"
+                className="px-4 py-2 bg-logoOrange text-white rounded-md text-sm font-medium hover:bg-red-700"
               >
                 Delete
               </button>
