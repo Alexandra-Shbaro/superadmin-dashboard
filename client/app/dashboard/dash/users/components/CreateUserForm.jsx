@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { CalendarIcon, X } from 'lucide-react';
+import { X } from 'lucide-react';
 
-export default function CreateUserForm({ isOpen, onClose }) {
+export default function CreateUserForm({ onClose, onSuccess }) {
   const [formData, setFormData] = useState({
     name: "",
     lastName: "",
@@ -28,6 +28,8 @@ export default function CreateUserForm({ isOpen, onClose }) {
     confirmPassword: "",
   });
 
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -38,11 +40,23 @@ export default function CreateUserForm({ isOpen, onClose }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData);
-    onClose();
+    
+    // Check if all fields are filled
+    const isFormValid = Object.values(formData).every(value => value.trim() !== "");
+    
+    if (isFormValid) {
+      console.log(formData);
+      setShowSuccessPopup(true);
+      // You might want to send this data to your backend here
+    } else {
+      alert("Please fill in all fields before submitting.");
+    }
   };
 
-  if (!isOpen) return null;
+  const handleSuccessClose = () => {
+    setShowSuccessPopup(false);
+    onSuccess();
+  };
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -71,6 +85,7 @@ export default function CreateUserForm({ isOpen, onClose }) {
                     onChange={handleChange}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
                     placeholder="Name"
+                    required
                   />
                 </div>
 
@@ -84,6 +99,7 @@ export default function CreateUserForm({ isOpen, onClose }) {
                     value={formData.dateOfBirth}
                     onChange={handleChange}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                    required
                   />
                 </div>
 
@@ -98,6 +114,7 @@ export default function CreateUserForm({ isOpen, onClose }) {
                     onChange={handleChange}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
                     placeholder="Emergency Contact"
+                    required
                   />
                 </div>
 
@@ -112,6 +129,7 @@ export default function CreateUserForm({ isOpen, onClose }) {
                     onChange={handleChange}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
                     placeholder="Last Name"
+                    required
                   />
                 </div>
 
@@ -126,6 +144,7 @@ export default function CreateUserForm({ isOpen, onClose }) {
                     onChange={handleChange}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
                     placeholder="Area"
+                    required
                   />
                 </div>
 
@@ -138,6 +157,7 @@ export default function CreateUserForm({ isOpen, onClose }) {
                     value={formData.relationship}
                     onChange={handleChange}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                    required
                   >
                     <option value="">Select relationship</option>
                     <option value="parent">Parent</option>
@@ -159,6 +179,7 @@ export default function CreateUserForm({ isOpen, onClose }) {
                     onChange={handleChange}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
                     placeholder="Personal Email"
+                    required
                   />
                 </div>
 
@@ -173,6 +194,7 @@ export default function CreateUserForm({ isOpen, onClose }) {
                     onChange={handleChange}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
                     placeholder="Street"
+                    required
                   />
                 </div>
 
@@ -187,6 +209,7 @@ export default function CreateUserForm({ isOpen, onClose }) {
                     onChange={handleChange}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
                     placeholder="Emergency Email"
+                    required
                   />
                 </div>
 
@@ -201,6 +224,7 @@ export default function CreateUserForm({ isOpen, onClose }) {
                     onChange={handleChange}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
                     placeholder="Phone Number"
+                    required
                   />
                 </div>
 
@@ -215,6 +239,7 @@ export default function CreateUserForm({ isOpen, onClose }) {
                     onChange={handleChange}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
                     placeholder="Building"
+                    required
                   />
                 </div>
 
@@ -229,6 +254,7 @@ export default function CreateUserForm({ isOpen, onClose }) {
                     onChange={handleChange}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
                     placeholder="Emergency Number"
+                    required
                   />
                 </div>
               </div>
@@ -247,6 +273,7 @@ export default function CreateUserForm({ isOpen, onClose }) {
                     value={formData.department}
                     onChange={handleChange}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                    required
                   >
                     <option value="">Select department</option>
                     <option value="engineering">Engineering</option>
@@ -266,6 +293,7 @@ export default function CreateUserForm({ isOpen, onClose }) {
                     value={formData.role}
                     onChange={handleChange}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                    required
                   >
                     <option value="">Select role</option>
                     <option value="developer">Developer</option>
@@ -284,6 +312,7 @@ export default function CreateUserForm({ isOpen, onClose }) {
                     value={formData.employmentType}
                     onChange={handleChange}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                    required
                   >
                     <option value="">Select type</option>
                     <option value="full-time">Full Time</option>
@@ -303,6 +332,7 @@ export default function CreateUserForm({ isOpen, onClose }) {
                     value={formData.startDate}
                     onChange={handleChange}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                    required
                   />
                 </div>
 
@@ -317,6 +347,7 @@ export default function CreateUserForm({ isOpen, onClose }) {
                     onChange={handleChange}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
                     placeholder="Work Hours"
+                    required
                   />
                 </div>
               </div>
@@ -337,6 +368,7 @@ export default function CreateUserForm({ isOpen, onClose }) {
                     onChange={handleChange}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
                     placeholder="Username"
+                    required
                   />
                 </div>
 
@@ -351,6 +383,7 @@ export default function CreateUserForm({ isOpen, onClose }) {
                     onChange={handleChange}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
                     placeholder="Email"
+                    required
                   />
                 </div>
 
@@ -365,6 +398,7 @@ export default function CreateUserForm({ isOpen, onClose }) {
                     onChange={handleChange}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
                     placeholder="Temporary Password"
+                    required
                   />
                 </div>
 
@@ -379,6 +413,7 @@ export default function CreateUserForm({ isOpen, onClose }) {
                     onChange={handleChange}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
                     placeholder="Confirm Password"
+                    required
                   />
                 </div>
               </div>
@@ -402,6 +437,21 @@ export default function CreateUserForm({ isOpen, onClose }) {
           </form>
         </div>
       </div>
+
+      {showSuccessPopup && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-xl">
+            <h3 className="text-lg font-semibold mb-4">Success!</h3>
+            <p className="mb-4">User has been added successfully.</p>
+            <button
+              onClick={handleSuccessClose}
+              className="px-4 py-2 bg-logoOrange text-white rounded-md text-sm font-medium hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
