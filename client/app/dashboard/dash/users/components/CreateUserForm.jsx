@@ -105,21 +105,6 @@ export default function CreateUserForm({ onClose, onSuccess }) {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Emergency Contact
-                  </label>
-                  <input
-                    type="text"
-                    name="emergencyContact"
-                    value={formData.emergencyContact}
-                    onChange={handleChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
-                    placeholder="Emergency Contact"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
                     Last Name
                   </label>
                   <input
@@ -146,26 +131,6 @@ export default function CreateUserForm({ onClose, onSuccess }) {
                     placeholder="Area"
                     required
                   />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Relationship
-                  </label>
-                  <select
-                    name="relationship"
-                    value={formData.relationship}
-                    onChange={handleChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
-                    required
-                  >
-                    <option value="">Select relationship</option>
-                    <option value="parent">Parent</option>
-                    <option value="spouse">Spouse</option>
-                    <option value="sibling">Sibling</option>
-                    <option value="friend">Friend</option>
-                    <option value="other">Other</option>
-                  </select>
                 </div>
 
                 <div>
@@ -200,21 +165,6 @@ export default function CreateUserForm({ onClose, onSuccess }) {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Emergency Contact Email
-                  </label>
-                  <input
-                    type="email"
-                    name="emergencyEmail"
-                    value={formData.emergencyEmail}
-                    onChange={handleChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
-                    placeholder="Emergency Email"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
                     Phone Number
                   </label>
                   <input
@@ -239,6 +189,62 @@ export default function CreateUserForm({ onClose, onSuccess }) {
                     onChange={handleChange}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
                     placeholder="Building"
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Emergency Contact Information */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold italic">Emergency Contact Information</h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Emergency Contact
+                  </label>
+                  <input
+                    type="text"
+                    name="emergencyContact"
+                    value={formData.emergencyContact}
+                    onChange={handleChange}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                    placeholder="Emergency Contact"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Relationship
+                  </label>
+                  <select
+                    name="relationship"
+                    value={formData.relationship}
+                    onChange={handleChange}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                    required
+                  >
+                    <option value="">Select relationship</option>
+                    <option value="parent">Parent</option>
+                    <option value="spouse">Spouse</option>
+                    <option value="sibling">Sibling</option>
+                    <option value="friend">Friend</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Emergency Contact Email
+                  </label>
+                  <input
+                    type="email"
+                    name="emergencyEmail"
+                    value={formData.emergencyEmail}
+                    onChange={handleChange}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                    placeholder="Emergency Email"
                     required
                   />
                 </div>
