@@ -4,8 +4,8 @@ import { useState } from 'react'
 import { ChevronLeft, ChevronRight, Plus, ArrowUpDown, Eye, Edit, Trash2 } from 'lucide-react'
 import CreateClientForm from './components/create-client-form'
 import ViewClient from './components/ViewClient'
-import EditClientModal from './components/edit-client-modal'
-import DeleteClientModal from './components/delete-client-modal'
+import EditClient from './components/EditClient'
+import DeleteClient from './components/DeleteClient'
 
 const Button = ({ children, className, ...props }) => (
     <button
@@ -246,13 +246,13 @@ const handleDelete = (client) => {
                 />
             )}
             {viewClient && (
-                <ViewClientModal
+                <ViewClient
                     client={viewClient}
                     onClose={() => setViewClient(null)}
                 />
             )}
             {editClient && (
-                <EditClientModal
+                <EditClient
                     client={editClient}
                     onClose={() => setEditClient(null)}
                     onSuccess={(updatedClient) => {
@@ -262,7 +262,7 @@ const handleDelete = (client) => {
                 />
             )}
             {deleteClient && (
-                <DeleteClientModal
+                <DeleteClient
                     client={deleteClient}
                     onClose={() => setDeleteClient(null)}
                     onConfirm={() => {
