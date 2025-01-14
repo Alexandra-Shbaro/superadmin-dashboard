@@ -29,7 +29,7 @@ const StepThree = ({ onNext }) => {
 
             <h1 className="font-bold text-lg mb-5">Company Overview</h1>
 
-            <div className="bg-white shadow-md rounded-lg p-8 w-full max-w-4xl mx-auto">
+            <div className="bg-white shadow-md rounded-lg p-8 w-full max-w-4xl mx-auto mb-5">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="h-full">
                         <div className="space-y-2">
