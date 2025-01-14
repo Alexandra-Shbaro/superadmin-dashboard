@@ -13,7 +13,7 @@ export function CampaignCard({ campaign }) {
     }
   
     return (
-      <div className="rounded-lg bg-[#2C3333] p-6 border border-[#FAFAFA]">
+      <div className="rounded-lg bg-mediumGrey p-6 border border-softBlack">
         <div className="flex items-start justify-between">
           <div>
             <h3 className="text-lg font-semibold text-[#FAFAFA]">{campaign.title}</h3>
