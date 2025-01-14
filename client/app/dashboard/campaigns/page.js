@@ -56,33 +56,33 @@ const campaigns = [
 ]
 
 export default function Page() {
-  return (
-    <div className="min-h-screen bg-[#2C3333] p-8">
-      <div className="mx-auto max-w-7xl">
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {stats.map((stat) => (
-            <StatsCard key={stat.title} {...stat} />
-          ))}
-        </div>
-        
-        <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2">
-          {campaigns.map((campaign) => (
-            <CampaignCard key={campaign.title} campaign={campaign} />
-          ))}
-        </div>
-        
-        <div className="mt-8 flex justify-center gap-2">
-          <button className="rounded-md bg-[#FF8A00] px-3 py-1 text-sm font-medium text-[#2C3333]">1</button>
-          <button className="rounded-md px-3 py-1 text-sm font-medium text-[#E7E7E7] hover:bg-[#5C5C5C]">2</button>
-          <button className="rounded-md px-3 py-1 text-sm font-medium text-[#E7E7E7] hover:bg-[#5C5C5C]">3</button>
-          <button className="rounded-md px-3 py-1 text-sm font-medium text-[#E7E7E7] hover:bg-[#5C5C5C]">
-            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
-          </button>
+    return (
+      <div className="min-h-screen bg-lightGrey rounded-md p-6">
+        <div className="mx-auto max-w-7xl">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {stats.map((stat) => (
+              <StatsCard key={stat.title} {...stat} />
+            ))}
+          </div>
+          
+          <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2">
+            {campaigns.map((campaign) => (
+              <CampaignCard key={campaign.title} campaign={campaign} />
+            ))}
+          </div>
+          
+          <div className="mt-8 flex justify-center gap-2">
+            <button className="rounded-md bg-logoOrange px-3 py-1 text-sm font-medium text-softBlack">1</button>
+            <button className="rounded-md px-3 py-1 text-sm font-medium text-lightGrey hover:bg-softBlack/20">2</button>
+            <button className="rounded-md px-3 py-1 text-sm font-medium text-lightGrey hover:bg-softBlack/20">3</button>
+            <button className="rounded-md px-3 py-1 text-sm font-medium text-lightGrey hover:bg-softBlack/20">
+              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
-    </div>
-  )
-}
+    )
+  }
 
