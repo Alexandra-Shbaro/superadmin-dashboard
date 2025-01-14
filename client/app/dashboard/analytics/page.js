@@ -62,7 +62,7 @@ const allCampaigns = [
   }
 ]
 
-const ITEMS_PER_PAGE = 4
+const ITEMS_PER_PAGE = 6
 
 function StatsCard({ title, value, progress }) {
   return (
@@ -142,7 +142,7 @@ export default function AnalyticsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#FAFAFA] p-8">
+    <div className="min-h-screen bg-lightGrey p-8">
       <div className="max-w-7xl mx-auto">
         <h1 className="text-2xl font-bold text-[#2C3333] mb-8">Campaign Analytics</h1>
         
