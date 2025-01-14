@@ -33,6 +33,12 @@ export default function CreatePlatformManager({ isOpen, onClose, onSubmit }) {
   const handleSubmit = (e) => {
     e.preventDefault()
     
+    // Check if the form is valid (all required fields are filled)
+    if (!e.target.checkValidity()) {
+      e.target.reportValidity()
+      return
+    }
+    
     // Check if passwords match
     if (formData.temporaryPassword !== formData.confirmPassword) {
       alert('Passwords do not match')
@@ -75,6 +81,7 @@ export default function CreatePlatformManager({ isOpen, onClose, onSubmit }) {
                     placeholder="Name"
                     className="w-full p-2 border rounded-md"
                     onChange={handleChange}
+                    required
                   />
                 </div>
                 <div className="relative">
@@ -84,6 +91,7 @@ export default function CreatePlatformManager({ isOpen, onClose, onSubmit }) {
                     placeholder="Date of Birth"
                     className="w-full p-2 border rounded-md"
                     onChange={handleChange}
+                    required
                   />
                   <Calendar className="absolute right-3 top-2.5 h-4 w-4 text-gray-400" />
                 </div>
@@ -94,6 +102,7 @@ export default function CreatePlatformManager({ isOpen, onClose, onSubmit }) {
                     placeholder="Emergency Contact"
                     className="w-full p-2 border rounded-md"
                     onChange={handleChange}
+                    required
                   />
                 </div>
                 <div>
@@ -103,6 +112,7 @@ export default function CreatePlatformManager({ isOpen, onClose, onSubmit }) {
                     placeholder="Last Name"
                     className="w-full p-2 border rounded-md"
                     onChange={handleChange}
+                    required
                   />
                 </div>
                 <div>
@@ -112,6 +122,7 @@ export default function CreatePlatformManager({ isOpen, onClose, onSubmit }) {
                     placeholder="Area"
                     className="w-full p-2 border rounded-md"
                     onChange={handleChange}
+                    required
                   />
                 </div>
                 <div>
@@ -119,6 +130,7 @@ export default function CreatePlatformManager({ isOpen, onClose, onSubmit }) {
                     name="relationship"
                     className="w-full p-2 border rounded-md"
                     onChange={handleChange}
+                    required
                   >
                     <option value="">Relationship</option>
                     <option value="parent">Parent</option>
@@ -133,6 +145,7 @@ export default function CreatePlatformManager({ isOpen, onClose, onSubmit }) {
                     placeholder="Personal Email"
                     className="w-full p-2 border rounded-md"
                     onChange={handleChange}
+                    required
                   />
                 </div>
                 <div>
@@ -142,6 +155,7 @@ export default function CreatePlatformManager({ isOpen, onClose, onSubmit }) {
                     placeholder="Street"
                     className="w-full p-2 border rounded-md"
                     onChange={handleChange}
+                    required
                   />
                 </div>
                 <div>
@@ -151,6 +165,7 @@ export default function CreatePlatformManager({ isOpen, onClose, onSubmit }) {
                     placeholder="Emergency Contact Email"
                     className="w-full p-2 border rounded-md"
                     onChange={handleChange}
+                    required
                   />
                 </div>
                 <div>
@@ -160,6 +175,7 @@ export default function CreatePlatformManager({ isOpen, onClose, onSubmit }) {
                     placeholder="Phone Number"
                     className="w-full p-2 border rounded-md"
                     onChange={handleChange}
+                    required
                   />
                 </div>
                 <div>
@@ -169,6 +185,7 @@ export default function CreatePlatformManager({ isOpen, onClose, onSubmit }) {
                     placeholder="Building"
                     className="w-full p-2 border rounded-md"
                     onChange={handleChange}
+                    required
                   />
                 </div>
                 <div>
@@ -178,6 +195,7 @@ export default function CreatePlatformManager({ isOpen, onClose, onSubmit }) {
                     placeholder="Emergency Contact Number"
                     className="w-full p-2 border rounded-md"
                     onChange={handleChange}
+                    required
                   />
                 </div>
               </div>
@@ -192,6 +210,7 @@ export default function CreatePlatformManager({ isOpen, onClose, onSubmit }) {
                     name="department"
                     className="w-full p-2 border rounded-md"
                     onChange={handleChange}
+                    required
                   >
                     <option value="">Select Department</option>
                     <option value="marketing">Marketing</option>
@@ -204,6 +223,7 @@ export default function CreatePlatformManager({ isOpen, onClose, onSubmit }) {
                     name="employmentType"
                     className="w-full p-2 border rounded-md"
                     onChange={handleChange}
+                    required
                   >
                     <option value="">Employment Type</option>
                     <option value="fullTime">Full Time</option>
@@ -217,6 +237,7 @@ export default function CreatePlatformManager({ isOpen, onClose, onSubmit }) {
                       placeholder="Start Date"
                       className="w-full p-2 border rounded-md"
                       onChange={handleChange}
+                      required
                     />
                     <Calendar className="absolute right-3 top-2.5 h-4 w-4 text-gray-400" />
                   </div>
@@ -226,6 +247,7 @@ export default function CreatePlatformManager({ isOpen, onClose, onSubmit }) {
                     placeholder="Work Hours"
                     className="w-full p-2 border rounded-md"
                     onChange={handleChange}
+                    required
                   />
                 </div>
               </div>
@@ -240,6 +262,7 @@ export default function CreatePlatformManager({ isOpen, onClose, onSubmit }) {
                     placeholder="Username"
                     className="w-full p-2 border rounded-md"
                     onChange={handleChange}
+                    required
                   />
                   <input
                     type="email"
@@ -247,6 +270,7 @@ export default function CreatePlatformManager({ isOpen, onClose, onSubmit }) {
                     placeholder="Email"
                     className="w-full p-2 border rounded-md"
                     onChange={handleChange}
+                    required
                   />
                   <input
                     type="password"
@@ -254,6 +278,7 @@ export default function CreatePlatformManager({ isOpen, onClose, onSubmit }) {
                     placeholder="Temporary Password"
                     className="w-full p-2 border rounded-md"
                     onChange={handleChange}
+                    required
                   />
                   <input
                     type="password"
@@ -261,6 +286,7 @@ export default function CreatePlatformManager({ isOpen, onClose, onSubmit }) {
                     placeholder="Confirm Password"
                     className="w-full p-2 border rounded-md"
                     onChange={handleChange}
+                    required
                   />
                 </div>
               </div>
