@@ -28,10 +28,10 @@ export default function WorkspacePage() {
   return (
     <div className="p-6 space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-semibold text-softBlack">Platform Managers</h1>
+        <h1 className="text-xl font-semibold text-softBlack">Platform Managers</h1>
         <button className="px-4 py-2 bg-logoOrange hover:bg-logoOrange/90 text-white rounded-md flex items-center">
           <Plus className="mr-2 h-4 w-4" />
-          Add
+          Add Platform Manager 
         </button>
       </div>
 
