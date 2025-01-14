@@ -41,11 +41,11 @@ const Header = () => {
 
     useEffect(() => {
         const pathToTextMap = {
-            '/workspace': 'Workspace Management',
-            '/dashboard': 'Dashboard',
-            '/analytics': 'Analytics',
-            '/campaigns': 'Campaigns',
-            '/reports': 'Reports',
+            '/dashboard/workspace': 'Workspace Management',
+            '/dashboard/dash': 'Dashboard',
+            '/dashboard/analytics': 'Analytics',
+            '/dashboard/campaigns': 'Campaigns',
+            '/dashboard/reports': 'Reports',
         };
 
         const matchingPath = Object.keys(pathToTextMap).find((key) => pathname.startsWith(key));
