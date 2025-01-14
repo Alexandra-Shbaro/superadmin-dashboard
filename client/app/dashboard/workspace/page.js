@@ -310,17 +310,18 @@ export default function WorkspacePage() {
 
               <div className="space-y-6">
                 {/* Personal Information */}
-                <div className="bg-gray-50 p-6 rounded-lg">
-                  <h3 className="text-sm font-medium text-gray-900 mb-4">Personal Information</h3>
-                  <div className="grid grid-cols-3 gap-4">
+                <div className="bg-gray-50 p-6 rounded-lg mb-6">
+                  <h3 className="text-base italic font-bold text-gray-900 mb-4">Personal Information</h3>
+                  <div className="grid grid-cols-3 gap-4 items-end">
                     <p><span className="font-medium">Name:</span> {selectedManager.name}</p>
                     <p><span className="font-medium">Last Name:</span> {selectedManager.lastName}</p>
                     <p><span className="font-medium">Date of Birth:</span> {selectedManager.dateOfBirth}</p>
-                    <p><span className="font-medium">Area:</span> {selectedManager.area}</p>
-                    <p><span className="font-medium">Personal Email:</span> {selectedManager.personalEmail}</p>
                     <p><span className="font-medium">Phone Number:</span> {selectedManager.phoneNumber}</p>
+                    <p><span className="font-medium">Personal Email:</span> {selectedManager.personalEmail}</p>
+                    <p><span className="font-medium">Area:</span> {selectedManager.area}</p>
                     <p><span className="font-medium">Street:</span> {selectedManager.street}</p>
                     <p><span className="font-medium">Building:</span> {selectedManager.building}</p>
+                    <h4 className="col-span-3 text-base italic font-medium text-gray-900">Emergency Contact Details</h4>
                     <p><span className="font-medium">Emergency Contact:</span> {selectedManager.emergencyContact}</p>
                     <p><span className="font-medium">Emergency Contact Email:</span> {selectedManager.emergencyContactEmail}</p>
                     <p><span className="font-medium">Emergency Contact Number:</span> {selectedManager.emergencyContactNumber}</p>
@@ -330,7 +331,7 @@ export default function WorkspacePage() {
 
                 {/* Professional Information */}
                 <div className="bg-gray-50 p-6 rounded-lg">
-                  <h3 className="text-sm font-medium text-gray-900 mb-4">Professional Information</h3>
+                  <h3 className="text-base italic font-bold text-gray-900 mb-4">Professional Information</h3>
                   <div className="grid grid-cols-2 gap-4">
                     <p><span className="font-medium">Department:</span> {selectedManager.department}</p>
                     <p><span className="font-medium">Employment Type:</span> {selectedManager.employmentType}</p>
@@ -341,7 +342,7 @@ export default function WorkspacePage() {
 
                 {/* Account Details */}
                 <div className="bg-gray-50 p-6 rounded-lg">
-                  <h3 className="text-sm font-medium text-gray-900 mb-4">Account Details</h3>
+                  <h3 className="text-base italic font-bold text-gray-900 mb-4">Account Details</h3>
                   <div className="grid grid-cols-2 gap-4">
                     <p><span className="font-medium">Username:</span> {selectedManager.username}</p>
                     <p><span className="font-medium">Email:</span> {selectedManager.email}</p>
@@ -379,13 +380,14 @@ export default function WorkspacePage() {
               }}>
                 <div className="space-y-6">
                   {/* Personal Information */}
-                  <div className="bg-gray-50 p-6 rounded-lg">
-                    <h3 className="text-sm font-medium text-gray-900 mb-4">Personal Information</h3>
-                    <div className="grid grid-cols-3 gap-4">
+                  <div className="bg-gray-50 p-6 rounded-lg mb-6">
+                    <h3 className="text-base italic font-bold text-gray-900 mb-4">Personal Information</h3>
+                    <div className="grid grid-cols-3 gap-4 items-end">
                       <input
                         type="text"
                         name="name"
                         defaultValue={editingManager.name}
+                        placeholder="Name"
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                         required
                       />
@@ -393,6 +395,7 @@ export default function WorkspacePage() {
                         type="text"
                         name="lastName"
                         defaultValue={editingManager.lastName}
+                        placeholder="Last Name"
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                         required
                       />
@@ -400,20 +403,7 @@ export default function WorkspacePage() {
                         type="date"
                         name="dateOfBirth"
                         defaultValue={editingManager.dateOfBirth}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-                        required
-                      />
-                      <input
-                        type="text"
-                        name="area"
-                        defaultValue={editingManager.area}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-                        required
-                      />
-                      <input
-                        type="email"
-                        name="personalEmail"
-                        defaultValue={editingManager.personalEmail}
+                        placeholder="Date of Birth (MM/DD/YYYY)"
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                         required
                       />
@@ -421,6 +411,23 @@ export default function WorkspacePage() {
                         type="tel"
                         name="phoneNumber"
                         defaultValue={editingManager.phoneNumber}
+                        placeholder="Phone Number"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                        required
+                      />
+                      <input
+                        type="email"
+                        name="personalEmail"
+                        defaultValue={editingManager.personalEmail}
+                        placeholder="Personal Email"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                        required
+                      />
+                      <input
+                        type="text"
+                        name="area"
+                        defaultValue={editingManager.area}
+                        placeholder="Area"
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                         required
                       />
@@ -428,6 +435,7 @@ export default function WorkspacePage() {
                         type="text"
                         name="street"
                         defaultValue={editingManager.street}
+                        placeholder="Street"
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                         required
                       />
@@ -435,13 +443,16 @@ export default function WorkspacePage() {
                         type="text"
                         name="building"
                         defaultValue={editingManager.building}
+                        placeholder="Building"
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                         required
                       />
+                      <h4 className="col-span-3 text-base italic font-bold text-gray-900">Emergency Contact Details</h4>
                       <input
                         type="text"
                         name="emergencyContact"
                         defaultValue={editingManager.emergencyContact}
+                        placeholder="Emergency Contact"
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                         required
                       />
@@ -449,6 +460,7 @@ export default function WorkspacePage() {
                         type="email"
                         name="emergencyContactEmail"
                         defaultValue={editingManager.emergencyContactEmail}
+                        placeholder="Emergency Contact Email"
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                         required
                       />
@@ -456,6 +468,7 @@ export default function WorkspacePage() {
                         type="tel"
                         name="emergencyContactNumber"
                         defaultValue={editingManager.emergencyContactNumber}
+                        placeholder="Emergency Contact Number"
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                         required
                       />
@@ -465,23 +478,27 @@ export default function WorkspacePage() {
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                         required
                       >
+                        <option value="">Relationship</option>
                         <option value="parent">Parent</option>
                         <option value="spouse">Spouse</option>
                         <option value="sibling">Sibling</option>
+                        <option value="relative">Relative</option>
+                        <option value="friend">Friend</option>
                       </select>
                     </div>
                   </div>
 
                   {/* Professional Information */}
                   <div className="bg-gray-50 p-6 rounded-lg">
-                    <h3 className="text-sm font-medium text-gray-900 mb-4">Professional Information</h3>
-                    <div className="grid grid-cols-2 gap-4">
+                    <h3 className="text-base italic font-bold text-gray-900 mb-4">Professional Information</h3>
+                    <div className="space-y-4">
                       <select
                         name="department"
                         defaultValue={editingManager.department}
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                         required
                       >
+                        <option value="">Select Department</option>
                         <option value="marketing">Marketing</option>
                         <option value="sales">Sales</option>
                         <option value="engineering">Engineering</option>
@@ -494,6 +511,7 @@ export default function WorkspacePage() {
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                         required
                       >
+                        <option value="">Employment Type</option>
                         <option value="fullTime">Full Time</option>
                         <option value="partTime">Part Time</option>
                         <option value="contract">Contract</option>
@@ -502,6 +520,7 @@ export default function WorkspacePage() {
                         type="date"
                         name="startDate"
                         defaultValue={editingManager.startDate}
+                        placeholder="Start Date"
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                         required
                       />
@@ -509,6 +528,7 @@ export default function WorkspacePage() {
                         type="text"
                         name="workHours"
                         defaultValue={editingManager.workHours}
+                        placeholder="Work Hours"
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                         required
                       />
@@ -517,12 +537,13 @@ export default function WorkspacePage() {
 
                   {/* Account Details */}
                   <div className="bg-gray-50 p-6 rounded-lg">
-                    <h3 className="text-sm font-medium text-gray-900 mb-4">Account Details</h3>
-                    <div className="grid grid-cols-2 gap-4">
+                    <h3 className="text-base italic font-bold text-gray-900 mb-4">Account Details</h3>
+                    <div className="space-y-4">
                       <input
                         type="text"
                         name="username"
                         defaultValue={editingManager.username}
+                        placeholder="Username"
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                         required
                       />
@@ -530,6 +551,7 @@ export default function WorkspacePage() {
                         type="email"
                         name="email"
                         defaultValue={editingManager.email}
+                        placeholder="Email"
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                         required
                       />
