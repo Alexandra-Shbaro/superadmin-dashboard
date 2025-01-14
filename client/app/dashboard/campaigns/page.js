@@ -1,5 +1,8 @@
-import { StatsCard } from "./components/StatsCard"
-import { CampaignCard } from "./components/CampaignCard"
+'use client'
+
+import { useState } from 'react'
+import { StatsCard } from './components/StatsCard'
+import { CampaignCard } from './components/CampaignCard'
 
 const stats = [
   { title: "Total Campaigns", value: "6" },
@@ -8,7 +11,7 @@ const stats = [
   { title: "Total Engagement", value: "65K" },
 ]
 
-const campaigns = [
+const allCampaigns = [
   {
     title: "Relaunch of Holiday Campaign",
     description: "Seasonal promotion focusing on holiday products and Christmas decorations",
@@ -49,40 +52,109 @@ const campaigns = [
     reach: "150K",
     timeline: {
       start: "2024/09/18",
-      end: "2025/11/18",
+      end: "2025/11/19",
     },
     progress: 100,
   },
+  {
+    title: "Social Media Boost",
+    description: "Increasing engagement across all social media platforms",
+    status: "Active",
+    reach: "500K",
+    timeline: {
+      start: "2024/10/1",
+      end: "2025/03/31",
+    },
+    progress: 30,
+  },
 ]
 
-export default function Page() {
-    return (
-      <div className="min-h-screen bg-lightGrey rounded-md p-6">
-        <div className="mx-auto max-w-7xl">
+const ITEMS_PER_PAGE = 4
+
+export default function CampaignsPage() {
+  const [currentPage, setCurrentPage] = useState(1)
+  
+  const totalPages = Math.ceil(allCampaigns.length / ITEMS_PER_PAGE)
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE
+  const endIndex = startIndex + ITEMS_PER_PAGE
+  const currentCampaigns = allCampaigns.slice(startIndex, endIndex)
+
+  const generatePageButtons = () => {
+    let buttons = []
+    for (let i = 1; i <= totalPages; i++) {
+      buttons.push(
+        <button
+          key={i}
+          onClick={() => setCurrentPage(i)}
+          className={`rounded-md px-3 py-1 text-sm font-medium ${
+            i === currentPage
+              ? "bg-[#FF8A00] text-[#2C3333]"
+              : "text-[#E7E7E7] hover:bg-[#2C3333]/20"
+          }`}
+        >
+          {i}
+        </button>
+      )
+    }
+    return buttons
+  }
+
+  const nextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1)
+    }
+  }
+
+  const prevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1)
+    }
+  }
+
+  return (
+    <div className="min-h-screen bg-lightGrey flex flex-col">
+      <div className="flex-grow p-8 overflow-y-auto">
+        <div className="mx-auto w-full max-w-7xl">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {stats.map((stat) => (
               <StatsCard key={stat.title} {...stat} />
             ))}
           </div>
           
-          <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2">
-            {campaigns.map((campaign) => (
-              <CampaignCard key={campaign.title} campaign={campaign} />
+          <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6" style={{ gridTemplateRows: 'repeat(2, minmax(0, 1fr))' }}>
+            {[...Array(ITEMS_PER_PAGE)].map((_, index) => (
+              <div key={index} className="min-h-[280px]">
+                {currentCampaigns[index] && (
+                  <CampaignCard campaign={currentCampaigns[index]} />
+                )}
+              </div>
             ))}
-          </div>
-          
-          <div className="mt-8 flex justify-center gap-2">
-            <button className="rounded-md bg-logoOrange px-3 py-1 text-sm font-medium text-softBlack">1</button>
-            <button className="rounded-md px-3 py-1 text-sm font-medium text-lightGrey hover:bg-softBlack/20">2</button>
-            <button className="rounded-md px-3 py-1 text-sm font-medium text-lightGrey hover:bg-softBlack/20">3</button>
-            <button className="rounded-md px-3 py-1 text-sm font-medium text-lightGrey hover:bg-softBlack/20">
-              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
           </div>
         </div>
       </div>
-    )
-  }
+      
+      <div className="bg-lightGrey border-t border-[#5C5C5C] p-4 flex justify-center items-center gap-2">
+        <button
+          onClick={prevPage}
+          className="rounded-md px-3 py-1 text-sm font-medium text-[#E7E7E7] hover:bg-softBlack/20 disabled:opacity-50 disabled:cursor-not-allowed"
+          disabled={currentPage === 1}
+        >
+          <svg className="h-5 w-5 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+        {generatePageButtons()}
+        <button
+          onClick={nextPage}
+          className="rounded-md px-3 py-1 text-sm font-medium text-[#E7E7E7] hover:bg-[#2C3333]/20 disabled:opacity-50 disabled:cursor-not-allowed"
+          disabled={currentPage === totalPages}
+        >
+          <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  )
+}
 
