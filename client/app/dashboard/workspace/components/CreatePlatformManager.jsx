@@ -73,7 +73,7 @@ export default function CreatePlatformManager({ isOpen, onClose, onSubmit }) {
             {/* Personal Information */}
             <div className="bg-gray-50 p-6 rounded-lg mb-6">
               <h3 className="text-base italic font-medium text-gray-900 mb-4">Personal Information</h3>
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-3 gap-4 items-end">
                 <div>
                   <input
                     type="text"
@@ -84,31 +84,42 @@ export default function CreatePlatformManager({ isOpen, onClose, onSubmit }) {
                     required
                   />
                 </div>
-                <div className="relative">
-                  <input
-                    type="date"
-                    name="dateOfBirth"
-                    placeholder="Date of Birth"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-                <div>
-                  <input
-                    type="text"
-                    name="emergencyContact"
-                    placeholder="Emergency Contact"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
                 <div>
                   <input
                     type="text"
                     name="lastName"
                     placeholder="Last Name"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+                <div className="relative">
+                  <input
+                    type="date"
+                    name="dateOfBirth"
+                    placeholder="Date of Birth (MM/DD/YYYY)"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+                
+                <div>
+                  <input
+                    type="tel"
+                    name="phoneNumber"
+                    placeholder="Phone Number"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+                <div>
+                  <input
+                    type="email"
+                    name="personalEmail"
+                    placeholder="Personal Email"
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                     onChange={handleChange}
                     required
@@ -125,23 +136,10 @@ export default function CreatePlatformManager({ isOpen, onClose, onSubmit }) {
                   />
                 </div>
                 <div>
-                  <select
-                    name="relationship"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-                    onChange={handleChange}
-                    required
-                  >
-                    <option value="">Relationship</option>
-                    <option value="parent">Parent</option>
-                    <option value="spouse">Spouse</option>
-                    <option value="sibling">Sibling</option>
-                  </select>
-                </div>
-                <div>
                   <input
-                    type="email"
-                    name="personalEmail"
-                    placeholder="Personal Email"
+                    type="text"
+                    name="street"
+                    placeholder="Street"
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                     onChange={handleChange}
                     required
@@ -150,8 +148,19 @@ export default function CreatePlatformManager({ isOpen, onClose, onSubmit }) {
                 <div>
                   <input
                     type="text"
-                    name="street"
-                    placeholder="Street"
+                    name="building"
+                    placeholder="Building"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+                <h4 className="col-span-3 text-base italic font-medium text-gray-900 ">Emergency Contact Details</h4>
+                <div>
+                  <input
+                    type="text"
+                    name="emergencyContact"
+                    placeholder="Emergency Contact"
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                     onChange={handleChange}
                     required
@@ -170,32 +179,27 @@ export default function CreatePlatformManager({ isOpen, onClose, onSubmit }) {
                 <div>
                   <input
                     type="tel"
-                    name="phoneNumber"
-                    placeholder="Phone Number"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-                <div>
-                  <input
-                    type="text"
-                    name="building"
-                    placeholder="Building"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-                <div>
-                  <input
-                    type="tel"
                     name="emergencyContactNumber"
                     placeholder="Emergency Contact Number"
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                     onChange={handleChange}
                     required
                   />
+                </div>
+                <div>
+                  <select
+                    name="relationship"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    onChange={handleChange}
+                    required
+                  >
+                    <option value="">Relationship</option>
+                    <option value="parent">Parent</option>
+                    <option value="spouse">Spouse</option>
+                    <option value="sibling">Sibling</option>
+                    <option value="relative">Relative</option>
+                    <option value="friend">Friend</option>
+                  </select>
                 </div>
               </div>
             </div>
