@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Line, Bar } from 'react-chartjs-2'
+import { Line, Bar, Doughnut } from 'react-chartjs-2'
 import { Download } from 'lucide-react'
 import {
   Chart as ChartJS,
@@ -10,6 +10,7 @@ import {
   PointElement,
   LineElement,
   BarElement,
+  ArcElement,
   Title,
   Tooltip,
   Legend
@@ -21,6 +22,7 @@ ChartJS.register(
   PointElement,
   LineElement,
   BarElement,
+  ArcElement,
   Title,
   Tooltip,
   Legend
@@ -84,6 +86,42 @@ const engagementTrendsData = {
   ],
 }
 
+const projectionData = {
+  labels: ['May', 'Jun', 'Jul', 'Aug'],
+  datasets: [
+    {
+      label: 'Projected',
+      data: [1200, 1500, 1800, 2000],
+      borderColor: '#FF8A00',
+      backgroundColor: '#FF8A00',
+      borderDash: [5, 5],
+      tension: 0.4,
+    },
+    {
+      label: 'Actual',
+      data: [1150, 1400, 1700],
+      borderColor: '#FFD700',
+      backgroundColor: '#FFD700',
+      tension: 0.4,
+    },
+  ],
+}
+
+const usageData = {
+  labels: ['Active Users', 'Occasional Users', 'Inactive Users'],
+  datasets: [{
+    data: [45, 25, 30],
+    backgroundColor: ['#FF8A00', '#FFD700', '#5C5C5C'],
+  }],
+}
+
+const churnRiskData = [
+  { name: 'Client A', lastActive: '2 weeks ago', riskLevel: 85 },
+  { name: 'Client B', lastActive: '1 week ago', riskLevel: 65 },
+  { name: 'Client C', lastActive: '2 days ago', riskLevel: 45 },
+  { name: 'Client D', lastActive: 'today', riskLevel: 25 },
+]
+
 const chartOptions = {
   responsive: true,
   plugins: {
@@ -102,6 +140,15 @@ const chartOptions = {
       grid: {
         display: false,
       },
+    },
+  },
+}
+
+const pieChartOptions = {
+  responsive: true,
+  plugins: {
+    legend: {
+      position: 'bottom',
     },
   },
 }
@@ -241,6 +288,80 @@ export default function ReportsPage() {
     </div>
   )
 
+  const renderInsightContent = () => (
+    <div className="space-y-6">
+      <div className="bg-[#FAFAFA] rounded-lg border border-[#E7E7E7] shadow-sm">
+        <div className="p-4 flex items-center justify-between border-b border-[#E7E7E7]">
+          <h2 className="text-lg font-semibold text-[#2C3333]">Future Projections</h2>
+          <button
+            onClick={() => handleDownload('projections')}
+            className="p-2 text-[#5C5C5C] hover:text-[#2C3333] rounded-md hover:bg-[#E7E7E7]"
+          >
+            <Download className="h-4 w-4" />
+          </button>
+        </div>
+        <div className="p-6">
+          <div className="h-[300px]">
+            <Line options={chartOptions} data={projectionData} />
+          </div>
+        </div>
+      </div>
+
+      <div className="bg-[#FAFAFA] rounded-lg border border-[#E7E7E7] shadow-sm">
+        <div className="p-4 flex items-center justify-between border-b border-[#E7E7E7]">
+          <h2 className="text-lg font-semibold text-[#2C3333]">Usage Distribution</h2>
+          <button
+            onClick={() => handleDownload('usage')}
+            className="p-2 text-[#5C5C5C] hover:text-[#2C3333] rounded-md hover:bg-[#E7E7E7]"
+          >
+            <Download className="h-4 w-4" />
+          </button>
+        </div>
+        <div className="p-6">
+          <div className="h-[300px]">
+            <Doughnut options={pieChartOptions} data={usageData} />
+          </div>
+        </div>
+      </div>
+
+      <div className="bg-[#FAFAFA] rounded-lg border border-[#E7E7E7] shadow-sm">
+        <div className="p-4 flex items-center justify-between border-b border-[#E7E7E7]">
+          <h2 className="text-lg font-semibold text-[#2C3333]">Churn Risk Analysis</h2>
+          <button
+            onClick={() => handleDownload('churn')}
+            className="p-2 text-[#5C5C5C] hover:text-[#2C3333] rounded-md hover:bg-[#E7E7E7]"
+          >
+            <Download className="h-4 w-4" />
+          </button>
+        </div>
+        <div className="p-6">
+          <div className="space-y-4">
+            {churnRiskData.map((client) => (
+              <div
+                key={client.name}
+                className="flex items-center justify-between p-4 rounded-lg border border-[#E7E7E7]"
+              >
+                <div className="space-y-1">
+                  <h3 className="font-medium text-[#2C3333]">{client.name}</h3>
+                  <p className="text-sm text-[#5C5C5C]">Last active: {client.lastActive}</p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-24 h-2 bg-[#E7E7E7] rounded-full overflow-hidden">
+                    <div 
+                      className="h-full bg-[#FF8A00] rounded-full"
+                      style={{ width: `${client.riskLevel}%` }}
+                    />
+                  </div>
+                  <span className="text-sm text-[#5C5C5C]">{client.riskLevel}% risk</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+
   const handleDownload = (section) => {
     // Implement download functionality
     console.log(`Downloading ${section} data...`)
@@ -270,6 +391,7 @@ export default function ReportsPage() {
 
         {activeTab === 'overview' && renderOverviewContent()}
         {activeTab === 'engagement' && renderEngagementContent()}
+        {activeTab === 'insight' && renderInsightContent()}
       </div>
     </div>
   )
