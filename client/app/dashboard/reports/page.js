@@ -1,8 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { Line, Bar, Doughnut } from 'react-chartjs-2'
 import { Download } from 'lucide-react'
+import { downloadChartAsPDF } from './utils/downloadChart'
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -155,6 +156,14 @@ const pieChartOptions = {
 
 export default function ReportsPage() {
   const [activeTab, setActiveTab] = useState('overview')
+  
+  const activityChartRef = useRef(null)
+  const retentionChartRef = useRef(null)
+  const comparisonChartRef = useRef(null)
+  const trendsChartRef = useRef(null)
+  const projectionsChartRef = useRef(null)
+  const usageChartRef = useRef(null)
+
 
   const renderOverviewContent = () => (
     <div className="space-y-6">
@@ -162,14 +171,14 @@ export default function ReportsPage() {
         <div className="p-4 flex items-center justify-between border-b border-[#E7E7E7]">
           <h2 className="text-lg font-semibold text-[#2C3333]">Client Activity Overview</h2>
           <button
-            onClick={() => handleDownload('activity')}
+            onClick={() => handleDownload('activity', activityChartRef, 'Client Activity Overview')}
             className="p-2 text-[#5C5C5C] hover:text-[#2C3333] rounded-md hover:bg-[#E7E7E7]"
           >
             <Download className="h-4 w-4" />
           </button>
         </div>
         <div className="p-6">
-          <div className="h-[300px]">
+          <div className="h-[300px]" ref={activityChartRef}>
             <Line options={chartOptions} data={{
               labels: months,
               datasets: [
@@ -197,14 +206,14 @@ export default function ReportsPage() {
         <div className="p-4 flex items-center justify-between border-b border-[#E7E7E7]">
           <h2 className="text-lg font-semibold text-[#2C3333]">Client Retention Rates</h2>
           <button
-            onClick={() => handleDownload('retention')}
+            onClick={() => handleDownload('retention', retentionChartRef, 'Client Retention Rates')}
             className="p-2 text-[#5C5C5C] hover:text-[#2C3333] rounded-md hover:bg-[#E7E7E7]"
           >
             <Download className="h-4 w-4" />
           </button>
         </div>
         <div className="p-6">
-          <div className="h-[300px]">
+          <div className="h-[300px]" ref={retentionChartRef}>
             <Line options={chartOptions} data={{
               labels: months,
               datasets: [
@@ -256,14 +265,14 @@ export default function ReportsPage() {
         <div className="p-4 flex items-center justify-between border-b border-[#E7E7E7]">
           <h2 className="text-lg font-semibold text-[#2C3333]">Client Comparisons</h2>
           <button
-            onClick={() => handleDownload('comparisons')}
+            onClick={() => handleDownload('comparisons', comparisonChartRef, 'Client Comparisons')}
             className="p-2 text-[#5C5C5C] hover:text-[#2C3333] rounded-md hover:bg-[#E7E7E7]"
           >
             <Download className="h-4 w-4" />
           </button>
         </div>
         <div className="p-6">
-          <div className="h-[300px]">
+          <div className="h-[300px]" ref={comparisonChartRef}>
             <Bar options={chartOptions} data={comparisonData} />
           </div>
         </div>
@@ -273,14 +282,14 @@ export default function ReportsPage() {
         <div className="p-4 flex items-center justify-between border-b border-[#E7E7E7]">
           <h2 className="text-lg font-semibold text-[#2C3333]">Engagement Trends</h2>
           <button
-            onClick={() => handleDownload('trends')}
+            onClick={() => handleDownload('trends', trendsChartRef, 'Engagement Trends')}
             className="p-2 text-[#5C5C5C] hover:text-[#2C3333] rounded-md hover:bg-[#E7E7E7]"
           >
             <Download className="h-4 w-4" />
           </button>
         </div>
         <div className="p-6">
-          <div className="h-[300px]">
+          <div className="h-[300px]" ref={trendsChartRef}>
             <Line options={chartOptions} data={engagementTrendsData} />
           </div>
         </div>
@@ -294,14 +303,14 @@ export default function ReportsPage() {
         <div className="p-4 flex items-center justify-between border-b border-[#E7E7E7]">
           <h2 className="text-lg font-semibold text-[#2C3333]">Future Projections</h2>
           <button
-            onClick={() => handleDownload('projections')}
+            onClick={() => handleDownload('projections', projectionsChartRef, 'Future Projections')}
             className="p-2 text-[#5C5C5C] hover:text-[#2C3333] rounded-md hover:bg-[#E7E7E7]"
           >
             <Download className="h-4 w-4" />
           </button>
         </div>
         <div className="p-6">
-          <div className="h-[300px]">
+          <div className="h-[300px]" ref={projectionsChartRef}>
             <Line options={chartOptions} data={projectionData} />
           </div>
         </div>
@@ -311,14 +320,14 @@ export default function ReportsPage() {
         <div className="p-4 flex items-center justify-between border-b border-[#E7E7E7]">
           <h2 className="text-lg font-semibold text-[#2C3333]">Usage Distribution</h2>
           <button
-            onClick={() => handleDownload('usage')}
+            onClick={() => handleDownload('usage', usageChartRef, 'Usage Distribution')}
             className="p-2 text-[#5C5C5C] hover:text-[#2C3333] rounded-md hover:bg-[#E7E7E7]"
           >
             <Download className="h-4 w-4" />
           </button>
         </div>
         <div className="p-6">
-          <div className="h-[300px]">
+          <div className="h-[300px]" ref={usageChartRef}>
             <Doughnut options={pieChartOptions} data={usageData} />
           </div>
         </div>
@@ -362,9 +371,12 @@ export default function ReportsPage() {
     </div>
   )
 
-  const handleDownload = (section) => {
-    // Implement download functionality
-    console.log(`Downloading ${section} data...`)
+  const handleDownload = async (section, ref, title) => {
+    if(ref){
+      await downloadChartAsPDF(ref, title)
+    } else {
+      console.log(`Downloading ${section} data...`)
+    }
   }
 
   return (
