@@ -88,8 +88,8 @@ export default function CampaignsPage() {
           onClick={() => setCurrentPage(i)}
           className={`rounded-md px-3 py-1 text-sm font-medium ${
             i === currentPage
-              ? "bg-[#FF8A00] text-[#2C3333]"
-              : "text-[#E7E7E7] hover:bg-[#2C3333]/20"
+              ? "bg-logoOrange text-softBlack"
+              : "text-lightGrey hover:bg-softBlack hover:text-offWhite"
           }`}
         >
           {i}
@@ -133,10 +133,10 @@ export default function CampaignsPage() {
         </div>
       </div>
       
-      <div className="bg-lightGrey border-t border-[#5C5C5C] p-4 flex justify-center items-center gap-2">
+      <div className="bg-lightGrey border-t border-mediumGrey p-4 flex justify-center items-center gap-2">
         <button
           onClick={prevPage}
-          className="rounded-md px-3 py-1 text-sm font-medium text-[#E7E7E7] hover:bg-softBlack/20 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="rounded-md px-3 py-1 text-sm font-medium text-lightGrey hover:bg-softBlack hover:text-offWhite disabled:opacity-50 disabled:cursor-not-allowed"
           disabled={currentPage === 1}
         >
           <svg className="h-5 w-5 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -146,7 +146,7 @@ export default function CampaignsPage() {
         {generatePageButtons()}
         <button
           onClick={nextPage}
-          className="rounded-md px-3 py-1 text-sm font-medium text-[#E7E7E7] hover:bg-[#2C3333]/20 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="rounded-md px-3 py-1 text-sm font-medium text-lightGrey hover:bg-softBlack hover:text-offWhite disabled:opacity-50 disabled:cursor-not-allowed"
           disabled={currentPage === totalPages}
         >
           <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -157,4 +157,3 @@ export default function CampaignsPage() {
     </div>
   )
 }
-
