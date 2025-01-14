@@ -151,7 +151,7 @@ export default function Home() {
               onClick={() => setIsActive(false)}
               className="bg-transparent border border-white text-white text-sm px-12 py-3 rounded-lg font-semibold tracking-wider uppercase mt-3 cursor-pointer"
             >
-              Sign In
+              Log In
             </button>
           </div>
           <div className={`absolute right-0 w-1/2 h-full flex flex-col items-center justify-center px-8 text-center transition-all duration-600 ease-in-out`}>
