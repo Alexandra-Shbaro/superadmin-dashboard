@@ -257,38 +257,38 @@ export default function WorkspacePage() {
         </table>
       </div>
 
-      <div className="flex justify-center mt-4">
-        <div className="flex items-center space-x-2">
+      <div className="mt-8 flex justify-center items-center gap-2">
+        <button
+          onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+          className="rounded-md px-3 py-1 text-sm font-medium text-[#5C5C5C] hover:bg-[#E7E7E7] disabled:opacity-50 disabled:cursor-not-allowed"
+          disabled={currentPage === 1}
+        >
+          <svg className="h-5 w-5 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+        {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
           <button
-            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-            disabled={currentPage === 1}
-            className="inline-flex items-center px-2 py-1 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+            key={page}
+            onClick={() => setCurrentPage(page)}
+            className={`rounded-md px-3 py-1 text-sm font-medium ${
+              currentPage === page
+                ? "bg-[#FF8A00] text-[#FAFAFA]"
+                : "text-[#5C5C5C] hover:bg-[#E7E7E7]"
+            }`}
           >
-            <ChevronLeft className="w-4 h-4" />
+            {page}
           </button>
-          <div className="flex items-center space-x-1">
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-              <button
-                key={page}
-                onClick={() => setCurrentPage(page)}
-                className={`px-3 py-1 rounded-md text-sm font-medium ${
-                  currentPage === page
-                    ? "bg-logoOrange text-white"
-                    : "text-gray-700 hover:bg-gray-50"
-                }`}
-              >
-                {page}
-              </button>
-            ))}
-          </div>
-          <button
-            onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-            disabled={currentPage === totalPages}
-            className="inline-flex items-center px-2 py-1 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            <ChevronRight className="w-4 h-4" />
-          </button>
-        </div>
+        ))}
+        <button
+          onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+          className="rounded-md px-3 py-1 text-sm font-medium text-[#5C5C5C] hover:bg-[#E7E7E7] disabled:opacity-50 disabled:cursor-not-allowed"
+          disabled={currentPage === totalPages}
+        >
+          <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
       </div>
 
       <CreatePlatformManager 
@@ -311,7 +311,7 @@ export default function WorkspacePage() {
               <div className="space-y-6">
                 {/* Personal Information */}
                 <div className="bg-gray-50 p-6 rounded-lg mb-6">
-                  <h3 className="text-base italic font-bold text-gray-900 mb-4">Personal Information</h3>
+                  <h3 className="text-base italic font-medium text-gray-900 mb-4">Personal Information</h3>
                   <div className="grid grid-cols-3 gap-4 items-end">
                     <p><span className="font-medium">Name:</span> {selectedManager.name}</p>
                     <p><span className="font-medium">Last Name:</span> {selectedManager.lastName}</p>
@@ -331,7 +331,7 @@ export default function WorkspacePage() {
 
                 {/* Professional Information */}
                 <div className="bg-gray-50 p-6 rounded-lg">
-                  <h3 className="text-base italic font-bold text-gray-900 mb-4">Professional Information</h3>
+                  <h3 className="text-base italic font-medium text-gray-900 mb-4">Professional Information</h3>
                   <div className="grid grid-cols-2 gap-4">
                     <p><span className="font-medium">Department:</span> {selectedManager.department}</p>
                     <p><span className="font-medium">Employment Type:</span> {selectedManager.employmentType}</p>
@@ -342,7 +342,7 @@ export default function WorkspacePage() {
 
                 {/* Account Details */}
                 <div className="bg-gray-50 p-6 rounded-lg">
-                  <h3 className="text-base italic font-bold text-gray-900 mb-4">Account Details</h3>
+                  <h3 className="text-base italic font-medium text-gray-900 mb-4">Account Details</h3>
                   <div className="grid grid-cols-2 gap-4">
                     <p><span className="font-medium">Username:</span> {selectedManager.username}</p>
                     <p><span className="font-medium">Email:</span> {selectedManager.email}</p>
@@ -381,7 +381,7 @@ export default function WorkspacePage() {
                 <div className="space-y-6">
                   {/* Personal Information */}
                   <div className="bg-gray-50 p-6 rounded-lg mb-6">
-                    <h3 className="text-base italic font-bold text-gray-900 mb-4">Personal Information</h3>
+                    <h3 className="text-base italic font-medium text-gray-900 mb-4">Personal Information</h3>
                     <div className="grid grid-cols-3 gap-4 items-end">
                       <input
                         type="text"
@@ -447,7 +447,7 @@ export default function WorkspacePage() {
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                         required
                       />
-                      <h4 className="col-span-3 text-base italic font-bold text-gray-900">Emergency Contact Details</h4>
+                      <h4 className="col-span-3 text-base italic font-medium text-gray-900">Emergency Contact Details</h4>
                       <input
                         type="text"
                         name="emergencyContact"
@@ -490,7 +490,7 @@ export default function WorkspacePage() {
 
                   {/* Professional Information */}
                   <div className="bg-gray-50 p-6 rounded-lg">
-                    <h3 className="text-base italic font-bold text-gray-900 mb-4">Professional Information</h3>
+                    <h3 className="text-base italic font-medium text-gray-900 mb-4">Professional Information</h3>
                     <div className="space-y-4">
                       <select
                         name="department"
@@ -537,7 +537,7 @@ export default function WorkspacePage() {
 
                   {/* Account Details */}
                   <div className="bg-gray-50 p-6 rounded-lg">
-                    <h3 className="text-base italic font-bold text-gray-900 mb-4">Account Details</h3>
+                    <h3 className="text-base italic font-medium text-gray-900 mb-4">Account Details</h3>
                     <div className="space-y-4">
                       <input
                         type="text"
