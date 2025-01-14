@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { Plus, Eye, Pencil, Trash, ChevronLeft, ChevronRight, X } from 'lucide-react'
 import CreatePlatformManager from './components/CreatePlatformManager'
+
 // Sample data - this would typically come from an API
 const initialManagers = [
   { 
@@ -141,6 +142,8 @@ export default function WorkspacePage() {
   const [selectedManager, setSelectedManager] = useState(null)
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
   const [editingManager, setEditingManager] = useState(null)
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+  const [managerToDelete, setManagerToDelete] = useState(null)
   const itemsPerPage = 6
   const totalPages = Math.ceil(managers.length / itemsPerPage)
 
@@ -173,6 +176,17 @@ export default function WorkspacePage() {
     setIsEditModalOpen(false)
   }
 
+  const handleDeleteManager = (manager) => {
+    setManagerToDelete(manager)
+    setIsDeleteModalOpen(true)
+  }
+
+  const confirmDelete = () => {
+    setManagers(managers.filter(m => m.id !== managerToDelete.id))
+    setIsDeleteModalOpen(false)
+    setManagerToDelete(null)
+  }
+
   return (
     <div className="p-6 space-y-6">
       <div className="flex justify-between items-center">
@@ -182,7 +196,7 @@ export default function WorkspacePage() {
           className="px-4 py-2 bg-logoOrange hover:bg-logoOrange/90 text-white rounded-md flex items-center"
         >
           <Plus className="mr-2 h-4 w-4" />
-          Add Platform Manager
+          Add Platform Manager 
         </button>
       </div>
 
@@ -228,7 +242,10 @@ export default function WorkspacePage() {
                       <Pencil className="h-4 w-4 text-gray-500" />
                       <span className="sr-only">Edit</span>
                     </button>
-                    <button className="p-2 hover:bg-gray-200 rounded-md">
+                    <button 
+                      className="p-2 hover:bg-gray-200 rounded-md"
+                      onClick={() => handleDeleteManager(manager)}
+                    >
                       <Trash className="h-4 w-4 text-red-500" />
                       <span className="sr-only">Delete</span>
                     </button>
@@ -537,6 +554,28 @@ export default function WorkspacePage() {
                   </button>
                 </div>
               </form>
+            </div>
+          </div>
+        </div>
+      )}
+      {isDeleteModalOpen && managerToDelete && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 w-96">
+            <h2 className="text-xl font-semibold text-softBlack mb-4">Confirm Deletion</h2>
+            <p className="mb-6">Are you sure you want to delete {managerToDelete.name}?</p>
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={() => setIsDeleteModalOpen(false)}
+                className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmDelete}
+                className="px-4 py-2 bg-logoOrange hover:bg-orange-700 text-white rounded-md text-sm font-medium"
+              >
+                Delete
+              </button>
             </div>
           </div>
         </div>
