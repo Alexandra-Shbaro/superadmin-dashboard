@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { Plus, Eye, Pencil, Trash, ChevronLeft, ChevronRight } from 'lucide-react'
+import CreatePlatformManager from './components/CreatePlatformManager'
 
 // Sample data - this would typically come from an API
 const initialManagers = [
@@ -16,6 +17,7 @@ const initialManagers = [
 export default function WorkspacePage() {
   const [currentPage, setCurrentPage] = useState(1)
   const [managers] = useState(initialManagers)
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const itemsPerPage = 6
   const totalPages = Math.ceil(managers.length / itemsPerPage)
 
@@ -25,11 +27,20 @@ export default function WorkspacePage() {
     return managers.slice(start, end)
   }
 
+  const handleCreateManager = (formData) => {
+    console.log('New manager data:', formData)
+    // Here you would typically make an API call to create the manager
+    setIsModalOpen(false)
+  }
+
   return (
     <div className="p-6 space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-xl font-semibold text-softBlack">Platform Managers</h1>
-        <button className="px-4 py-2 bg-logoOrange hover:bg-logoOrange/90 text-white rounded-md flex items-center">
+        <h1 className="text-2xl font-semibold text-softBlack">Platform Managers</h1>
+        <button 
+          onClick={() => setIsModalOpen(true)}
+          className="px-4 py-2 bg-logoOrange hover:bg-logoOrange/90 text-white rounded-md flex items-center"
+        >
           <Plus className="mr-2 h-4 w-4" />
           Add Platform Manager 
         </button>
@@ -108,6 +119,12 @@ export default function WorkspacePage() {
           </button>
         </div>
       </div>
+
+      <CreatePlatformManager 
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSubmit={handleCreateManager}
+      />
     </div>
   )
 }
