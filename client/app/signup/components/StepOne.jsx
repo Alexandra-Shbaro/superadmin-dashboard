@@ -11,11 +11,11 @@ const StepOne = ({ onNext }) => {
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-offWhite">
-            <div className="text-center">
+            <div className="text-center p-3">
                 <img
                     src="/lumilogo.svg" 
                     alt="Lumi Logo"
-                    className="mx-auto w-42 h-20 mb-10" 
+                    className="mx-auto w-42 h-20 mb-5" 
                 />
                 <p className="text-mediumGrey mb-5">Finish setting up your profile</p>
             </div>

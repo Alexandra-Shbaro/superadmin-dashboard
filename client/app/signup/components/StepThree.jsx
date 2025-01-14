@@ -11,13 +11,13 @@ const StepThree = ({ onNext }) => {
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-offWhite">
-            <div className="text-center">
+            <div className="text-center p-3">
                 <img
                     src="/lumilogo.svg" 
                     alt="Lumi Logo"
-                    className="mx-auto w-42 h-20 mb-10" 
+                    className="mx-auto w-42 h-20 mb-5" 
                 />
-                <p className="text-mediumGrey">Finish setting up your profile</p>
+                <p className="text-mediumGrey mb-5">Finish setting up your profile</p>
             </div>
             <div className="flex items-center space-x-4 mb-8">
                 <div className="w-6 h-6 rounded-full bg-mediumGrey text-offWhite flex items-center justify-center">1</div>
@@ -27,9 +27,9 @@ const StepThree = ({ onNext }) => {
                 <div className="w-6 h-6 rounded-full bg-logoOrange text-offWhite flex items-center justify-center">3</div>
             </div>
 
-            <h1 className="font-bold text-lg mb-6">Company Overview</h1>
+            <h1 className="font-bold text-lg mb-5">Company Overview</h1>
 
-            <div className="bg-offWhite shadow-md rounded-lg p-8 w-full max-w-4xl mx-auto">
+            <div className="bg-white shadow-md rounded-lg p-8 w-full max-w-4xl mx-auto">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="h-full">
                         <div className="space-y-2">
