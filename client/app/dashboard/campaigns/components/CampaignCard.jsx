@@ -1,19 +1,27 @@
+'use client'
+
+import { useState } from 'react'
+import { CampaignDetails } from './CampaignDetails'
+
 export function CampaignCard({ campaign }) {
-    const getStatusColor = (status) => {
-      switch (status) {
-        case 'Active':
-          return 'bg-[#FF8A00]'
-        case 'Planning':
-          return 'bg-[#FFD700]'
-        case 'Closed':
-          return 'bg-lightGrey'
-        default:
-          return 'bg-[#E7E7E7]'
-      }
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'Active':
+        return 'bg-[#FF8A00]'
+      case 'Planning':
+        return 'bg-[#FFD700]'
+      case 'Closed':
+        return 'bg-[#5C5C5C]'
+      default:
+        return 'bg-[#E7E7E7]'
     }
-  
-    return (
-      <div className="h-full rounded-lg bg-mediumGrey p-6 border border-[#FAFAFA] flex flex-col">
+  }
+
+  return (
+    <>
+      <div className="h-full rounded-lg bg-[#2C3333] p-6 border border-[#FAFAFA] flex flex-col">
         <div className="flex items-start justify-between mb-4">
           <div>
             <h3 className="text-lg font-semibold text-[#FAFAFA]">{campaign.title}</h3>
@@ -51,14 +59,23 @@ export function CampaignCard({ campaign }) {
           </div>
         </div>
         
-        <button className="mt-4 flex items-center text-sm text-[#FF8A00] hover:text-[#FFD700]">
+        <button 
+          onClick={() => setIsModalOpen(true)}
+          className="mt-4 flex items-center text-sm text-[#FF8A00] hover:text-[#FFD700]"
+        >
           View Details
           <svg className="ml-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
           </svg>
         </button>
       </div>
-    )
-  }
-  
-  
+
+      <CampaignDetails
+        campaign={campaign}
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
+    </>
+  )
+}
+
