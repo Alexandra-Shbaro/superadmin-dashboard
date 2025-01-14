@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { X, Calendar } from 'lucide-react'
+import { X } from 'lucide-react'
 
 export default function CreatePlatformManager({ isOpen, onClose, onSubmit }) {
   const [formData, setFormData] = useState({
@@ -72,14 +72,14 @@ export default function CreatePlatformManager({ isOpen, onClose, onSubmit }) {
           <form onSubmit={handleSubmit}>
             {/* Personal Information */}
             <div className="bg-gray-50 p-6 rounded-lg mb-6">
-              <h3 className="text-sm font-medium text-gray-900 mb-4">Personal Information</h3>
+              <h3 className="text-base italic font-medium text-gray-900 mb-4">Personal Information</h3>
               <div className="grid grid-cols-3 gap-4">
                 <div>
                   <input
                     type="text"
                     name="name"
                     placeholder="Name"
-                    className="w-full p-2 border rounded-md"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                     onChange={handleChange}
                     required
                   />
@@ -89,18 +89,17 @@ export default function CreatePlatformManager({ isOpen, onClose, onSubmit }) {
                     type="date"
                     name="dateOfBirth"
                     placeholder="Date of Birth"
-                    className="w-full p-2 border rounded-md"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                     onChange={handleChange}
                     required
                   />
-                  <Calendar className="absolute right-3 top-2.5 h-4 w-4 text-gray-400" />
                 </div>
                 <div>
                   <input
                     type="text"
                     name="emergencyContact"
                     placeholder="Emergency Contact"
-                    className="w-full p-2 border rounded-md"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                     onChange={handleChange}
                     required
                   />
@@ -110,7 +109,7 @@ export default function CreatePlatformManager({ isOpen, onClose, onSubmit }) {
                     type="text"
                     name="lastName"
                     placeholder="Last Name"
-                    className="w-full p-2 border rounded-md"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                     onChange={handleChange}
                     required
                   />
@@ -120,7 +119,7 @@ export default function CreatePlatformManager({ isOpen, onClose, onSubmit }) {
                     type="text"
                     name="area"
                     placeholder="Area"
-                    className="w-full p-2 border rounded-md"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                     onChange={handleChange}
                     required
                   />
@@ -128,7 +127,7 @@ export default function CreatePlatformManager({ isOpen, onClose, onSubmit }) {
                 <div>
                   <select
                     name="relationship"
-                    className="w-full p-2 border rounded-md"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                     onChange={handleChange}
                     required
                   >
@@ -143,7 +142,7 @@ export default function CreatePlatformManager({ isOpen, onClose, onSubmit }) {
                     type="email"
                     name="personalEmail"
                     placeholder="Personal Email"
-                    className="w-full p-2 border rounded-md"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                     onChange={handleChange}
                     required
                   />
@@ -153,7 +152,7 @@ export default function CreatePlatformManager({ isOpen, onClose, onSubmit }) {
                     type="text"
                     name="street"
                     placeholder="Street"
-                    className="w-full p-2 border rounded-md"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                     onChange={handleChange}
                     required
                   />
@@ -163,7 +162,7 @@ export default function CreatePlatformManager({ isOpen, onClose, onSubmit }) {
                     type="email"
                     name="emergencyContactEmail"
                     placeholder="Emergency Contact Email"
-                    className="w-full p-2 border rounded-md"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                     onChange={handleChange}
                     required
                   />
@@ -173,7 +172,7 @@ export default function CreatePlatformManager({ isOpen, onClose, onSubmit }) {
                     type="tel"
                     name="phoneNumber"
                     placeholder="Phone Number"
-                    className="w-full p-2 border rounded-md"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                     onChange={handleChange}
                     required
                   />
@@ -183,7 +182,7 @@ export default function CreatePlatformManager({ isOpen, onClose, onSubmit }) {
                     type="text"
                     name="building"
                     placeholder="Building"
-                    className="w-full p-2 border rounded-md"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                     onChange={handleChange}
                     required
                   />
@@ -193,7 +192,7 @@ export default function CreatePlatformManager({ isOpen, onClose, onSubmit }) {
                     type="tel"
                     name="emergencyContactNumber"
                     placeholder="Emergency Contact Number"
-                    className="w-full p-2 border rounded-md"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                     onChange={handleChange}
                     required
                   />
@@ -204,11 +203,11 @@ export default function CreatePlatformManager({ isOpen, onClose, onSubmit }) {
             {/* Professional Information */}
             <div className="grid grid-cols-2 gap-6">
               <div className="bg-gray-50 p-6 rounded-lg">
-                <h3 className="text-sm font-medium text-gray-900 mb-4">Professional Information</h3>
+                <h3 className="text-base italic font-medium text-gray-900 mb-4">Professional Information</h3>
                 <div className="space-y-4">
                   <select
                     name="department"
-                    className="w-full p-2 border rounded-md"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                     onChange={handleChange}
                     required
                   >
@@ -221,7 +220,7 @@ export default function CreatePlatformManager({ isOpen, onClose, onSubmit }) {
                   </select>
                   <select
                     name="employmentType"
-                    className="w-full p-2 border rounded-md"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                     onChange={handleChange}
                     required
                   >
@@ -235,17 +234,16 @@ export default function CreatePlatformManager({ isOpen, onClose, onSubmit }) {
                       type="date"
                       name="startDate"
                       placeholder="Start Date"
-                      className="w-full p-2 border rounded-md"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                       onChange={handleChange}
                       required
                     />
-                    <Calendar className="absolute right-3 top-2.5 h-4 w-4 text-gray-400" />
                   </div>
                   <input
                     type="text"
                     name="workHours"
                     placeholder="Work Hours"
-                    className="w-full p-2 border rounded-md"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                     onChange={handleChange}
                     required
                   />
@@ -254,13 +252,13 @@ export default function CreatePlatformManager({ isOpen, onClose, onSubmit }) {
 
               {/* Account Details */}
               <div className="bg-gray-50 p-6 rounded-lg">
-                <h3 className="text-sm font-medium text-gray-900 mb-4">Account Details</h3>
+                <h3 className="text-base italic font-medium text-gray-900 mb-4">Account Details</h3>
                 <div className="space-y-4">
                   <input
                     type="text"
                     name="username"
                     placeholder="Username"
-                    className="w-full p-2 border rounded-md"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                     onChange={handleChange}
                     required
                   />
@@ -268,7 +266,7 @@ export default function CreatePlatformManager({ isOpen, onClose, onSubmit }) {
                     type="email"
                     name="email"
                     placeholder="Email"
-                    className="w-full p-2 border rounded-md"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                     onChange={handleChange}
                     required
                   />
@@ -276,7 +274,7 @@ export default function CreatePlatformManager({ isOpen, onClose, onSubmit }) {
                     type="password"
                     name="temporaryPassword"
                     placeholder="Temporary Password"
-                    className="w-full p-2 border rounded-md"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                     onChange={handleChange}
                     required
                   />
@@ -284,7 +282,7 @@ export default function CreatePlatformManager({ isOpen, onClose, onSubmit }) {
                     type="password"
                     name="confirmPassword"
                     placeholder="Confirm Password"
-                    className="w-full p-2 border rounded-md"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                     onChange={handleChange}
                     required
                   />
@@ -303,7 +301,7 @@ export default function CreatePlatformManager({ isOpen, onClose, onSubmit }) {
               </button>
               <button
                 type="submit"
-                className="px-4 py-2 bg-logoOrange hover:bg-logoOrange/90 text-white rounded-md text-sm font-medium"
+                className="px-4 py-2 bg-logoOrange hover:bg-orange-600 text-white rounded-md text-sm font-medium"
               >
                 Create
               </button>
