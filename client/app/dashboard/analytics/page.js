@@ -9,7 +9,7 @@ const stats = [
   { title: "Projects At Risk", value: "3", progress: 12.5 },
 ]
 
-const campaigns = [
+const allCampaigns = [
   {
     name: "Holiday Marketing Campaign",
     progress: 75,
@@ -30,14 +30,46 @@ const campaigns = [
     progress: 15,
     status: "Behind Schedule"
   },
+  {
+    name: "Email Marketing Campaign",
+    progress: 60,
+    status: "On Track"
+  },
+  {
+    name: "Social Media Strategy",
+    progress: 25,
+    status: "Behind Schedule"
+  },
+  {
+    name: "Brand Awareness Campaign",
+    progress: 80,
+    status: "On Track"
+  },
+  {
+    name: "Lead Generation Program",
+    progress: 40,
+    status: "At Risk"
+  },
+  {
+    name: "Content Marketing Initiative",
+    progress: 55,
+    status: "On Track"
+  },
+  {
+    name: "Customer Feedback Campaign",
+    progress: 90,
+    status: "On Track"
+  }
 ]
+
+const ITEMS_PER_PAGE = 4
 
 function StatsCard({ title, value, progress }) {
   return (
-    <div className="bg-[#2C3333] rounded-lg p-4 border border-[#FAFAFA]">
-      <h3 className="text-[#E7E7E7] text-sm">{title}</h3>
-      <p className="text-[#FAFAFA] text-2xl font-bold mt-1">{value}</p>
-      <div className="mt-2 h-1 bg-[#5C5C5C] rounded-full overflow-hidden">
+    <div className="bg-[#FAFAFA] rounded-lg p-4 border border-[#E7E7E7] shadow-sm">
+      <h3 className="text-[#5C5C5C] text-sm">{title}</h3>
+      <p className="text-[#2C3333] text-2xl font-bold mt-1">{value}</p>
+      <div className="mt-2 h-1 bg-[#E7E7E7] rounded-full overflow-hidden">
         <div 
           className="h-full bg-[#FF8A00] rounded-full"
           style={{ width: `${progress}%` }}
@@ -65,12 +97,12 @@ function CampaignProgress({ campaign }) {
     <div className="flex items-center gap-4">
       <div className="flex-grow">
         <div className="flex justify-between items-center mb-2">
-          <h3 className="text-[#FAFAFA]">{campaign.name}</h3>
+          <h3 className="text-[#2C3333]">{campaign.name}</h3>
           <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(campaign.status)}`}>
             {campaign.status}
           </span>
         </div>
-        <div className="h-2 bg-[#5C5C5C] rounded-full overflow-hidden">
+        <div className="h-2 bg-[#E7E7E7] rounded-full overflow-hidden">
           <div 
             className="h-full bg-[#FF8A00] rounded-full"
             style={{ width: `${campaign.progress}%` }}
@@ -83,7 +115,11 @@ function CampaignProgress({ campaign }) {
 
 export default function AnalyticsPage() {
   const [currentPage, setCurrentPage] = useState(1)
-  const totalPages = 3
+  
+  const totalPages = Math.ceil(allCampaigns.length / ITEMS_PER_PAGE)
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE
+  const endIndex = startIndex + ITEMS_PER_PAGE
+  const currentCampaigns = allCampaigns.slice(startIndex, endIndex)
 
   const generatePageButtons = () => {
     let buttons = []
@@ -94,8 +130,8 @@ export default function AnalyticsPage() {
           onClick={() => setCurrentPage(i)}
           className={`rounded-md px-3 py-1 text-sm font-medium ${
             i === currentPage
-              ? "bg-[#FF8A00] text-[#2C3333]"
-              : "text-[#E7E7E7] hover:bg-[#2C3333]/20"
+              ? "bg-[#FF8A00] text-[#FAFAFA]"
+              : "text-[#5C5C5C] hover:bg-[#E7E7E7]"
           }`}
         >
           {i}
@@ -106,9 +142,9 @@ export default function AnalyticsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#2C3333] p-8">
+    <div className="min-h-screen bg-[#FAFAFA] p-8">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-2xl font-bold text-[#FAFAFA] mb-8">Campaign Analytics</h1>
+        <h1 className="text-2xl font-bold text-[#2C3333] mb-8">Campaign Analytics</h1>
         
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           {stats.map((stat) => (
@@ -116,10 +152,10 @@ export default function AnalyticsPage() {
           ))}
         </div>
 
-        <div className="bg-[#2C3333] rounded-lg border border-[#FAFAFA] p-6">
-          <h2 className="text-xl font-semibold text-[#FAFAFA] mb-6">Campaign Progress Breakdown</h2>
-          <div className="space-y-6">
-            {campaigns.map((campaign) => (
+        <div className="bg-[#FAFAFA] rounded-lg border border-[#E7E7E7] p-6 shadow-sm">
+          <h2 className="text-xl font-semibold text-[#2C3333] mb-6">Campaign Progress Breakdown</h2>
+          <div className="space-y-6 min-h-[400px]">
+            {currentCampaigns.map((campaign) => (
               <CampaignProgress key={campaign.name} campaign={campaign} />
             ))}
           </div>
@@ -128,7 +164,7 @@ export default function AnalyticsPage() {
         <div className="mt-8 flex justify-center items-center gap-2">
           <button
             onClick={() => currentPage > 1 && setCurrentPage(currentPage - 1)}
-            className="rounded-md px-3 py-1 text-sm font-medium text-[#E7E7E7] hover:bg-[#2C3333]/20 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="rounded-md px-3 py-1 text-sm font-medium text-[#5C5C5C] hover:bg-[#E7E7E7] disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={currentPage === 1}
           >
             <svg className="h-5 w-5 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -138,7 +174,7 @@ export default function AnalyticsPage() {
           {generatePageButtons()}
           <button
             onClick={() => currentPage < totalPages && setCurrentPage(currentPage + 1)}
-            className="rounded-md px-3 py-1 text-sm font-medium text-[#E7E7E7] hover:bg-[#2C3333]/20 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="rounded-md px-3 py-1 text-sm font-medium text-[#5C5C5C] hover:bg-[#E7E7E7] disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={currentPage === totalPages}
           >
             <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
