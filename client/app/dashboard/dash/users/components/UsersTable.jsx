@@ -18,6 +18,8 @@ export default function UsersTable({ onBack, onCreateUser }) {
     { id: 8, name: "Carlie Rakhazi", role: "Project Manager", status: "Active" },
     { id: 9, name: "George Bakhtri", role: "Graphic Designer", status: "Active" },
     { id: 10, name: "Dana Herb", role: "Information Architect", status: "Inactive" },
+    { id: 11, name: "Bushra Itani", role: "Graphic Designer", status: "Active" },
+    { id: 12, name: "Johnny Haidar", role: "Information Architect", status: "Inactive" },
   ]);
   const [deleteIndex, setDeleteIndex] = useState(null);
   const [selectedUser, setSelectedUser] = useState(null);
@@ -53,13 +55,15 @@ export default function UsersTable({ onBack, onCreateUser }) {
   };
 
   const handleUpdateUser = (updatedUser) => {
-    const updatedUsers = users.map(user => 
+    const updatedUsers = users.map(user =>
       user.id === updatedUser.id ? updatedUser : user
     );
     setUsers(updatedUsers);
     setSelectedUser(null);
     setIsEditMode(false);
   };
+
+  const totalPages = Math.ceil(users.length / 10); // Assuming 10 users per page
 
   return (
     <div className="bg-white rounded-lg shadow p-6">
@@ -71,7 +75,7 @@ export default function UsersTable({ onBack, onCreateUser }) {
           </button>
           <h2 className="text-xl font-semibold text-[#2C3333]">Users</h2>
         </div>
-        <button 
+        <button
           onClick={onCreateUser}
           className="flex items-center gap-2 px-4 py-2 text-white text-base bg-logoOrange rounded-lg hover:bg-orange-500 transition duration-300"
         >
@@ -101,9 +105,9 @@ export default function UsersTable({ onBack, onCreateUser }) {
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {users.map((user, index) => (
-              <tr 
-                key={user.id} 
-                className="hover:bg-gray-50" 
+              <tr
+                key={user.id}
+                className="hover:bg-gray-50"
               >
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="text-sm font-medium text-gray-900">{user.name}</div>
@@ -114,11 +118,10 @@ export default function UsersTable({ onBack, onCreateUser }) {
                 <td className="px-6 py-4 whitespace-nowrap">
                   <button
                     onClick={(e) => toggleStatus(e, index)}
-                    className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                      user.status === "Active" 
-                        ? "bg-green-100 text-green-800 hover:bg-green-200" 
+                    className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${user.status === "Active"
+                        ? "bg-green-100 text-green-800 hover:bg-green-200"
                         : "bg-red-100 text-red-800 hover:bg-red-200"
-                    }`}
+                      }`}
                   >
                     {user.status}
                   </button>
@@ -150,38 +153,33 @@ export default function UsersTable({ onBack, onCreateUser }) {
       </div>
 
       {/* Pagination */}
-      <div className="flex justify-center mt-4">
-        <div className="flex items-center space-x-2">
+      <div className="mt-8 flex justify-center items-center gap-2">
+        <button
+          onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+          className="rounded-md px-3 py-1 text-sm font-medium text-[#5C5C5C] hover:bg-[#E7E7E7] disabled:opacity-50 disabled:cursor-not-allowed"
+          disabled={currentPage === 1}
+        >
+          <ChevronLeft className="h-5 w-5" />
+        </button>
+        {[...Array(totalPages)].map((_, i) => (
           <button
-            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-            disabled={currentPage === 1}
-            className="inline-flex items-center px-2 py-1 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+            key={i}
+            onClick={() => setCurrentPage(i + 1)}
+            className={`rounded-md px-3 py-1 text-sm font-medium ${i + 1 === currentPage
+                ? "bg-[#FF8A00] text-[#FAFAFA]"
+                : "text-[#5C5C5C] hover:bg-[#E7E7E7]"
+              }`}
           >
-            <ChevronLeft className="w-4 h-4" />
+            {i + 1}
           </button>
-          <div className="flex items-center space-x-1">
-            {[1, 2, 3].map((page) => (
-              <button
-                key={page}
-                onClick={() => setCurrentPage(page)}
-                className={`px-3 py-1 rounded-md text-sm font-medium ${
-                  currentPage === page
-                    ? "bg-logoOrange text-white"
-                    : "text-gray-700 hover:bg-gray-50"
-                }`}
-              >
-                {page}
-              </button>
-            ))}
-          </div>
-          <button
-            onClick={() => setCurrentPage(prev => prev + 1)}
-            disabled={currentPage === 3}
-            className="inline-flex items-center px-2 py-1 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            <ChevronRight className="w-4 h-4" />
-          </button>
-        </div>
+        ))}
+        <button
+          onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+          className="rounded-md px-3 py-1 text-sm font-medium text-[#5C5C5C] hover:bg-[#E7E7E7] disabled:opacity-50 disabled:cursor-not-allowed"
+          disabled={currentPage === totalPages}
+        >
+          <ChevronRight className="h-5 w-5" />
+        </button>
       </div>
 
       {/* Delete Confirmation Popup */}
