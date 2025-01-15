@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { X } from 'lucide-react';
 
 export default function CreateUserForm({ onClose, onSuccess }) {
+  console.log("CreateUserForm rendered");
   const [formData, setFormData] = useState({
     id: "",
     name: "",
@@ -43,17 +44,18 @@ export default function CreateUserForm({ onClose, onSuccess }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     
-    // Check if all fields are filled
-    const isFormValid = Object.values(formData).every(value => value.toString().trim() !== "");
+    // Log form data for debugging
+    console.log("Form Data:", formData);
+
+    // Call onSuccess with the form data
+    onSuccess(formData);
     
-    if (isFormValid) {
-      console.log(formData);
-      setShowSuccessPopup(true);
-      onSuccess(formData);
-    }
+    // Show success popup
+    setShowSuccessPopup(true);
   };
 
   const handleSuccessClose = () => {
+    console.log("Success popup closed");
     setShowSuccessPopup(false);
     onClose();
   };
@@ -96,7 +98,9 @@ export default function CreateUserForm({ onClose, onSuccess }) {
     <div className="space-y-4">
       <h3 className="text-lg font-semibold italic">{title}</h3>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {fields.map(field => renderField(...field))}
+        {fields.map(field => (
+          <div key={field[0]}>{renderField(...field)}</div>
+        ))}
       </div>
     </div>
   );
@@ -177,7 +181,8 @@ export default function CreateUserForm({ onClose, onSuccess }) {
                 Close
               </button>
               <button
-                type="submit"
+                type="button"
+                onClick={handleSubmit}
                 className="px-4 py-2 bg-logoOrange text-white rounded-md text-sm font-medium hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
               >
                 Create
