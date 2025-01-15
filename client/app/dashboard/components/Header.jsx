@@ -162,9 +162,9 @@ const Header = () => {
                             </div>
                         )}
                     </div>
-                    <button className="rounded-full p-2 text-gray-700 hover:bg-gray-200/50">
+                    {/* <button className="rounded-full p-2 text-gray-700 hover:bg-gray-200/50">
                         <Mail className="h-5 w-5" />
-                    </button>
+                    </button> */}
                     <button className="rounded-full p-2 text-gray-700 hover:bg-gray-200/50">
                         <img src="/lumiIcon.png" alt="Settings" className="h-10 w-15" />
                     </button>
