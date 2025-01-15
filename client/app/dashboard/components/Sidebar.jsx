@@ -12,7 +12,7 @@ export function Sidebar() {
         <div className="h-8 w-8 rounded-full bg-[#5C5C5C]" />
         <span className="ml-3 text-sm font-semibold">Company Name</span>
       </div>
-      <div className="mt-2 px-4">
+      <div className="mt-6 px-4">
         <nav className="mt-4 space-y-1">
           <Link
             href="/dashboard/workspace"

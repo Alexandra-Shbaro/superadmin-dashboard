@@ -1,8 +1,7 @@
 'use client';
 
-import { Search, Bell, Mail, Settings, X } from 'lucide-react';
-import { useEffect, useState } from 'react';
-import { usePathname } from 'next/navigation';
+import { useState, useCallback } from 'react';
+import { Search, Bell, Mail, X } from 'lucide-react';
 import Link from 'next/link';
 
 // Dummy notifications data
@@ -33,27 +32,20 @@ const dummyNotifications = [
     },
 ];
 
+const searchableItems = [
+    { title: 'Workspace Management', path: '/dashboard/workspace' },
+    { title: 'Dashboard', path: '/dashboard/dash' },
+    { title: 'Analytics', path: '/dashboard/analytics' },
+    { title: 'Campaigns', path: '/dashboard/campaigns' },
+    { title: 'Reports', path: '/dashboard/reports' },
+];
+
 const Header = () => {
-    const pathname = usePathname();
     const [headerText, setHeaderText] = useState('Default Page');
-    const [notifications, setNotifications] = useState([]);
+    const [notifications, setNotifications] = useState(dummyNotifications);
     const [showNotifications, setShowNotifications] = useState(false);
-
-    useEffect(() => {
-        const pathToTextMap = {
-            '/dashboard/workspace': 'Workspace Management',
-            '/dashboard/dash': 'Dashboard',
-            '/dashboard/analytics': 'Analytics',
-            '/dashboard/campaigns': 'Campaigns',
-            '/dashboard/reports': 'Reports',
-        };
-
-        const matchingPath = Object.keys(pathToTextMap).find((key) => pathname.startsWith(key));
-        setHeaderText(pathToTextMap[matchingPath] || 'Default Page');
-
-        // Simulating fetching notifications
-        setNotifications(dummyNotifications);
-    }, [pathname]);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [searchResults, setSearchResults] = useState([]);
 
     const unreadCount = notifications.filter(n => n.status === 'unread').length;
 
@@ -61,6 +53,30 @@ const Header = () => {
         setNotifications(notifications.map(n => 
             n.id === id ? { ...n, status: 'read' } : n
         ));
+    };
+
+    const performSearch = useCallback((query) => {
+        const results = searchableItems.filter(item =>
+            item.title.toLowerCase().includes(query.toLowerCase())
+        );
+        setSearchResults(results);
+    }, []);
+
+    const handleSearchChange = (e) => {
+        const query = e.target.value;
+        setSearchQuery(query);
+        if (query) {
+            performSearch(query);
+        } else {
+            setSearchResults([]);
+        }
+    };
+
+    const handleSearchResultClick = (path) => {
+        // Instead of using router.push, we'll use window.location
+        window.location.href = path;
+        setSearchQuery('');
+        setSearchResults([]);
     };
 
     return (
@@ -76,8 +92,23 @@ const Header = () => {
                         <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-offWhite" />
                         <input
                             placeholder="Search..."
+                            value={searchQuery}
+                            onChange={handleSearchChange}
                             className="w-full rounded-md border border-softBlack bg-mediumGrey py-1.5 pl-10 pr-4 text-sm text-offWhite placeholder:text-offWhite focus:border-gray-500 focus:outline-none focus:ring-1 focus:ring-offWhite"
                         />
+                        {searchResults.length > 0 && (
+                            <div className="absolute mt-1 w-full bg-offWhite rounded-md shadow-lg overflow-hidden z-20">
+                                {searchResults.map((result, index) => (
+                                    <div
+                                        key={index}
+                                        className="px-4 py-2 hover:bg-lightGrey cursor-pointer"
+                                        onClick={() => handleSearchResultClick(result.path)}
+                                    >
+                                        <p className="text-sm text-softBlack">{result.title}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                     </div>
                 </div>
                 <div className="flex items-center space-x-2">
