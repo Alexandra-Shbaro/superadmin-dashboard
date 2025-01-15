@@ -1,9 +1,11 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { Search, Bell, Mail, X } from 'lucide-react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
+// Dummy notifications data
 const dummyNotifications = [
     {
         id: 1,
@@ -40,16 +42,33 @@ const searchableItems = [
 ];
 
 const Header = () => {
-    const [headerText, setHeaderText] = useState('Default Page');
+    const pathname = usePathname();
+    const [headerText, setHeaderText] = useState('');
     const [notifications, setNotifications] = useState(dummyNotifications);
     const [showNotifications, setShowNotifications] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const [searchResults, setSearchResults] = useState([]);
 
+    useEffect(() => {
+        let title = 'Default Page';
+        if (pathname.startsWith('/dashboard/dash')) {
+            title = 'Dashboard';
+        } else if (pathname.startsWith('/dashboard/workspace')) {
+            title = 'Workspace Management';
+        } else if (pathname.startsWith('/dashboard/analytics')) {
+            title = 'Analytics';
+        } else if (pathname.startsWith('/dashboard/campaigns')) {
+            title = 'Campaigns';
+        } else if (pathname.startsWith('/dashboard/reports')) {
+            title = 'Reports';
+        }
+        setHeaderText(title);
+    }, [pathname]);
+
     const unreadCount = notifications.filter(n => n.status === 'unread').length;
 
     const handleNotificationClick = (id) => {
-        setNotifications(notifications.map(n => 
+        setNotifications(notifications.map(n =>
             n.id === id ? { ...n, status: 'read' } : n
         ));
     };
@@ -72,10 +91,11 @@ const Header = () => {
     };
 
     const handleSearchResultClick = (path) => {
-        // Instead of using router.push, we'll use window.location
         window.location.href = path;
         setSearchQuery('');
         setSearchResults([]);
+        const title = searchableItems.find(item => item.path === path)?.title || 'Default Page';
+        setHeaderText(title);
     };
 
     return (
@@ -112,7 +132,7 @@ const Header = () => {
                 </div>
                 <div className="flex items-center space-x-2">
                     <div className="relative">
-                        <button 
+                        <button
                             className="rounded-full p-2 text-gray-700 hover:bg-gray-200/50"
                             onClick={() => setShowNotifications(!showNotifications)}
                         >
@@ -162,9 +182,9 @@ const Header = () => {
                             </div>
                         )}
                     </div>
-                    {/* <button className="rounded-full p-2 text-gray-700 hover:bg-gray-200/50">
+                    <button className="rounded-full p-2 text-gray-700 hover:bg-gray-200/50">
                         <Mail className="h-5 w-5" />
-                    </button> */}
+                    </button>
                     <button className="rounded-full p-2 text-gray-700 hover:bg-gray-200/50">
                         <img src="/lumiIcon.png" alt="Settings" className="h-10 w-15" />
                     </button>
