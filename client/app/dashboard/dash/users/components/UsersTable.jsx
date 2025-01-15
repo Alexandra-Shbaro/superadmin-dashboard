@@ -126,13 +126,13 @@ export default function UsersTable({ onBack, onCreateUser }) {
                 <td className="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
                   <button
                     onClick={() => handleUserSelect(user, 'view')}
-                    className="text-indigo-600 hover:text-indigo-900 mr-2"
+                    className="text-gray-500 hover:text-gray-700 mr-2"
                   >
                     <Eye className="w-5 h-5 inline" />
                   </button>
                   <button
                     onClick={() => handleUserSelect(user, 'edit')}
-                    className="text-blue-600 hover:text-blue-900 mr-2"
+                    className="text-gray-500 hover:text-gray-700 mr-2"
                   >
                     <Edit className="w-5 h-5 inline" />
                   </button>
