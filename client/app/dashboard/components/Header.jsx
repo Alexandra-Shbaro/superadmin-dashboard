@@ -4,7 +4,6 @@ import { useState, useCallback } from 'react';
 import { Search, Bell, Mail, X } from 'lucide-react';
 import Link from 'next/link';
 
-// Dummy notifications data
 const dummyNotifications = [
     {
         id: 1,
