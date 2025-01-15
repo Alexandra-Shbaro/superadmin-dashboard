@@ -57,6 +57,7 @@ export default function CreateTeamForm({ onClose, onSuccess }) {
                               required
                               value={teamName}
                               onChange={(e) => setTeamName(e.target.value)}
+                              placeholder="Enter team name"
                               className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                           />
                       </div>
@@ -69,6 +70,7 @@ export default function CreateTeamForm({ onClose, onSuccess }) {
                               required
                               value={teamDescription}
                               onChange={(e) => setTeamDescription(e.target.value)}
+                              placeholder="Enter team description"
                               className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                           />
                       </div>
@@ -82,7 +84,7 @@ export default function CreateTeamForm({ onClose, onSuccess }) {
                               onChange={(e) => setDepartment(e.target.value)}
                               className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                           >
-                              <option value="">Select Department</option>
+                              <option value="">Select Department / Phase</option>
                               <option value="design">Design</option>
                               <option value="development">Development</option>
                               <option value="marketing">Marketing</option>
@@ -98,7 +100,7 @@ export default function CreateTeamForm({ onClose, onSuccess }) {
                               onChange={(e) => setTeamTitle(e.target.value)}
                               className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                           >
-                              <option value="">Select Title</option>
+                              <option value="">Select Team Title</option>
                               <option value="core">Core Team</option>
                               <option value="support">Support Team</option>
                               <option value="specialized">Specialized Team</option>
@@ -116,7 +118,7 @@ export default function CreateTeamForm({ onClose, onSuccess }) {
                           onChange={(e) => setTeamManager(e.target.value)}
                           className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                       >
-                          <option value="">Select Manager</option>
+                          <option value="">Select Team Manager</option>
                           <option value="john">John Doe</option>
                           <option value="jane">Jane Smith</option>
                           <option value="mike">Mike Johnson</option>
