@@ -63,7 +63,11 @@ export default function UsersTable({ onBack, onCreateUser }) {
     setIsEditMode(false);
   };
 
-  const totalPages = Math.ceil(users.length / 10); // Assuming 10 users per page
+  const usersPerPage = 10;
+  const totalPages = Math.ceil(users.length / usersPerPage);
+  const startIndex = (currentPage - 1) * usersPerPage;
+  const endIndex = startIndex + usersPerPage;
+  const currentUsers = users.slice(startIndex, endIndex);
 
   return (
     <div className="bg-white rounded-lg shadow p-6">
@@ -104,7 +108,7 @@ export default function UsersTable({ onBack, onCreateUser }) {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {users.map((user, index) => (
+            {currentUsers.map((user, index) => (
               <tr
                 key={user.id}
                 className="hover:bg-gray-50"
@@ -117,11 +121,12 @@ export default function UsersTable({ onBack, onCreateUser }) {
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <button
-                    onClick={(e) => toggleStatus(e, index)}
-                    className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${user.status === "Active"
+                    onClick={(e) => toggleStatus(e, startIndex + index)}
+                    className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                      user.status === "Active"
                         ? "bg-green-100 text-green-800 hover:bg-green-200"
                         : "bg-red-100 text-red-800 hover:bg-red-200"
-                      }`}
+                    }`}
                   >
                     {user.status}
                   </button>
@@ -140,7 +145,7 @@ export default function UsersTable({ onBack, onCreateUser }) {
                     <Edit className="w-5 h-5 inline" />
                   </button>
                   <button
-                    onClick={(e) => confirmDelete(e, index)}
+                    onClick={(e) => confirmDelete(e, startIndex + index)}
                     className="text-red-600 hover:text-red-900"
                   >
                     <Trash2 className="w-5 h-5 inline" />
@@ -165,10 +170,11 @@ export default function UsersTable({ onBack, onCreateUser }) {
           <button
             key={i}
             onClick={() => setCurrentPage(i + 1)}
-            className={`rounded-md px-3 py-1 text-sm font-medium ${i + 1 === currentPage
+            className={`rounded-md px-3 py-1 text-sm font-medium ${
+              i + 1 === currentPage
                 ? "bg-[#FF8A00] text-[#FAFAFA]"
                 : "text-[#5C5C5C] hover:bg-[#E7E7E7]"
-              }`}
+            }`}
           >
             {i + 1}
           </button>
