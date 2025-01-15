@@ -79,6 +79,20 @@ const currentTeams = [
         projectManager: "Sally Sprouse",
         department: "Social Media",
         creationDate: "Tue 7 January 2025, 11:00 AM"
+    },
+    {
+        teamName: "Team Delta",
+        teamLead: "Alice Johnson",
+        projectManager: "Bob Smith",
+        department: "Marketing",
+        creationDate: "Wed 8 January 2025, 10:00 AM"
+    },
+    {
+        teamName: "Team Epsilon",
+        teamLead: "Charlie Brown",
+        projectManager: "Diana Prince",
+        department: "IT",
+        creationDate: "Thu 9 January 2025, 9:00 AM"
     }
 ]
 
@@ -96,6 +110,20 @@ const requestedTeams = [
         projectManager: "Tony Beth",
         requestedTeam: "Team Two",
         requestDate: "Tue 7 January 2025, 11:00 AM"
+    },
+    {
+        requestId: "003",
+        teamLead: "Alice Johnson",
+        projectManager: "Bob Smith",
+        requestedTeam: "Team Three",
+        requestDate: "Wed 8 January 2025, 10:00 AM"
+    },
+    {
+        requestId: "004",
+        teamLead: "Charlie Brown",
+        projectManager: "Diana Prince",
+        requestedTeam: "Team Four",
+        requestDate: "Thu 9 January 2025, 9:00 AM"
     }
 ]
 
@@ -104,6 +132,19 @@ export default function TeamManagement() {
     const [requestedPage, setRequestedPage] = useState(1)
     const [showTeamsList, setShowTeamsList] = useState(false)
     const [showCreateForm, setShowCreateForm] = useState(false)
+
+    const CURRENT_TEAMS_PER_PAGE = 3
+    const REQUESTED_TEAMS_PER_PAGE = 2
+
+    const currentTeamsPages = Math.ceil(currentTeams.length / CURRENT_TEAMS_PER_PAGE)
+    const currentTeamsStart = (currentPage - 1) * CURRENT_TEAMS_PER_PAGE
+    const currentTeamsEnd = currentTeamsStart + CURRENT_TEAMS_PER_PAGE
+    const currentTeamsToShow = currentTeams.slice(currentTeamsStart, currentTeamsEnd)
+
+    const requestedTeamsPages = Math.ceil(requestedTeams.length / REQUESTED_TEAMS_PER_PAGE)
+    const requestedTeamsStart = (requestedPage - 1) * REQUESTED_TEAMS_PER_PAGE
+    const requestedTeamsEnd = requestedTeamsStart + REQUESTED_TEAMS_PER_PAGE
+    const requestedTeamsToShow = requestedTeams.slice(requestedTeamsStart, requestedTeamsEnd)
 
     if (showTeamsList) {
         return <TeamsListView onBack={() => setShowTeamsList(false)} />
@@ -140,7 +181,7 @@ export default function TeamManagement() {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {currentTeams.map((team, index) => (
+                        {currentTeamsToShow.map((team, index) => (
                             <TableRow key={index}>
                                 <TableCell>{team.teamName}</TableCell>
                                 <TableCell>{team.teamLead}</TableCell>
@@ -162,22 +203,23 @@ export default function TeamManagement() {
                             <ChevronLeft className="w-4 h-4" />
                         </button>
                         <div className="flex items-center space-x-1">
-                            {[1, 2, 3].map((page) => (
+                            {[...Array(currentTeamsPages)].map((_, i) => (
                                 <button
-                                    key={page}
-                                    onClick={() => setCurrentPage(page)}
-                                    className={`px-3 py-1 rounded-md text-sm font-medium ${currentPage === page
-                                        ? "bg-logoOrange text-white"
-                                        : "text-gray-700 hover:bg-gray-50"
-                                        }`}
+                                    key={i}
+                                    onClick={() => setCurrentPage(i + 1)}
+                                    className={`px-3 py-1 rounded-md text-sm font-medium ${
+                                        currentPage === i + 1
+                                            ? "bg-logoOrange text-white"
+                                            : "text-gray-700 hover:bg-gray-50"
+                                    }`}
                                 >
-                                    {page}
+                                    {i + 1}
                                 </button>
                             ))}
                         </div>
                         <button
-                            onClick={() => setCurrentPage(prev => prev + 1)}
-                            disabled={currentPage === 3}
+                            onClick={() => setCurrentPage(prev => Math.min(prev + 1, currentTeamsPages))}
+                            disabled={currentPage === currentTeamsPages}
                             className="inline-flex items-center px-2 py-1 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             <ChevronRight className="w-4 h-4" />
@@ -199,7 +241,7 @@ export default function TeamManagement() {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {requestedTeams.map((team, index) => (
+                        {requestedTeamsToShow.map((team, index) => (
                             <TableRow key={index}>
                                 <TableCell>{team.requestId}</TableCell>
                                 <TableCell>{team.teamLead}</TableCell>
@@ -214,29 +256,30 @@ export default function TeamManagement() {
                 <div className="flex justify-center mt-4">
                     <div className="flex items-center space-x-2">
                         <button
-                            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-                            disabled={currentPage === 1}
+                            onClick={() => setRequestedPage(prev => Math.max(prev - 1, 1))}
+                            disabled={requestedPage === 1}
                             className="inline-flex items-center px-2 py-1 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             <ChevronLeft className="w-4 h-4" />
                         </button>
                         <div className="flex items-center space-x-1">
-                            {[1, 2, 3].map((page) => (
+                            {[...Array(requestedTeamsPages)].map((_, i) => (
                                 <button
-                                    key={page}
-                                    onClick={() => setCurrentPage(page)}
-                                    className={`px-3 py-1 rounded-md text-sm font-medium ${currentPage === page
+                                    key={i}
+                                    onClick={() => setRequestedPage(i + 1)}
+                                    className={`px-3 py-1 rounded-md text-sm font-medium ${
+                                        requestedPage === i + 1
                                             ? "bg-logoOrange text-white"
                                             : "text-gray-700 hover:bg-gray-50"
-                                        }`}
+                                    }`}
                                 >
-                                    {page}
+                                    {i + 1}
                                 </button>
                             ))}
                         </div>
                         <button
-                            onClick={() => setCurrentPage(prev => prev + 1)}
-                            disabled={currentPage === 3}
+                            onClick={() => setRequestedPage(prev => Math.min(prev + 1, requestedTeamsPages))}
+                            disabled={requestedPage === requestedTeamsPages}
                             className="inline-flex items-center px-2 py-1 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             <ChevronRight className="w-4 h-4" />
