@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from 'react'
-import { ChevronLeft, ChevronRight, Plus, ArrowUpDown } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Plus, ArrowUpDown, Eye, Edit, X, Trash2 } from 'lucide-react'
 import Requests from '../../components/Requests'
 import CreateTeamForm from './CreateTeamForm'
 
@@ -45,13 +45,14 @@ export default function TeamsListView({ onBack }) {
     const [requests, setRequests] = useState(initialRequests);
     const [currentPage, setCurrentPage] = useState(1);
     const [showCreateForm, setShowCreateForm] = useState(false);
+    const [selectedTeam, setSelectedTeam] = useState(null);
+    const [showViewTeamPopup, setShowViewTeamPopup] = useState(false);
     const teamsPerPage = 10;
     const indexOfLastTeam = currentPage * teamsPerPage;
     const indexOfFirstTeam = indexOfLastTeam - teamsPerPage;
     const currentTeams = teams.slice(indexOfFirstTeam, indexOfLastTeam);
 
     const handleApproveRequest = (request) => {
-        // Logic to approve the request
         const newTeam = {
             id: teams.length + 1,
             name: request.requestedTeam,
@@ -64,9 +65,22 @@ export default function TeamsListView({ onBack }) {
     };
 
     const handleRejectRequest = (request, reason) => {
-        // Logic to reject the request
         console.log(`Request ${request.id} rejected. Reason: ${reason}`);
         setRequests(requests.filter(r => r.id !== request.id));
+    };
+
+    const handleViewTeam = (team) => {
+        setSelectedTeam(team);
+        setShowViewTeamPopup(true);
+    };
+
+    const handleEditTeam = (team) => {
+        setSelectedTeam(team);
+        setShowCreateForm(true);
+    };
+
+    const handleDeleteTeam = (teamId) => {
+        setTeams(teams.filter(team => team.id !== teamId));
     };
 
     const totalPages = Math.ceil(teams.length / teamsPerPage);
@@ -102,13 +116,16 @@ export default function TeamsListView({ onBack }) {
                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                                     Status
                                 </th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                                    Actions
+                                </th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-200">
                             {currentTeams.map((team) => (
                                 <tr 
                                     key={team.id} 
-                                    className="hover:bg-gray-50 cursor-pointer"
+                                    className="hover:bg-gray-50"
                                 >
                                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                         {team.name}
@@ -129,6 +146,19 @@ export default function TeamsListView({ onBack }) {
                                         >
                                             {team.status}
                                         </span>
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <div className="flex space-x-2">
+                                            <button onClick={() => handleViewTeam(team)}>
+                                                <Eye className="w-5 h-5 text-gray-400 hover:text-gray-600" />
+                                            </button>
+                                            <button onClick={() => handleEditTeam(team)}>
+                                                <Edit className="w-5 h-5 text-gray-400 hover:text-gray-600" />
+                                            </button>
+                                            <button onClick={() => handleDeleteTeam(team.id)}>
+                                                <Trash2 className="w-5 h-5 text-red-500 hover:text-red-700" />
+                                            </button>
+                                        </div>
                                     </td>
                                 </tr>
                             ))}
@@ -181,12 +211,56 @@ export default function TeamsListView({ onBack }) {
             </Card>
             {showCreateForm && (
                 <CreateTeamForm
-                    onClose={() => setShowCreateForm(false)}
-                    onSuccess={(newTeam) => {
-                        setTeams([...teams, newTeam]);
+                    team={selectedTeam}
+                    isEditing={!!selectedTeam}
+                    onClose={() => {
                         setShowCreateForm(false);
+                        setSelectedTeam(null);
+                    }}
+                    onSuccess={(updatedTeam) => {
+                        if (selectedTeam) {
+                            setTeams(teams.map(team => team.id === updatedTeam.id ? updatedTeam : team));
+                        } else {
+                            setTeams([...teams, updatedTeam]);
+                        }
+                        setShowCreateForm(false);
+                        setSelectedTeam(null);
                     }}
                 />
+            )}
+            {showViewTeamPopup && selectedTeam && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div className="bg-white p-6 rounded-lg shadow-xl w-[600px] max-h-[90vh] overflow-y-auto">
+                        <div className="flex justify-between items-center mb-6">
+                            <h2 className="text-xl font-semibold">View Team Details</h2>
+                            <button onClick={() => setShowViewTeamPopup(false)} className="text-gray-500 hover:text-gray-700">
+                                <X className="w-5 h-5" />
+                            </button>
+                        </div>
+                        <div className="space-y-4">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Team Name</label>
+                                <p className="mt-1 p-2 block w-full rounded-md border border-gray-300 bg-gray-50">{selectedTeam.name}</p>
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Team Description</label>
+                                <p className="mt-1 p-2 block w-full rounded-md border border-gray-300 bg-gray-50">{selectedTeam.description}</p>
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Department / Phase</label>
+                                <p className="mt-1 p-2 block w-full rounded-md border border-gray-300 bg-gray-50">{selectedTeam.department}</p>
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Team Manager</label>
+                                <p className="mt-1 p-2 block w-full rounded-md border border-gray-300 bg-gray-50">{selectedTeam.manager}</p>
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                                <p className="mt-1 p-2 block w-full rounded-md border border-gray-300 bg-gray-50">{selectedTeam.status}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             )}
         </div>
     );
