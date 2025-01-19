@@ -3,6 +3,7 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const { execute } = require("./db-utils"); // Import the execute function
 const authRoutes = require("./auth-routes"); // Import the auth routes
+const agencyRoutes = require("./agency-routes"); // Import the auth routes
 
 dotenv.config();
 
@@ -19,6 +20,7 @@ app.get("/", (req, res) => {
 
 // Use the auth routes
 app.use("/api/auth", authRoutes);
+app.use("/api/agency", agencyRoutes);
 
 // CRUD for platform manager
 app.get("/api/platform-managers", async (req, res) => {

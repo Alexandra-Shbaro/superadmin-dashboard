@@ -10,7 +10,6 @@ dotenv.config({ path: path.resolve(__dirname, "../.env") });
 const router = express.Router();
 
 // Login a user
-// Login a user
 router.post("/login", async (req, res) => {
     const { email, password } = req.body;
 
@@ -29,6 +28,30 @@ router.post("/login", async (req, res) => {
             return res.status(400).json({ message: "Invalid credentials" });
         }
 
+        // Check if the user is of type 'Agency' and fetch agency details if applicable
+        let agencyDetails = null;
+        if (user.user_type === "Agency") {
+            const agencyQuery = `
+                SELECT 
+                    aud.*, 
+                    a.agency_tagline, 
+                    a.business_category, 
+                    a.agency_size, 
+                    a.business_email AS agency_email, 
+                    a.agency_website_url
+                FROM 
+                    agency_user_details aud
+                INNER JOIN 
+                    agency a ON aud.agency_id = a.agency_id
+                WHERE 
+                    aud.user_id = ?
+            `;
+            const agencyData = await execute(agencyQuery, [user.user_id]);
+            if (agencyData.length > 0) {
+                agencyDetails = agencyData[0];
+            }
+        }
+
         // Generate a JWT with the complete user details
         const token = jwt.sign(
             {
@@ -44,7 +67,7 @@ router.post("/login", async (req, res) => {
             { expiresIn: "1h" }
         );
 
-        // Return the user details and the token
+        // Return the user details, agency details if applicable, and the token
         res.status(200).json({
             message: "Login successful",
             token,
@@ -56,6 +79,7 @@ router.post("/login", async (req, res) => {
                 requires_logout: user.requires_logout,
                 user_status: user.user_status,
                 user_role_id: user.user_role_id,
+                agency_details: agencyDetails, // Include agency details if available
             },
         });
     } catch (error) {
@@ -63,7 +87,6 @@ router.post("/login", async (req, res) => {
         res.status(500).json({ message: "Server error", error: error.message });
     }
 });
-
 // Create an agency admin user
 router.post("/create-agency-admin", async (req, res) => {
     const {

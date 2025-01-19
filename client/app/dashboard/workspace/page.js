@@ -1,17 +1,18 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Plus, Eye, Pencil, Trash, ChevronLeft, ChevronRight, X } from 'lucide-react'
 import CreatePlatformManager from './components/CreatePlatformManager'
+import { useSession } from 'next-auth/react'
 
 // Sample data - this would typically come from an API
 const initialManagers = [
-  { 
-    id: 1, 
-    name: 'John Smith', 
+  {
+    id: 1,
+    name: 'John Smith',
     lastName: 'Smith',
-    email: 'john.smith@example.com', 
-    department: 'Marketing', 
+    email: 'john.smith@example.com',
+    department: 'Marketing',
     startDate: '2023-01-15',
     dateOfBirth: '1985-05-20',
     area: 'Sales',
@@ -27,12 +28,12 @@ const initialManagers = [
     workHours: '9 AM - 5 PM',
     username: 'jsmith'
   },
-  { 
-    id: 2, 
-    name: 'Emma Johnson', 
+  {
+    id: 2,
+    name: 'Emma Johnson',
     lastName: 'Johnson',
-    email: 'emma.johnson@example.com', 
-    department: 'Sales', 
+    email: 'emma.johnson@example.com',
+    department: 'Sales',
     startDate: '2023-02-01',
     dateOfBirth: '1990-08-15',
     area: 'Northeast',
@@ -48,12 +49,12 @@ const initialManagers = [
     workHours: '10 AM - 3 PM',
     username: 'ejohnson'
   },
-  { 
-    id: 3, 
-    name: 'Michael Brown', 
+  {
+    id: 3,
+    name: 'Michael Brown',
     lastName: 'Brown',
-    email: 'michael.brown@example.com', 
-    department: 'Engineering', 
+    email: 'michael.brown@example.com',
+    department: 'Engineering',
     startDate: '2023-03-10',
     dateOfBirth: '1988-11-30',
     area: 'Technology',
@@ -69,12 +70,12 @@ const initialManagers = [
     workHours: '8 AM - 4 PM',
     username: 'mbrown'
   },
-  { 
-    id: 4, 
-    name: 'Olivia Davis', 
+  {
+    id: 4,
+    name: 'Olivia Davis',
     lastName: 'Davis',
-    email: 'olivia.davis@example.com', 
-    department: 'Human Resources', 
+    email: 'olivia.davis@example.com',
+    department: 'Human Resources',
     startDate: '2023-04-05',
     dateOfBirth: '1992-02-25',
     area: 'Recruitment',
@@ -90,12 +91,12 @@ const initialManagers = [
     workHours: '9 AM - 5 PM',
     username: 'odavis'
   },
-  { 
-    id: 5, 
-    name: 'William Wilson', 
+  {
+    id: 5,
+    name: 'William Wilson',
     lastName: 'Wilson',
-    email: 'william.wilson@example.com', 
-    department: 'Finance', 
+    email: 'william.wilson@example.com',
+    department: 'Finance',
     startDate: '2023-05-20',
     dateOfBirth: '1987-07-10',
     area: 'Accounting',
@@ -111,12 +112,12 @@ const initialManagers = [
     workHours: '8:30 AM - 4:30 PM',
     username: 'wwilson'
   },
-  { 
-    id: 6, 
-    name: 'Sophia Taylor', 
+  {
+    id: 6,
+    name: 'Sophia Taylor',
     lastName: 'Taylor',
-    email: 'sophia.taylor@example.com', 
-    department: 'Marketing', 
+    email: 'sophia.taylor@example.com',
+    department: 'Marketing',
     startDate: '2023-06-15',
     dateOfBirth: '1993-09-05',
     area: 'Digital Marketing',
@@ -145,7 +146,10 @@ export default function WorkspacePage() {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
   const [managerToDelete, setManagerToDelete] = useState(null)
   const itemsPerPage = 6
+  const [agencyId, setAgencyId] = useState(null);
   const totalPages = Math.ceil(managers.length / itemsPerPage)
+
+
 
   const getCurrentPageData = () => {
     const start = (currentPage - 1) * itemsPerPage
@@ -153,11 +157,47 @@ export default function WorkspacePage() {
     return managers.slice(start, end)
   }
 
-  const handleCreateManager = (formData) => {
-    const newManager = { id: managers.length + 1, ...formData }
-    setManagers([...managers, newManager])
-    setIsCreateModalOpen(false)
-  }
+  useEffect(() => {
+    const getAgencyIdFromToken = () => {
+      const cookies = document.cookie.split('; ');
+      const sessionToken = cookies.find((row) => row.startsWith('next-auth.session-token='));
+      if (sessionToken) {
+        const token = sessionToken.split('=')[1];
+        const decodedToken = jwt.decode(token);
+        if (decodedToken && decodedToken.agencyDetails) {
+          setAgencyId(decodedToken.agencyDetails.agency_id);
+        }
+      }
+    };
+
+    getAgencyIdFromToken();
+  }, []);
+  const handleCreateManager = async (formData) => {
+    try {
+      const response = await fetch("http://localhost:8080/api/agency/create-platform-manager", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ...formData, agency_id: agencyId, }),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        const newManager = { id: managers.length + 1, ...formData };
+        setManagers([...managers, newManager]);
+        setIsCreateModalOpen(false);
+      } else {
+        console.error("Error:", result.message);
+        alert("Failed to create platform manager: " + result.message);
+      }
+    } catch (error) {
+      console.error("Error creating platform manager:", error);
+      alert("An error occurred while creating the platform manager.");
+    }
+  };
+
 
   const handleViewManager = (manager) => {
     setSelectedManager(manager)
@@ -170,7 +210,7 @@ export default function WorkspacePage() {
   }
 
   const handleEditSubmit = (formData) => {
-    setManagers(managers.map(manager => 
+    setManagers(managers.map(manager =>
       manager.id === editingManager.id ? { ...manager, ...formData } : manager
     ))
     setIsEditModalOpen(false)
@@ -191,12 +231,12 @@ export default function WorkspacePage() {
     <div className="p-6 space-y-6">
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-semibold text-softBlack">Platform Managers</h1>
-        <button 
+        <button
           onClick={() => setIsCreateModalOpen(true)}
           className="px-4 py-2 bg-logoOrange hover:bg-logoOrange/90 text-white rounded-md flex items-center"
         >
           <Plus className="mr-2 h-4 w-4" />
-          Add Platform Manager 
+          Add Platform Manager
         </button>
       </div>
 
@@ -228,21 +268,21 @@ export default function WorkspacePage() {
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                   <div className="flex gap-2">
-                    <button 
+                    <button
                       className="p-2 hover:bg-gray-200 rounded-md"
                       onClick={() => handleViewManager(manager)}
                     >
                       <Eye className="h-4 w-4 text-gray-500" />
                       <span className="sr-only">View</span>
                     </button>
-                    <button 
+                    <button
                       className="p-2 hover:bg-gray-200 rounded-md"
                       onClick={() => handleEditManager(manager)}
                     >
                       <Pencil className="h-4 w-4 text-gray-500" />
                       <span className="sr-only">Edit</span>
                     </button>
-                    <button 
+                    <button
                       className="p-2 hover:bg-gray-200 rounded-md"
                       onClick={() => handleDeleteManager(manager)}
                     >
@@ -271,11 +311,10 @@ export default function WorkspacePage() {
           <button
             key={page}
             onClick={() => setCurrentPage(page)}
-            className={`rounded-md px-3 py-1 text-sm font-medium ${
-              currentPage === page
-                ? "bg-[#FF8A00] text-[#FAFAFA]"
-                : "text-[#5C5C5C] hover:bg-[#E7E7E7]"
-            }`}
+            className={`rounded-md px-3 py-1 text-sm font-medium ${currentPage === page
+              ? "bg-[#FF8A00] text-[#FAFAFA]"
+              : "text-[#5C5C5C] hover:bg-[#E7E7E7]"
+              }`}
           >
             {page}
           </button>
@@ -291,7 +330,7 @@ export default function WorkspacePage() {
         </button>
       </div>
 
-      <CreatePlatformManager 
+      <CreatePlatformManager
         isOpen={isCreateModalOpen}
         onClose={() => setIsCreateModalOpen(false)}
         onSubmit={handleCreateManager}

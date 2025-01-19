@@ -40,6 +40,7 @@ export const authOptions = {
         };
       }
 
+      console.log(token)
       return token;
     },
     async session({ session, token }) {
