@@ -13,9 +13,9 @@ const StepOne = ({ onNext }) => {
         <div className="flex flex-col items-center justify-center min-h-screen bg-offWhite">
             <div className="text-center p-3">
                 <img
-                    src="/lumilogo.svg" 
+                    src="/resources/lumilogo.svg"
                     alt="Lumi Logo"
-                    className="mx-auto w-42 h-20 mb-5" 
+                    className="mx-auto w-42 h-20 mb-5"
                 />
                 <p className="text-mediumGrey mb-5">Finish setting up your profile</p>
             </div>
@@ -27,7 +27,7 @@ const StepOne = ({ onNext }) => {
                 <div className="w-6 h-6 rounded-full bg-mediumGrey text-offWhite flex items-center justify-center">3</div>
             </div>
             <h1 className="font-bold text-lg mb-5">Company Core Details</h1>
-            <div className="bg-white shadow-md rounded-lg p-8 w-[500px] mx-auto mb-5"> 
+            <div className="bg-white shadow-md rounded-lg p-8 w-[500px] mx-auto mb-5">
                 <div className="mb-4">
                     <label className="block text-mediumGrey font-medium">Company Tagline</label>
                     <input
@@ -78,9 +78,9 @@ const StepOne = ({ onNext }) => {
                     </select>
                 </div>
 
-                <button 
-                    onClick={onNext} 
-                    className={`w-full py-3 ${isFormValid ? 'bg-logoOrange' : 'bg-mediumGrey cursor-not-allowed'} text-offWhite rounded-md hover:${isFormValid ? 'bg-logoYellow' : ''} transition-all`} 
+                <button
+                    onClick={onNext}
+                    className={`w-full py-3 ${isFormValid ? 'bg-logoOrange' : 'bg-mediumGrey cursor-not-allowed'} text-offWhite rounded-md hover:${isFormValid ? 'bg-logoYellow' : ''} transition-all`}
                     disabled={!isFormValid}
                 >
                     Next

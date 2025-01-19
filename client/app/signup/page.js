@@ -1,4 +1,4 @@
-"use client";  
+"use client";
 
 import { useState } from 'react';
 import StepOne from './components/StepOne';
@@ -13,12 +13,13 @@ export default function SignupPage() {
     setCurrentStep((prevStep) => prevStep + 1);
   };
 
+
   return (
     <div>
       {currentStep === 1 && <StepOne onNext={nextStep} />}
       {currentStep === 2 && <StepTwo onNext={nextStep} />}
-      {currentStep === 3 && <StepThree onNext={nextStep}/>}
-      {currentStep === 4 && <StepFour/>}
+      {currentStep === 3 && <StepThree onNext={nextStep} />}
+      {currentStep === 4 && <StepFour />}
     </div>
   );
 }

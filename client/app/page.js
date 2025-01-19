@@ -2,9 +2,37 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
+import { signIn, useSession } from "next-auth/react";
+import { useRouter, useSearchParams } from "next/navigation"
+import { useEffect } from 'react'
 
 export default function Home() {
+  const searchParams = useSearchParams()
+
+  const router = useRouter()
+  const callbackURL = searchParams.get("callbackUrl");
+  const { data: session, status } = useSession();
+  const [retryCount, setRetryCount] = useState(0);
+
+  useEffect(() => {
+    // Retry mechanism to check session status
+    if (status === "loading" && retryCount < 5) {
+      const timer = setTimeout(() => {
+        setRetryCount(retryCount + 1);
+      }, 1000); // Retry every 1 second
+
+      return () => clearTimeout(timer);
+    }
+
+    // Redirect if user is authenticated
+    if (status === "authenticated" && session) {
+      router.replace("/dashboard");
+    }
+  }, [status, session, router, callbackURL, retryCount]);
+
   const [isActive, setIsActive] = useState(false);
+
+
 
   const [formValues, setFormValues] = useState({
     companyName: '',
@@ -48,6 +76,23 @@ export default function Home() {
       [name]: value,
     }));
   };
+
+  const handleLoginSubmit = async () => {
+
+
+    const result = await signIn('credentials', {
+      redirect: false, // Prevent automatic redirection
+      email: loginValues.loginEmail,
+      password: loginValues.loginPassword,
+    });
+
+    if (result?.error) {
+
+    } else {
+      router.push('/dashboard'); // Redirect to dashboard on success
+    }
+  };
+
 
   return (
     <main className="h-screen w-screen relative overflow-hidden">
@@ -94,7 +139,7 @@ export default function Home() {
           {!passwordsMatch && (
             <p className="text-red-500 text-sm mt-2">Passwords do not match.</p>
           )}
-          <Link href={allFieldsFilled ? '/signup' : '#'}>
+         
             <button
               className={`bg-gradient-to-r from-[#FF8A00] to-[#FFD700] text-white text-sm px-12 py-3 rounded-lg font-semibold tracking-wider uppercase mt-3 cursor-pointer ${allFieldsFilled ? '' : 'opacity-50 cursor-not-allowed'
                 }`}
@@ -102,7 +147,7 @@ export default function Home() {
             >
               Sign Up
             </button>
-          </Link>
+       
         </form>
       </div>
 
@@ -129,15 +174,16 @@ export default function Home() {
           <a href="#" className="text-sm font-bold text-gray-800 underline mt-4 mb-3">
             Forget Password?
           </a>
-          <Link href="/dashboard">
-            <button
-              className={`bg-gradient-to-r from-[#FF8A00] to-[#FFD700] text-white text-sm px-12 py-3 rounded-lg font-semibold tracking-wider uppercase mt-3 cursor-pointer ${areLoginFieldsFilled ? '' : 'opacity-50 cursor-not-allowed'
-                }`}
-              disabled={!areLoginFieldsFilled}
-            >
-              Log In
-            </button>
-          </Link>
+          <button
+            type="button"
+            onClick={handleLoginSubmit}
+            className={`bg-gradient-to-r from-[#FF8A00] to-[#FFD700] text-white text-sm px-12 py-3 rounded-lg font-semibold tracking-wider uppercase mt-3 cursor-pointer ${areLoginFieldsFilled ? '' : 'opacity-50 cursor-not-allowed'
+              }`}
+            disabled={!areLoginFieldsFilled}
+          >
+            Log In
+          </button>
+
         </form>
       </div>
 
