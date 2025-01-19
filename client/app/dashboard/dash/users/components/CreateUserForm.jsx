@@ -3,9 +3,8 @@
 import { useState } from 'react';
 import { X } from 'lucide-react';
 
-export default function CreateUserForm({ onClose, onSuccess }) {
-  console.log("CreateUserForm rendered");
-  const [formData, setFormData] = useState({
+export default function CreateUserForm({ user, isReadOnly, onClose, onSuccess }) {
+  const [formData, setFormData] = useState(user || {
     id: "",
     name: "",
     lastName: "",
@@ -34,23 +33,22 @@ export default function CreateUserForm({ onClose, onSuccess }) {
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    if (!isReadOnly) {
+      const { name, value } = e.target;
+      setFormData(prev => ({
+        ...prev,
+        [name]: value
+      }));
+    }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     
-    // Log form data for debugging
     console.log("Form Data:", formData);
 
-    // Call onSuccess with the form data
     onSuccess(formData);
     
-    // Show success popup
     setShowSuccessPopup(true);
   };
 
@@ -68,10 +66,11 @@ export default function CreateUserForm({ onClose, onSuccess }) {
       {options ? (
         <select
           name={name}
-          value={formData[name]}
+          value={formData[name] || ""}
           onChange={handleChange}
           className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
           required
+          disabled={isReadOnly}
         >
           <option value="">Select {label.toLowerCase()}</option>
           {options.map((option) => (
@@ -84,11 +83,12 @@ export default function CreateUserForm({ onClose, onSuccess }) {
         <input
           type={type}
           name={name}
-          value={formData[name]}
+          value={formData[name] || ""}
           onChange={handleChange}
           className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
           placeholder={label}
           required
+          readOnly={isReadOnly}
         />
       )}
     </div>
@@ -110,7 +110,7 @@ export default function CreateUserForm({ onClose, onSuccess }) {
       <div className="bg-white rounded-lg shadow-xl w-full max-w-4xl max-h-[90vh] overflow-y-auto m-4">
         <div className="p-6">
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-bold">Create User</h2>
+            <h2 className="text-2xl font-bold">{user ? (isReadOnly ? 'View User' : 'Edit User') : 'Create User'}</h2>
             <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
               <X className="w-6 h-6" />
             </button>
@@ -180,13 +180,14 @@ export default function CreateUserForm({ onClose, onSuccess }) {
               >
                 Close
               </button>
-              <button
-                type="button"
-                onClick={handleSubmit}
-                className="px-4 py-2 bg-logoOrange text-white rounded-md text-sm font-medium hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
-              >
-                Create
-              </button>
+              {!isReadOnly && (
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-logoOrange text-white rounded-md text-sm font-medium hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
+                >
+                  {user ? 'Update' : 'Create'}
+                </button>
+              )}
             </div>
           </form>
         </div>
@@ -196,7 +197,7 @@ export default function CreateUserForm({ onClose, onSuccess }) {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg shadow-xl">
             <h3 className="text-lg font-semibold mb-4">Success!</h3>
-            <p className="mb-4">User has been added successfully.</p>
+            <p className="mb-4">User has been {user ? 'updated' : 'added'} successfully.</p>
             <button
               onClick={handleSuccessClose}
               className="px-4 py-2 bg-logoOrange text-white rounded-md text-sm font-medium hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"

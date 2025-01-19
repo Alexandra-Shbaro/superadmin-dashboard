@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from 'react';
-import { ChevronLeft, ChevronRight, Plus, ArrowLeft, Trash2, X, Edit, Eye } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Plus, ArrowLeft, Trash2, Eye, Edit } from 'lucide-react';
 import CreateUserForm from './CreateUserForm';
 
 export default function UsersTable({ onBack, onCreateUser }) {
@@ -23,7 +23,7 @@ export default function UsersTable({ onBack, onCreateUser }) {
   ]);
   const [deleteIndex, setDeleteIndex] = useState(null);
   const [selectedUser, setSelectedUser] = useState(null);
-  const [isEditMode, setIsEditMode] = useState(false);
+  const [isReadOnly, setIsReadOnly] = useState(true);
 
   const toggleStatus = (e, index) => {
     e.stopPropagation();
@@ -51,7 +51,8 @@ export default function UsersTable({ onBack, onCreateUser }) {
 
   const handleUserSelect = (user, mode) => {
     setSelectedUser(user);
-    setIsEditMode(mode === 'edit');
+    setIsReadOnly(mode === 'view');
+    setShowCreateForm(true);
   };
 
   const handleUpdateUser = (updatedUser) => {
@@ -60,7 +61,13 @@ export default function UsersTable({ onBack, onCreateUser }) {
     );
     setUsers(updatedUsers);
     setSelectedUser(null);
-    setIsEditMode(false);
+    setShowCreateForm(false);
+  };
+
+  const handleCreateUser = () => {
+    setSelectedUser(null);
+    setIsReadOnly(false);
+    setShowCreateForm(true);
   };
 
   const usersPerPage = 10;
@@ -80,7 +87,7 @@ export default function UsersTable({ onBack, onCreateUser }) {
           <h2 className="text-xl font-semibold text-[#2C3333]">Users</h2>
         </div>
         <button
-          onClick={onCreateUser}
+          onClick={handleCreateUser}
           className="flex items-center gap-2 px-4 py-2 text-white text-base bg-logoOrange rounded-lg hover:bg-orange-500 transition duration-300"
         >
           <Plus className="w-5 h-5" />
@@ -212,13 +219,13 @@ export default function UsersTable({ onBack, onCreateUser }) {
         </div>
       )}
 
-      {selectedUser && (
+      {showCreateForm && (
         <CreateUserForm
           user={selectedUser}
-          isReadOnly={!isEditMode}
+          isReadOnly={isReadOnly}
           onClose={() => {
             setSelectedUser(null);
-            setIsEditMode(false);
+            setShowCreateForm(false);
           }}
           onSuccess={handleUpdateUser}
         />

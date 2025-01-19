@@ -10,7 +10,7 @@ export function Sidebar() {
     <div className="fixed left-0 top-0 h-full w-64 bg-[#2C3333] text-white">
       <div className="flex h-16 items-center px-6">
         <div className="h-8 w-8 rounded-full bg-[#5C5C5C]" />
-        <span className="ml-3 text-sm font-semibold">Company Name</span>
+        <span className="ml-3 text-sm font-semibold">The Concept</span>
       </div>
       <div className="mt-6 px-4">
         <nav className="mt-4 space-y-1">
