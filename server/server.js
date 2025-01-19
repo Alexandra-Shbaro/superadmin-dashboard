@@ -4,6 +4,7 @@ const cors = require("cors");
 const mysql = require("mysql2/promise");
 
 const PORT = process.env.PORT || 8080;
+const DB_PASS = process.env.DB_PASS
 
 app.use(cors());
 app.use(express.json());
@@ -11,7 +12,7 @@ app.use(express.json());
 const pool = mysql.createPool({
   host: "localhost",
   user: "root",
-  password: "alexandra",
+  password: DB_PASS,
   database: "lumi",
   port: "3307",
   waitForConnections: true,
