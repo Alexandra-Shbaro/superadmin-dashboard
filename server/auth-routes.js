@@ -1,4 +1,5 @@
 const express = require("express");
+const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 const path = require("path");
@@ -61,5 +62,46 @@ router.post("/login", async (req, res) => {
     }
 });
 
+// Create an agency admin user
+router.post("/create-agency-admin", async (req, res) => {
+    const {
+        companyTagline,
+        businessCategory,
+        companySize,
+        companyEmail,
+        companyNumber,
+        businessWebsite,
+        companyAbout,
+        companyVision,
+        companyMission,
+        companyName: username,
+        email: user_email,
+        password,
+    } = req.body;
 
+    try {
+        // Hash the password
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // SQL query to insert the user
+        const query = `
+            INSERT INTO user (username, user_email, password, user_type, user_status, user_role_id)
+            VALUES (?, ?, ?, 'Agency', 'Active', 18)
+        `;
+
+        // Execute the query
+        const result = await execute(query, [username, user_email, hashedPassword]);
+
+        res.status(201).json({
+            message: "Agency admin created successfully",
+            user_id: result.insertId,
+        });
+    } catch (error) {
+        console.error("Error creating agency admin:", error);
+        res.status(500).json({
+            message: "Failed to create agency admin",
+            error: error.message,
+        });
+    }
+});
 module.exports = router;

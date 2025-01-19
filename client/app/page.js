@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { signIn, useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation"
 import { useEffect } from 'react'
+import cryptoJs from 'crypto-js';
 
 export default function Home() {
   const searchParams = useSearchParams()
@@ -94,6 +95,23 @@ export default function Home() {
   };
 
 
+  const redirectToSignup = () => {
+    if (!allFieldsFilled) {
+      console.error("All fields must be filled out before signing up.");
+      return;
+    }
+
+    // Encrypt the form values
+    const encryptedData = cryptoJs.AES.encrypt(
+      JSON.stringify(formValues),
+      "123456789"
+    ).toString();
+
+    // Redirect to the signup page with the encrypted data as a query parameter
+    router.push(`/signup?data=${encodeURIComponent(encryptedData)}`);
+  };
+
+
   return (
     <main className="h-screen w-screen relative overflow-hidden">
       <div className={`absolute top-0 h-full transition-all duration-600 ease-in-out ${isActive ? 'translate-x-full opacity-100 z-10' : 'translate-x-0 opacity-100 z-5'} left-0 w-1/2`}>
@@ -139,15 +157,18 @@ export default function Home() {
           {!passwordsMatch && (
             <p className="text-red-500 text-sm mt-2">Passwords do not match.</p>
           )}
-         
-            <button
-              className={`bg-gradient-to-r from-[#FF8A00] to-[#FFD700] text-white text-sm px-12 py-3 rounded-lg font-semibold tracking-wider uppercase mt-3 cursor-pointer ${allFieldsFilled ? '' : 'opacity-50 cursor-not-allowed'
-                }`}
-              disabled={!allFieldsFilled}
-            >
-              Sign Up
-            </button>
-       
+
+          <button
+            type="button"
+            onClick={redirectToSignup} // Add your event listener here
+            className={`bg-gradient-to-r from-[#FF8A00] to-[#FFD700] text-white text-sm px-12 py-3 rounded-lg font-semibold tracking-wider uppercase mt-3 cursor-pointer ${allFieldsFilled ? '' : 'opacity-50 cursor-not-allowed'
+              }`}
+            disabled={!allFieldsFilled} // Disable the button if not all fields are filled
+          >
+            Sign Up
+          </button>
+
+
         </form>
       </div>
 

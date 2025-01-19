@@ -1,21 +1,32 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from "react";
 
-const StepThree = ({ onNext }) => {
-    const [companyAbout, setCompanyAbout] = useState('')
-    const [companyVision, setCompanyVision] = useState('')
-    const [companyMission, setCompanyMission] = useState('')
+const StepThree = ({ onNext, setter }) => {
+    const [companyAbout, setCompanyAbout] = useState('');
+    const [companyVision, setCompanyVision] = useState('');
+    const [companyMission, setCompanyMission] = useState('');
 
-    const isFormValid = companyAbout && companyVision && companyMission;  
+    const isFormValid = companyAbout && companyVision && companyMission;
+
+    // Update parent state with the form data
+    useEffect(() => {
+        if (isFormValid) {
+            setter({
+                companyAbout,
+                companyVision,
+                companyMission,
+            });
+        }
+    }, [companyAbout, companyVision, companyMission, isFormValid, setter]);
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-offWhite">
             <div className="text-center p-3">
                 <img
-                    src="/lumilogo.svg" 
+                    src="/lumilogo.svg"
                     alt="Lumi Logo"
-                    className="mx-auto w-42 h-20 mb-5" 
+                    className="mx-auto w-42 h-20 mb-5"
                 />
                 <p className="text-mediumGrey mb-5">Finish setting up your profile</p>
             </div>
@@ -77,7 +88,7 @@ const StepThree = ({ onNext }) => {
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default StepThree;
