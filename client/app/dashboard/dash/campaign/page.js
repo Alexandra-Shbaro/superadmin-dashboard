@@ -3,6 +3,8 @@
 import { useState } from 'react'
 import { ChevronLeft, ChevronRight, Plus, ArrowUpDown } from 'lucide-react'
 import Requests from "../components/Requests"
+import CreateCampaignForm from './components/CreateCampaign'
+
 const Button = ({ children, className, ...props }) => (
     <button
         className={`px-4 py-2 rounded-md text-sm font-medium ${className}`}
@@ -40,6 +42,7 @@ export default function CampaignManagement() {
     const [campaigns, setCampaigns] = useState(initialCampaigns);
     const [requests, setRequests] = useState(initialRequests);
     const [currentPage, setCurrentPage] = useState(1);
+    const [showCreateForm, setShowCreateForm] = useState(false);
     const campaignsPerPage = 10;
     const indexOfLastCampaign = currentPage * campaignsPerPage;
     const indexOfFirstCampaign = indexOfLastCampaign - campaignsPerPage;
@@ -56,6 +59,19 @@ export default function CampaignManagement() {
         setRequests(requests.filter(r => r.id !== request.id));
     };
 
+    const handleCreateCampaign = () => {
+        setShowCreateForm(true);
+    };
+
+    const handleCloseCreateForm = () => {
+        setShowCreateForm(false);
+    };
+
+    const handleCampaignCreated = (newCampaign) => {
+        setCampaigns([...campaigns, newCampaign]);
+        setShowCreateForm(false);
+    };
+
     const totalPages = Math.ceil(campaigns.length / campaignsPerPage);
 
     return (
@@ -64,6 +80,7 @@ export default function CampaignManagement() {
                 <h1 className="text-xl font-semibold text-softBlack">Campaign Management</h1>
                 <Button 
                     className="p-2 text-white text-sm bg-logoOrange rounded-lg hover:bg-orange-500 transition duration-300 flex items-center"
+                    onClick={handleCreateCampaign}
                 >
                     <Plus className="mr-2 h-4 w-4" />
                     New Campaign
@@ -165,6 +182,13 @@ export default function CampaignManagement() {
                     onReject={handleRejectRequest}
                 />
             </Card>
+
+            {showCreateForm && (
+                <CreateCampaignForm
+                    onClose={handleCloseCreateForm}
+                    onSuccess={handleCampaignCreated}
+                />
+            )}
         </div>
     );
 }
