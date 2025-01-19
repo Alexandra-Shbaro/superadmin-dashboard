@@ -67,15 +67,14 @@ router.post("/login", async (req, res) => {
 // Create an agency admin user
 router.post("/create-agency-admin", async (req, res) => {
     const {
-        companyTagline,
-        businessCategory,
-        companySize,
-        companyEmail,
-        companyNumber,
-        businessWebsite,
-        companyAbout,
-        companyVision,
-        companyMission,
+        companyTagline: agency_tagline,
+        businessCategory: business_category,
+        companySize: agency_size,
+        companyEmail: business_email,
+        businessWebsite: agency_website_url,
+        companyAbout: agency_about,
+        companyVision: agency_vision,
+        companyMission: agency_mission,
         companyName: username,
         email: user_email,
         password,
@@ -85,18 +84,57 @@ router.post("/create-agency-admin", async (req, res) => {
         // Hash the password
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // SQL query to insert the user
-        const query = `
+        // Insert into the `user` table
+        const userQuery = `
             INSERT INTO user (username, user_email, password, user_type, user_status, user_role_id)
             VALUES (?, ?, ?, 'Agency', 'Active', 18)
         `;
+        const userResult = await execute(userQuery, [username, user_email, hashedPassword]);
 
-        // Execute the query
-        const result = await execute(query, [username, user_email, hashedPassword]);
+        // Get the `user_id` from the inserted user
+        const user_id = userResult.insertId;
+
+        // Insert into the `agency` table
+        const agencyQuery = `
+            INSERT INTO agency (
+                user_id, 
+                subscription_plan_id, 
+                agency_tagline, 
+                business_category, 
+                agency_size, 
+                business_email, 
+                agency_website_url, 
+                agency_about, 
+                agency_vision, 
+                agency_mission
+            ) VALUES (?, 1, ?, ?, ?, ?, ?, ?, ?, ?)
+        `;
+        const agencyResult = await execute(agencyQuery, [
+            user_id,
+            agency_tagline,
+            business_category,
+            agency_size,
+            business_email,
+            agency_website_url,
+            agency_about,
+            agency_vision,
+            agency_mission,
+        ]);
+
+        // Get the `agency_id` from the inserted agency
+        const agency_id = agencyResult.insertId;
+
+        // Insert into the `agency_user_details` table
+        const agencyUserDetailsQuery = `
+            INSERT INTO agency_user_details (user_id, agency_id, role_id)
+            VALUES (?, ?, 18)
+        `;
+        await execute(agencyUserDetailsQuery, [user_id, agency_id]);
 
         res.status(201).json({
             message: "Agency admin created successfully",
-            user_id: result.insertId,
+            user_id,
+            agency_id,
         });
     } catch (error) {
         console.error("Error creating agency admin:", error);
@@ -106,4 +144,5 @@ router.post("/create-agency-admin", async (req, res) => {
         });
     }
 });
+
 module.exports = router;
