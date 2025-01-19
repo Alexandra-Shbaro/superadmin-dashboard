@@ -10,6 +10,7 @@ dotenv.config({ path: path.resolve(__dirname, "../.env") });
 const router = express.Router();
 
 // Login a user
+// Login a user
 router.post("/login", async (req, res) => {
     const { email, password } = req.body;
 
@@ -22,8 +23,9 @@ router.post("/login", async (req, res) => {
 
         const user = users[0];
 
-        // Compare the plain-text password
-        if (password !== user.password) {
+        // Compare the provided password with the hashed password stored in the database
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
             return res.status(400).json({ message: "Invalid credentials" });
         }
 

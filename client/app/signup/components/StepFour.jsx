@@ -1,13 +1,17 @@
 "use client";
-import Link from "next/link";
+
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 const StepFour = ({ onNext, finalData }) => {
 
 
+  const router = useRouter()
+
   const handleSubmit = async () => {
     try {
       // Call the create-agency-admin API
-      const response = await fetch("/api/create-agency-admin", {
+      const response = await fetch("http://localhost:8080/api/auth/create-agency-admin", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -92,7 +96,7 @@ const StepFour = ({ onNext, finalData }) => {
         <div className="flex justify-end">
 
           <button
-            onClick={onNext}
+            onClick={() => handleSubmit()}
             className="bg-logoOrange text-white px-8 py-3 rounded-lg shadow-lg hover:bg-logoYellow transition-colors duration-300 flex items-center gap-2 text-lg"
           >
             Signup
