@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { X } from 'lucide-react'
 
 export default function CreatePlatformManager({ isOpen, onClose, onSubmit }) {
@@ -32,13 +32,13 @@ export default function CreatePlatformManager({ isOpen, onClose, onSubmit }) {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    
+
     // Check if the form is valid (all required fields are filled)
     if (!e.target.checkValidity()) {
       e.target.reportValidity()
       return
     }
-    
+
     // Check if passwords match
     if (formData.temporaryPassword !== formData.confirmPassword) {
       alert('Passwords do not match')
@@ -55,6 +55,12 @@ export default function CreatePlatformManager({ isOpen, onClose, onSubmit }) {
       [name]: value
     }))
   }
+
+
+  useEffect(() => {
+    console.log(formData)
+  }, [formData])
+
 
   if (!isOpen) return null
 
@@ -110,7 +116,7 @@ export default function CreatePlatformManager({ isOpen, onClose, onSubmit }) {
                     required
                   />
                 </div>
-                
+
                 <div>
                   <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
                   <input
@@ -217,12 +223,12 @@ export default function CreatePlatformManager({ isOpen, onClose, onSubmit }) {
                     onChange={handleChange}
                     required
                   >
-                    <option value="">Relationship</option>
-                    <option value="parent">Parent</option>
-                    <option value="spouse">Spouse</option>
-                    <option value="sibling">Sibling</option>
-                    <option value="relative">Relative</option>
-                    <option value="friend">Friend</option>
+                    <option value="Relationship">Relationship</option>
+                    <option value="Parent">Parent</option>
+                    <option value="Spouse">Spouse</option>
+                    <option value="Sibling">Sibling</option>
+                    <option value="Relative">Relative</option>
+                    <option value="Friend">Friend</option>
                   </select>
                 </div>
               </div>
@@ -243,11 +249,12 @@ export default function CreatePlatformManager({ isOpen, onClose, onSubmit }) {
                       required
                     >
                       <option value="">Select Department</option>
-                      <option value="marketing">Marketing</option>
-                      <option value="sales">Sales</option>
-                      <option value="engineering">Engineering</option>
-                      <option value="humanResources">Human Resources</option>
-                      <option value="finance">Finance</option>
+                      <option value="1">Strategy</option>
+                      <option value="2">Design</option>
+                      <option value="3">Prototype</option>
+                      <option value="4">Analysis</option>
+                      <option value="5">Management</option>
+                      <option value="6">Admin</option>
                     </select>
                   </div>
                   <div>
@@ -260,9 +267,9 @@ export default function CreatePlatformManager({ isOpen, onClose, onSubmit }) {
                       required
                     >
                       <option value="">Employment Type</option>
-                      <option value="fullTime">Full Time</option>
-                      <option value="partTime">Part Time</option>
-                      <option value="contract">Contract</option>
+                      <option value="Full Time">Full Time</option>
+                      <option value="Part Time">Part Time</option>
+                      <option value="Contract">Contract</option>
                     </select>
                   </div>
                   <div className="relative">

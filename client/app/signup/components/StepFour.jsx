@@ -1,26 +1,69 @@
 "use client";
-import Link from 'next/link';
 
-const StepFour = ({ onNext }) => {
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
+
+const StepFour = ({ onNext, finalData }) => {
+
+
+  const router = useRouter()
+
+  const handleSubmit = async () => {
+    try {
+      // Call the create-agency-admin API
+      const response = await fetch("http://localhost:8080/api/auth/create-agency-admin", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(finalData),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log("Agency admin created:", result);
+
+        // Automatically sign in after successful creation
+        const loginResult = await signIn("credentials", {
+          redirect: false,
+          email: finalData.email,
+          password: finalData.password,
+        });
+
+        if (!loginResult.error) {
+          router.push("/dashboard");
+        } else {
+          console.error("Login failed:", loginResult.error);
+        }
+      } else {
+        const errorData = await response.json();
+        console.error("Error creating agency admin:", errorData);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
 
   return (
-    <div className="h-screen flex flex-col items-center justify-center px-8 py-12"
-      style={{ background: 'linear-gradient(135deg, #FF8A00 0%, #FFD700 100%)' }}>
+    <div
+      className="h-screen flex flex-col items-center justify-center px-8 py-12"
+      style={{ background: "linear-gradient(135deg, #FF8A00 0%, #FFD700 100%)" }}
+    >
       <div className="w-full max-w-7xl bg-white/90 rounded-2xl p-12 backdrop-blur-sm shadow-xl">
-
         <div className="text-center mb-12">
           <h1 className="text-softBlack font-bold text-3xl mb-3">Sign Up Complete</h1>
-          <p className="text-gray-600 text-xl"> Hi there!</p>
-          <p className="text-softBlack text-xl mt-2">We're thrilled you've joined our platform!</p>
+          <p className="text-gray-600 text-xl">Hi there!</p>
+          <p className="text-softBlack text-xl mt-2">
+            We're thrilled you've joined our platform!
+          </p>
         </div>
-
 
         <div className="w-full mb-12">
           <p className="text-softBlack text-center font-medium text-xl mb-8">
             Getting Started is Simple:
           </p>
           <div className="flex justify-between gap-6">
-
             <div className="bg-white p-8 rounded-xl w-1/3 shadow-lg text-center transition-all duration-300 hover:border-2 hover:border-logoOrange">
               <div className="flex items-center justify-center w-10 h-10 bg-logoOrange text-white rounded-full mx-auto mb-4 text-xl">
                 1
@@ -29,7 +72,6 @@ const StepFour = ({ onNext }) => {
                 Set Up Your Platform Manager Account
               </p>
             </div>
-
 
             <div className="bg-white p-8 rounded-xl w-1/3 shadow-lg text-center transition-all duration-300 hover:border-2 hover:border-logoOrange">
               <div className="flex items-center justify-center w-10 h-10 bg-logoOrange text-white rounded-full mx-auto mb-4 text-xl">
@@ -52,28 +94,28 @@ const StepFour = ({ onNext }) => {
         </div>
 
         <div className="flex justify-end">
-          <Link href="/dashboard/workspace">
-            <button
-              onClick={onNext}
-              className="bg-logoOrange text-white px-8 py-3 rounded-lg shadow-lg hover:bg-logoYellow transition-colors duration-300 flex items-center gap-2 text-lg"
+
+          <button
+            onClick={() => handleSubmit()}
+            className="bg-logoOrange text-white px-8 py-3 rounded-lg shadow-lg hover:bg-logoYellow transition-colors duration-300 flex items-center gap-2 text-lg"
+          >
+            Signup
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
             >
-              Next
-              <svg
-                className="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M14 5l7 7m0 0l-7 7m7-7H3"
-                />
-              </svg>
-            </button>
-          </Link>
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M14 5l7 7m0 0l-7 7m7-7H3"
+              />
+            </svg>
+          </button>
+
         </div>
       </div>
     </div>
