@@ -1,9 +1,10 @@
 "use client"
 
 import { useState } from 'react'
-import { ChevronLeft, ChevronRight, Plus, ArrowUpDown } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Plus, ArrowUpDown, Eye, Edit, Trash2 } from 'lucide-react'
 import Requests from "../components/Requests"
 import CreateCampaignForm from './components/CreateCampaign'
+import CampaignView from './components/CampaignView'
 
 const Button = ({ children, className, ...props }) => (
     <button
@@ -43,18 +44,18 @@ export default function CampaignManagement() {
     const [requests, setRequests] = useState(initialRequests);
     const [currentPage, setCurrentPage] = useState(1);
     const [showCreateForm, setShowCreateForm] = useState(false);
+    const [showViewCampaign, setShowViewCampaign] = useState(false);
+    const [selectedCampaign, setSelectedCampaign] = useState(null);
     const campaignsPerPage = 10;
     const indexOfLastCampaign = currentPage * campaignsPerPage;
     const indexOfFirstCampaign = indexOfLastCampaign - campaignsPerPage;
     const currentCampaigns = campaigns.slice(indexOfFirstCampaign, indexOfLastCampaign);
 
     const handleApproveRequest = (request) => {
-        // Logic to approve the request
         setRequests(requests.filter(r => r.id !== request.id));
     };
 
     const handleRejectRequest = (request, reason) => {
-        // Logic to reject the request
         console.log(`Request ${request.id} rejected. Reason: ${reason}`);
         setRequests(requests.filter(r => r.id !== request.id));
     };
@@ -70,6 +71,26 @@ export default function CampaignManagement() {
     const handleCampaignCreated = (newCampaign) => {
         setCampaigns([...campaigns, newCampaign]);
         setShowCreateForm(false);
+    };
+
+    const handleCampaignUpdated = (updatedCampaign) => {
+        setCampaigns(campaigns.map(c => c.id === updatedCampaign.id ? updatedCampaign : c));
+        setShowCreateForm(false);
+        setSelectedCampaign(null);
+    };
+
+    const handleEditCampaign = (campaign) => {
+        setSelectedCampaign(campaign);
+        setShowCreateForm(true);
+    };
+
+    const handleDeleteCampaign = (campaignId) => {
+        setCampaigns(campaigns.filter(c => c.id !== campaignId));
+    };
+
+    const handleViewCampaign = (campaign) => {
+        setSelectedCampaign(campaign);
+        setShowViewCampaign(true);
     };
 
     const totalPages = Math.ceil(campaigns.length / campaignsPerPage);
@@ -105,13 +126,16 @@ export default function CampaignManagement() {
                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                                     Status
                                 </th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                                    Actions
+                                </th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-200">
                             {currentCampaigns.map((campaign) => (
                                 <tr 
                                     key={campaign.id} 
-                                    className="hover:bg-gray-50 cursor-pointer"
+                                    className="hover:bg-gray-50"
                                 >
                                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                         {campaign.name}
@@ -132,6 +156,31 @@ export default function CampaignManagement() {
                                         >
                                             {campaign.status}
                                         </span>
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <div className="flex space-x-2">
+                                            <button
+                                                onClick={() => handleViewCampaign(campaign)}
+                                                className="text-gray-400 hover:text-gray-600"
+                                                aria-label={`View ${campaign.name}`}
+                                            >
+                                                <Eye className="h-5 w-5" />
+                                            </button>
+                                            <button
+                                                onClick={() => handleEditCampaign(campaign)}
+                                                className="text-gray-400 hover:text-gray-600"
+                                                aria-label={`Edit ${campaign.name}`}
+                                            >
+                                                <Edit className="h-5 w-5" />
+                                            </button>
+                                            <button
+                                                onClick={() => handleDeleteCampaign(campaign.id)}
+                                                className="text-red-400 hover:text-red-600"
+                                                aria-label={`Delete ${campaign.name}`}
+                                            >
+                                                <Trash2 className="h-5 w-5" />
+                                            </button>
+                                        </div>
                                     </td>
                                 </tr>
                             ))}
@@ -186,7 +235,21 @@ export default function CampaignManagement() {
             {showCreateForm && (
                 <CreateCampaignForm
                     onClose={handleCloseCreateForm}
-                    onSuccess={handleCampaignCreated}
+                    onSuccess={selectedCampaign ? handleCampaignUpdated : handleCampaignCreated}
+                    campaignToEdit={selectedCampaign}
+                />
+            )}
+
+            {showViewCampaign && selectedCampaign && (
+                <CampaignView
+                    campaign={selectedCampaign}
+                    onClose={() => setShowViewCampaign(false)}
+                    onStatusChange={(campaign, newStatus) => {
+                        setCampaigns(campaigns.map(c => 
+                            c.id === campaign.id ? {...c, status: newStatus} : c
+                        ));
+                        setShowViewCampaign(false);
+                    }}
                 />
             )}
         </div>
