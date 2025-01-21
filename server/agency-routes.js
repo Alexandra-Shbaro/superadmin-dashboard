@@ -1,15 +1,13 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const path = require("path");
-const { execute } = require("./db-utils"); // Use the execute function for database operations
+const { execute } = require("./db-utils"); 
 const bcryptjs = require("bcryptjs");
 
 dotenv.config({ path: path.resolve(__dirname, "../.env") });
 
 const router = express.Router();
 
-
-// Create Platform Manager
 router.post("/create-platform-manager", async (req, res) => {
     const {
         name,
@@ -34,25 +32,20 @@ router.post("/create-platform-manager", async (req, res) => {
     } = req.body;
 
     try {
-        // Validate required fields
         if (!email || !username || !temporaryPassword) {
             return res.status(400).json({ message: "Required fields are missing" });
         }
 
-        // Hash the password
         const hashedPassword = await bcryptjs.hash(temporaryPassword, 10);
 
-        // Insert the user into the `user` table
         const userQuery = `
             INSERT INTO user (username, user_email, password, user_type, user_status, user_role_id)
             VALUES (?, ?, ?, 'Agency', 'Active', 19)
         `;
         const userResult = await execute(userQuery, [username, email, hashedPassword]);
 
-        // Get the new user's ID
         const userId = userResult.insertId;
 
-        // Insert details into `agency_user_details`
         const agencyUserDetailsQuery = `
             INSERT INTO agency_user_details (
                 user_id, 

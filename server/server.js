@@ -1,24 +1,22 @@
 const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
-const { execute } = require("./db-utils"); // Import the execute function
-const authRoutes = require("./auth-routes"); // Import the auth routes
-const agencyRoutes = require("./agency-routes"); // Import the auth routes
+const { execute } = require("./db-utils"); 
+const authRoutes = require("./auth-routes"); 
+const agencyRoutes = require("./agency-routes"); 
 
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 8000;
 
 app.use(cors());
 app.use(express.json());
 
-// Basic route for testing
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to the Lumi API" });
 });
 
-// Use the auth routes
 app.use("/api/auth", authRoutes);
 app.use("/api/agency", agencyRoutes);
 
