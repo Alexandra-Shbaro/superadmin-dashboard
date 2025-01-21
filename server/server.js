@@ -105,7 +105,7 @@ app.post("/api/auth/register", async (req, res) => {
   }
 });
 
-// Create Platform Manager Endpoint
+// Create Platform Manager 
 app.post("/api/platform-managers", async (req, res) => {
   const token = req.headers.authorization?.split(" ")[1]; // Extract token from Authorization header
   if (!token) {
@@ -470,6 +470,151 @@ app.delete("/api/platform-managers/:id", async (req, res) => {
   } catch (error) {
       console.error("Error deleting Platform Manager:", error);
       res.status(500).json({ message: "Failed to delete Platform Manager", error: error.message });
+  }
+});
+
+//Create User 
+app.post("/api/users", async (req, res) => {
+  const token = req.headers.authorization?.split(" ")[1]; // Extract token from Authorization header
+  if (!token) {
+      return res.status(401).json({ message: "Access token is missing" });
+  }
+
+  try {
+      // Decode and verify the token
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      const { user_role_id, user_type, user_id } = decoded;
+
+      // Log the decoded token for debugging
+      console.log("Decoded Token:", decoded);
+
+      // Check if the user is authorized
+      if (user_role_id !== 18 || user_type !== "Agency") {
+          return res.status(403).json({ message: "Unauthorized: Insufficient permissions" });
+      }
+
+      // Fetch the agency_id using the user_id
+      const agencyQuery = `SELECT agency_id FROM agency WHERE user_id = ?`;
+      const agencyResult = await execute(agencyQuery, [user_id]);
+
+      if (agencyResult.length === 0) {
+          return res.status(404).json({ message: "Agency not found for the current user" });
+      }
+
+      const agency_id = agencyResult[0].agency_id;
+
+      // Extract Normal User details from request body
+      const {
+          username,
+          email: user_email,
+          password,
+          first_name,
+          last_name,
+          personal_email,
+          phone_number,
+          date_of_birth,
+          area,
+          street,
+          building,
+          emergency_contact_name,
+          emergency_contact_relationship,
+          emergency_contact_email,
+          emergency_contact_number,
+          employment_type,
+          start_date,
+          work_hours,
+          user_role_id: new_user_role_id,
+          department_id,
+      } = req.body;
+
+      // Validate user_role_id and department_id
+      if (!new_user_role_id || new_user_role_id < 1 || new_user_role_id > 17) {
+          return res.status(400).json({ message: "Invalid user_role_id. It must be between 1 and 17." });
+      }
+      if (!department_id) {
+          return res.status(400).json({ message: "department_id is required." });
+      }
+
+      // Check for required fields
+      if (!username || !user_email || !password) {
+          return res.status(400).json({ message: "Username, email, and password are required" });
+      }
+
+      // Hash the password
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+      // Insert into the user table
+      const userQuery = `
+          INSERT INTO user (username, user_email, password, user_type, requires_logout, user_status, user_role_id)
+          VALUES (?, ?, ?, 'Agency', 1, 'Active', ?)
+      `;
+      const userResult = await execute(userQuery, [username, user_email, hashedPassword, new_user_role_id]);
+
+      // Get the generated user_id
+      const new_user_id = userResult.insertId;
+
+      // Prepare parameters for agency_user_details
+      const agencyUserDetailsParams = [
+          new_user_id,
+          agency_id, // Use the agency_id fetched from the database
+          department_id,
+          new_user_role_id,
+          first_name || null,
+          last_name || null,
+          personal_email || null,
+          phone_number || null,
+          date_of_birth || null,
+          area || null,
+          street || null,
+          building || null,
+          emergency_contact_name || null,
+          emergency_contact_relationship || null,
+          emergency_contact_email || null,
+          emergency_contact_number || null,
+          employment_type || null,
+          start_date || null,
+          work_hours || null,
+      ];
+
+      // Insert into the agency_user_details table
+      const agencyUserDetailsQuery = `
+          INSERT INTO agency_user_details (
+              user_id,
+              agency_id,
+              department_id,
+              role_id,
+              first_name,
+              last_name,
+              personal_email,
+              phone_number,
+              date_of_birth,
+              area,
+              street,
+              building,
+              emergency_contact_name,
+              emergency_contact_relationship,
+              emergency_contact_email,
+              emergency_contact_number,
+              employment_type,
+              start_date,
+              work_hours
+          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `;
+      await execute(agencyUserDetailsQuery, agencyUserDetailsParams);
+
+      res.status(201).json({
+          message: "Normal user created successfully",
+          user_id: new_user_id,
+      });
+  } catch (error) {
+      console.error("Error creating Normal User:", error);
+      if (error.name === "JsonWebTokenError" || error.name === "TokenExpiredError") {
+          return res.status(401).json({ message: "Invalid or expired token" });
+      }
+      res.status(500).json({
+          message: "Failed to create Normal User",
+          error: error.message,
+      });
   }
 });
 
