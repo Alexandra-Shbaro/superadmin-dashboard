@@ -723,7 +723,6 @@ app.get("/api/users/:id", async (req, res) => {
   }
 });
 
-
 // Edit Normal User
 app.put("/api/users/:id", async (req, res) => {
   const token = req.headers.authorization?.split(" ")[1];
@@ -819,6 +818,53 @@ app.put("/api/users/:id", async (req, res) => {
   }
 });
 
+// Delete User
+app.delete("/api/users/:id", async (req, res) => {
+  const token = req.headers.authorization?.split(" ")[1];
+  if (!token) {
+      return res.status(401).json({ message: "Access token is missing" });
+  }
+
+  try {
+      // Decode and verify the token
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      const { user_role_id, user_type, user_id } = decoded;
+
+      // Check if the user is authorized
+      if (user_role_id !== 18 || user_type !== "Agency") {
+          return res.status(403).json({ message: "Unauthorized: Insufficient permissions" });
+      }
+
+      // Fetch the agency_id using the user_id
+      const agencyQuery = `SELECT agency_id FROM agency WHERE user_id = ?`;
+      const agencyResult = await execute(agencyQuery, [user_id]);
+
+      if (agencyResult.length === 0) {
+          return res.status(404).json({ message: "Agency not found for the current user" });
+      }
+
+      const agency_id = agencyResult[0].agency_id;
+
+      // Extract normal user ID from params
+      const userIdToDelete = req.params.id;
+
+      // Delete the normal user from the agency_user_details table
+      const deleteDetailsQuery = `
+          DELETE FROM agency_user_details
+          WHERE user_id = ? AND agency_id = ?
+      `;
+      await execute(deleteDetailsQuery, [userIdToDelete, agency_id]);
+
+      // Delete the normal user from the user table
+      const deleteUserQuery = `DELETE FROM user WHERE user_id = ?`;
+      await execute(deleteUserQuery, [userIdToDelete]);
+
+      res.status(200).json({ message: "Normal user deleted successfully" });
+  } catch (error) {
+      console.error("Error deleting Normal User:", error);
+      res.status(500).json({ message: "Failed to delete Normal User", error: error.message });
+  }
+});
 
 
 
