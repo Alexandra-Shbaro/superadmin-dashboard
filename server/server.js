@@ -292,6 +292,64 @@ app.get("/api/platform-managers", async (req, res) => {
   }
 });
 
+// Get details of a single Platform Manager
+app.get("/api/platform-managers/:id", async (req, res) => {
+  const token = req.headers.authorization?.split(" ")[1];
+  if (!token) {
+      return res.status(401).json({ message: "Access token is missing" });
+  }
+
+  try {
+      // Decode and verify the token
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      const { user_role_id, user_type, user_id } = decoded;
+
+      // Check if the user is authorized
+      if (user_role_id !== 18 || user_type !== "Agency") {
+          return res.status(403).json({ message: "Unauthorized: Insufficient permissions" });
+      }
+
+      // Fetch the agency_id using the user_id
+      const agencyQuery = `SELECT agency_id FROM agency WHERE user_id = ?`;
+      const agencyResult = await execute(agencyQuery, [user_id]);
+
+      if (agencyResult.length === 0) {
+          return res.status(404).json({ message: "Agency not found for the current user" });
+      }
+
+      const agency_id = agencyResult[0].agency_id;
+
+      // Extract platform manager ID from params
+      const platformManagerId = req.params.id;
+
+      // Fetch details of the platform manager
+      const platformManagerQuery = `
+          SELECT 
+              u.user_id, u.username, u.user_email, u.user_status, aud.first_name, aud.last_name, 
+              aud.personal_email, aud.phone_number, aud.date_of_birth, aud.area, aud.street, aud.building,
+              aud.emergency_contact_name, aud.emergency_contact_relationship, aud.emergency_contact_email, 
+              aud.emergency_contact_number, aud.employment_type, aud.start_date, aud.work_hours
+          FROM 
+              user u
+          INNER JOIN 
+              agency_user_details aud ON u.user_id = aud.user_id
+          WHERE 
+              aud.agency_id = ? AND aud.role_id = 19 AND aud.user_id = ?
+      `;
+      const platformManagerResult = await execute(platformManagerQuery, [agency_id, platformManagerId]);
+
+      if (platformManagerResult.length === 0) {
+          return res.status(404).json({ message: "Platform Manager not found" });
+      }
+
+      res.status(200).json(platformManagerResult[0]);
+  } catch (error) {
+      console.error("Error fetching Platform Manager details:", error);
+      res.status(500).json({ message: "Failed to fetch Platform Manager details", error: error.message });
+  }
+});
+
+
 // Edit Platform Manager
 app.put("/api/platform-managers/:id", async (req, res) => {
   const token = req.headers.authorization?.split(" ")[1];
