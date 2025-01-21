@@ -1682,6 +1682,87 @@ app.get("/api/campaigns/:id", async (req, res) => {
   }
 });
 
+//Edit Campaign
+app.put("/api/campaigns/:id", async (req, res) => {
+  const token = req.headers.authorization?.split(" ")[1];
+  if (!token) {
+      return res.status(401).json({ message: "Access token is missing" });
+  }
+
+  try {
+      // Decode and verify the token
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      const { user_role_id, user_type, user_id } = decoded;
+
+      // Check if the user is authorized
+      if (user_role_id !== 18 || user_type !== "Agency") {
+          return res.status(403).json({ message: "Unauthorized: Insufficient permissions" });
+      }
+
+      // Fetch the agency_id using the user_id
+      const agencyQuery = `SELECT agency_id FROM agency WHERE user_id = ?`;
+      const agencyResult = await execute(agencyQuery, [user_id]);
+
+      if (agencyResult.length === 0) {
+          return res.status(404).json({ message: "Agency not found for the current user" });
+      }
+
+      const agency_id = agencyResult[0].agency_id;
+
+      // Extract campaign ID and new details
+      const campaignId = req.params.id;
+      const {
+          campaign_title,
+          campaign_description,
+          campaign_start_date,
+          campaign_end_date,
+          total_budget,
+          campaign_activity,
+          campaign_status,
+          campaign_phase,
+      } = req.body;
+
+      // Validate required fields
+      if (!campaign_title || !campaign_start_date || !campaign_end_date || !total_budget) {
+          return res.status(400).json({
+              message: "campaign_title, campaign_start_date, campaign_end_date, and total_budget are required.",
+          });
+      }
+
+      // Update the campaign
+      const updateCampaignQuery = `
+          UPDATE campaign
+          SET 
+              campaign_title = ?, 
+              campaign_description = ?, 
+              campaign_start_date = ?, 
+              campaign_end_date = ?, 
+              total_budget = ?, 
+              campaign_activity = ?, 
+              campaign_status = ?, 
+              campaign_phase = ?
+          WHERE 
+              campaign_id = ?;
+      `;
+      await execute(updateCampaignQuery, [
+          campaign_title,
+          campaign_description || null,
+          campaign_start_date,
+          campaign_end_date,
+          total_budget,
+          campaign_activity || "Active",
+          campaign_status || "OnTrack",
+          campaign_phase || null,
+          campaignId,
+      ]);
+
+      res.status(200).json({ message: "Campaign updated successfully" });
+  } catch (error) {
+      console.error("Error updating campaign:", error);
+      res.status(500).json({ message: "Failed to update campaign", error: error.message });
+  }
+});
+
 
 app.use("/api/auth", authRoutes);
 app.use("/api/agency", agencyRoutes);
