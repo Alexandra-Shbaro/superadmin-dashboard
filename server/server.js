@@ -1354,6 +1354,74 @@ app.get("/api/clients/:id", async (req, res) => {
   }
 });
 
+//Edit Client 
+app.put("/api/clients/:id", async (req, res) => {
+  const token = req.headers.authorization?.split(" ")[1];
+  if (!token) {
+      return res.status(401).json({ message: "Access token is missing" });
+  }
+
+  try {
+      // Decode and verify the token
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      const { user_role_id, user_type, user_id } = decoded;
+
+      // Check if the user is authorized
+      if (user_role_id !== 18 || user_type !== "Agency") {
+          return res.status(403).json({ message: "Unauthorized: Insufficient permissions" });
+      }
+
+      // Fetch the agency_id using the user_id
+      const agencyQuery = `SELECT agency_id FROM agency WHERE user_id = ?`;
+      const agencyResult = await execute(agencyQuery, [user_id]);
+
+      if (agencyResult.length === 0) {
+          return res.status(404).json({ message: "Agency not found for the current user" });
+      }
+
+      const agency_id = agencyResult[0].agency_id;
+
+      // Extract client ID and new details
+      const clientId = req.params.id;
+      const { client_name, client_phone_number, client_email, client_website_url, client_address, client_industry } = req.body;
+
+      // Validate required fields
+      if (!client_name || !client_phone_number || !client_email) {
+          return res.status(400).json({
+              message: "client_name, client_phone_number, and client_email are required.",
+          });
+      }
+
+      // Update the client
+      const updateClientQuery = `
+          UPDATE client
+          SET 
+              client_name = ?, 
+              client_phone_number = ?, 
+              client_email = ?, 
+              client_website_url = ?, 
+              client_address = ?, 
+              client_industry = ?
+          WHERE 
+              client_id = ? AND agency_id = ?;
+      `;
+      await execute(updateClientQuery, [
+          client_name,
+          client_phone_number,
+          client_email,
+          client_website_url || null,
+          client_address || null,
+          client_industry || null,
+          clientId,
+          agency_id,
+      ]);
+
+      res.status(200).json({ message: "Client updated successfully" });
+  } catch (error) {
+      console.error("Error updating client:", error);
+      res.status(500).json({ message: "Failed to update client", error: error.message });
+  }
+});
 
 
 
