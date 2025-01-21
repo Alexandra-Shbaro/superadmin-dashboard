@@ -105,6 +105,65 @@ app.post("/api/auth/register", async (req, res) => {
   }
 });
 
+//Login Endpoint
+app.post("/api/auth/login", async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+      // Validate request body
+      if (!email || !password) {
+          return res.status(400).json({ message: "Email and password are required." });
+      }
+
+      // Fetch user by email
+      const userQuery = `SELECT * FROM user WHERE user_email = ?`;
+      const userResult = await execute(userQuery, [email]);
+
+      if (userResult.length === 0) {
+          return res.status(404).json({ message: "User not found" });
+      }
+
+      const user = userResult[0];
+
+      // Compare the provided password with the hashed password
+      const isPasswordValid = await bcrypt.compare(password, user.password);
+      if (!isPasswordValid) {
+          return res.status(401).json({ message: "Invalid credentials" });
+      }
+
+      // Generate JWT token
+      const token = jwt.sign(
+          {
+              user_id: user.user_id,
+              username: user.username,
+              user_email: user.user_email,
+              user_type: user.user_type,
+              user_status: user.user_status,
+              user_role_id: user.user_role_id,
+          },
+          process.env.JWT_SECRET,
+          { expiresIn: "1h" }
+      );
+
+      // Return success response
+      res.status(200).json({
+          message: "Login successful",
+          token,
+          user: {
+              user_id: user.user_id,
+              username: user.username,
+              user_email: user.user_email,
+              user_type: user.user_type,
+              user_status: user.user_status,
+              user_role_id: user.user_role_id,
+          },
+      });
+  } catch (error) {
+      console.error("Error during login:", error);
+      res.status(500).json({ message: "Login failed", error: error.message });
+  }
+});
+
 // Create Platform Manager 
 app.post("/api/platform-managers", async (req, res) => {
   const token = req.headers.authorization?.split(" ")[1]; // Extract token from Authorization header
