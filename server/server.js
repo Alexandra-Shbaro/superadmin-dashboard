@@ -1303,6 +1303,56 @@ app.get("/api/clients", async (req, res) => {
   }
 });
 
+//View Single client Details
+app.get("/api/clients/:id", async (req, res) => {
+  const token = req.headers.authorization?.split(" ")[1];
+  if (!token) {
+      return res.status(401).json({ message: "Access token is missing" });
+  }
+
+  try {
+      // Decode and verify the token
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      const { user_role_id, user_type, user_id } = decoded;
+
+      // Check if the user is authorized
+      if (user_role_id !== 18 || user_type !== "Agency") {
+          return res.status(403).json({ message: "Unauthorized: Insufficient permissions" });
+      }
+
+      // Fetch the agency_id using the user_id
+      const agencyQuery = `SELECT agency_id FROM agency WHERE user_id = ?`;
+      const agencyResult = await execute(agencyQuery, [user_id]);
+
+      if (agencyResult.length === 0) {
+          return res.status(404).json({ message: "Agency not found for the current user" });
+      }
+
+      const agency_id = agencyResult[0].agency_id;
+
+      // Fetch client details
+      const clientId = req.params.id;
+      const clientQuery = `
+          SELECT 
+              client_id, client_name, client_phone_number, client_email, 
+              client_website_url, client_address, client_industry
+          FROM 
+              client
+          WHERE 
+              client_id = ? AND agency_id = ?;
+      `;
+      const clientResult = await execute(clientQuery, [clientId, agency_id]);
+
+      if (clientResult.length === 0) {
+          return res.status(404).json({ message: "Client not found" });
+      }
+
+      res.status(200).json(clientResult[0]);
+  } catch (error) {
+      console.error("Error fetching client details:", error);
+      res.status(500).json({ message: "Failed to fetch client details", error: error.message });
+  }
+});
 
 
 
