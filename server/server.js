@@ -244,6 +244,54 @@ app.post("/api/platform-managers", async (req, res) => {
   }
 });
 
+// Get all Platform Managers for the agency
+app.get("/api/platform-managers", async (req, res) => {
+  const token = req.headers.authorization?.split(" ")[1];
+  if (!token) {
+      return res.status(401).json({ message: "Access token is missing" });
+  }
+
+  try {
+      // Decode and verify the token
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      const { user_role_id, user_type, user_id } = decoded;
+
+      // Check if the user is authorized
+      if (user_role_id !== 18 || user_type !== "Agency") {
+          return res.status(403).json({ message: "Unauthorized: Insufficient permissions" });
+      }
+
+      // Fetch the agency_id using the user_id
+      const agencyQuery = `SELECT agency_id FROM agency WHERE user_id = ?`;
+      const agencyResult = await execute(agencyQuery, [user_id]);
+
+      if (agencyResult.length === 0) {
+          return res.status(404).json({ message: "Agency not found for the current user" });
+      }
+
+      const agency_id = agencyResult[0].agency_id;
+
+      // Fetch platform managers for the agency
+      const platformManagersQuery = `
+          SELECT 
+              u.user_id, u.username, u.user_email, u.user_status, aud.first_name, aud.last_name, 
+              aud.personal_email, aud.phone_number, aud.date_of_birth, aud.employment_type, aud.start_date, aud.work_hours
+          FROM 
+              user u
+          INNER JOIN 
+              agency_user_details aud ON u.user_id = aud.user_id
+          WHERE 
+              aud.agency_id = ? AND aud.role_id = 19
+      `;
+      const platformManagers = await execute(platformManagersQuery, [agency_id]);
+
+      res.status(200).json(platformManagers);
+  } catch (error) {
+      console.error("Error fetching Platform Managers:", error);
+      res.status(500).json({ message: "Failed to fetch Platform Managers", error: error.message });
+  }
+});
+
 
 app.use("/api/auth", authRoutes);
 app.use("/api/agency", agencyRoutes);
