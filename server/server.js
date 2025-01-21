@@ -292,6 +292,81 @@ app.get("/api/platform-managers", async (req, res) => {
   }
 });
 
+// Edit Platform Manager
+app.put("/api/platform-managers/:id", async (req, res) => {
+  const token = req.headers.authorization?.split(" ")[1];
+  if (!token) {
+      return res.status(401).json({ message: "Access token is missing" });
+  }
+
+  try {
+      // Decode and verify the token
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      const { user_role_id, user_type, user_id } = decoded;
+
+      // Check if the user is authorized
+      if (user_role_id !== 18 || user_type !== "Agency") {
+          return res.status(403).json({ message: "Unauthorized: Insufficient permissions" });
+      }
+
+      // Fetch the agency_id using the user_id
+      const agencyQuery = `SELECT agency_id FROM agency WHERE user_id = ?`;
+      const agencyResult = await execute(agencyQuery, [user_id]);
+
+      if (agencyResult.length === 0) {
+          return res.status(404).json({ message: "Agency not found for the current user" });
+      }
+
+      const agency_id = agencyResult[0].agency_id;
+
+      // Extract platform manager ID and new details
+      const platformManagerId = req.params.id;
+      const {
+          first_name,
+          last_name,
+          personal_email,
+          phone_number,
+          date_of_birth,
+          employment_type,
+          start_date,
+          work_hours,
+      } = req.body;
+
+      // Update the platform manager in the agency_user_details table
+      const updateQuery = `
+          UPDATE agency_user_details
+          SET 
+              first_name = ?, 
+              last_name = ?, 
+              personal_email = ?, 
+              phone_number = ?, 
+              date_of_birth = ?, 
+              employment_type = ?, 
+              start_date = ?, 
+              work_hours = ?
+          WHERE 
+              user_id = ? AND agency_id = ?
+      `;
+      await execute(updateQuery, [
+          first_name || null,
+          last_name || null,
+          personal_email || null,
+          phone_number || null,
+          date_of_birth || null,
+          employment_type || null,
+          start_date || null,
+          work_hours || null,
+          platformManagerId,
+          agency_id,
+      ]);
+
+      res.status(200).json({ message: "Platform Manager updated successfully" });
+  } catch (error) {
+      console.error("Error updating Platform Manager:", error);
+      res.status(500).json({ message: "Failed to update Platform Manager", error: error.message });
+  }
+});
+
 
 app.use("/api/auth", authRoutes);
 app.use("/api/agency", agencyRoutes);
