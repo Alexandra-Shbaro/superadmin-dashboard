@@ -1868,10 +1868,6 @@ app.delete("/api/campaigns/:id", async (req, res) => {
   }
 });
 
-
-app.use("/api/auth", authRoutes);
-app.use("/api/agency", agencyRoutes);
-
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
