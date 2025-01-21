@@ -913,12 +913,13 @@ app.post("/api/teams", async (req, res) => {
           });
       }
 
-      // Insert the new team into the `team` table
+      // Insert the new team into the `team` table, including `agency_id`
       const createTeamQuery = `
-          INSERT INTO team (manager_id, team_title_id, department_id, team_name, team_description, team_status, creation_date)
-          VALUES (?, ?, ?, ?, ?, ?, CURDATE())
+          INSERT INTO team (agency_id, manager_id, team_title_id, department_id, team_name, team_description, team_status, creation_date)
+          VALUES (?, ?, ?, ?, ?, ?, ?, CURDATE())
       `;
       const result = await execute(createTeamQuery, [
+          agency_id,
           manager_id,
           team_title_id,
           department_id,
