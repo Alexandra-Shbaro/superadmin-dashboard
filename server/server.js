@@ -1467,6 +1467,117 @@ app.delete("/api/clients/:id", async (req, res) => {
   }
 });
 
+//Create Campaign
+app.post("/api/campaigns", async (req, res) => {
+  const token = req.headers.authorization?.split(" ")[1];
+  if (!token) {
+      return res.status(401).json({ message: "Access token is missing" });
+  }
+
+  try {
+      // Decode and verify the token
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      const { user_role_id, user_type, user_id } = decoded;
+
+      // Log the decoded token for debugging
+      console.log("Decoded Token:", decoded);
+
+      // Check if the user is authorized to create a campaign
+      if (user_role_id !== 18 || user_type !== "Agency") {
+          return res.status(403).json({ message: "Unauthorized: Insufficient permissions" });
+      }
+
+      // Fetch the agency_id using the user_id
+      const agencyQuery = `SELECT agency_id FROM agency WHERE user_id = ?`;
+      const agencyResult = await execute(agencyQuery, [user_id]);
+
+      if (agencyResult.length === 0) {
+          return res.status(404).json({ message: "Agency not found for the current user" });
+      }
+
+      const agency_id = agencyResult[0].agency_id;
+
+      // Extract campaign details from request body
+      const {
+          client_id,
+          campaign_title,
+          campaign_description,
+          campaign_start_date,
+          campaign_end_date,
+          strategy_start_date,
+          strategy_end_date,
+          design_start_date,
+          design_end_date,
+          prototype_start_date,
+          prototype_end_date,
+          analysis_start_date,
+          analysis_end_date,
+          total_budget,
+          advertising_spend,
+          analytics_tools,
+          campaign_activity,
+          campaign_status,
+          campaign_phase,
+      } = req.body;
+
+      // Validate required fields
+      if (!client_id || !campaign_title || !campaign_start_date || !campaign_end_date || !total_budget) {
+          return res.status(400).json({
+              message: "client_id, campaign_title, campaign_start_date, campaign_end_date, and total_budget are required.",
+          });
+      }
+
+      // Insert the new campaign into the `campaign` table
+      const createCampaignQuery = `
+          INSERT INTO campaign (
+              client_id, campaign_title, campaign_description, campaign_start_date, campaign_end_date, 
+              strategy_start_date, strategy_end_date, design_start_date, design_end_date, 
+              prototype_start_date, prototype_end_date, analysis_start_date, analysis_end_date, 
+              total_budget, advertising_spend, analytics_tools, creation_date, 
+              campaign_activity, campaign_status, campaign_phase
+          ) VALUES (
+              ?, ?, ?, ?, ?, 
+              ?, ?, ?, ?, 
+              ?, ?, ?, ?, 
+              ?, ?, ?, CURDATE(), 
+              ?, ?, ?
+          )
+      `;
+      const result = await execute(createCampaignQuery, [
+          client_id,
+          campaign_title,
+          campaign_description || null,
+          campaign_start_date,
+          campaign_end_date,
+          strategy_start_date || null,
+          strategy_end_date || null,
+          design_start_date || null,
+          design_end_date || null,
+          prototype_start_date || null,
+          prototype_end_date || null,
+          analysis_start_date || null,
+          analysis_end_date || null,
+          total_budget,
+          advertising_spend || null,
+          analytics_tools || null,
+          campaign_activity || "Active",
+          campaign_status || "OnTrack",
+          campaign_phase || null,
+      ]);
+
+      // Return success response
+      res.status(201).json({
+          message: "Campaign created successfully",
+          campaign_id: result.insertId,
+      });
+  } catch (error) {
+      console.error("Error creating Campaign:", error);
+      res.status(500).json({
+          message: "Failed to create Campaign",
+          error: error.message,
+      });
+  }
+});
 
 
 app.use("/api/auth", authRoutes);
