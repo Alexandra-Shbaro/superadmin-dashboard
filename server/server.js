@@ -996,6 +996,75 @@ app.get("/api/teams", async (req, res) => {
   }
 });
 
+//Edit Team 
+app.put("/api/teams/:id", async (req, res) => {
+  const token = req.headers.authorization?.split(" ")[1];
+  if (!token) {
+      return res.status(401).json({ message: "Access token is missing" });
+  }
+
+  try {
+      // Decode and verify the token
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      const { user_role_id, user_type, user_id } = decoded;
+
+      // Check if the user is authorized
+      if (user_role_id !== 18 || user_type !== "Agency") {
+          return res.status(403).json({ message: "Unauthorized: Insufficient permissions" });
+      }
+
+      // Fetch the agency_id using the user_id
+      const agencyQuery = `SELECT agency_id FROM agency WHERE user_id = ?`;
+      const agencyResult = await execute(agencyQuery, [user_id]);
+
+      if (agencyResult.length === 0) {
+          return res.status(404).json({ message: "Agency not found for the current user" });
+      }
+
+      const agency_id = agencyResult[0].agency_id;
+
+      // Extract team ID and new details
+      const teamId = req.params.id;
+      const { manager_id, team_title_id, department_id, team_name, team_description, team_status } = req.body;
+
+      // Validate required fields
+      if (!manager_id || !team_title_id || !department_id || !team_name || !team_status) {
+          return res.status(400).json({
+              message: "manager_id, team_title_id, department_id, team_name, and team_status are required.",
+          });
+      }
+
+      // Update the team
+      const updateTeamQuery = `
+          UPDATE team
+          SET 
+              manager_id = ?, 
+              team_title_id = ?, 
+              department_id = ?, 
+              team_name = ?, 
+              team_description = ?, 
+              team_status = ?
+          WHERE 
+              team_id = ? AND agency_id = ?;
+      `;
+      await execute(updateTeamQuery, [
+          manager_id,
+          team_title_id,
+          department_id,
+          team_name,
+          team_description || null,
+          team_status,
+          teamId,
+          agency_id,
+      ]);
+
+      res.status(200).json({ message: "Team updated successfully" });
+  } catch (error) {
+      console.error("Error updating team:", error);
+      res.status(500).json({ message: "Failed to update team", error: error.message });
+  }
+});
+
 
 
 
