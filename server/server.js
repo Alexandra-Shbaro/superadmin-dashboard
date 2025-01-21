@@ -866,6 +866,83 @@ app.delete("/api/users/:id", async (req, res) => {
   }
 });
 
+//Create Team
+app.post("/api/teams", async (req, res) => {
+  const token = req.headers.authorization?.split(" ")[1]; // Extract token from Authorization header
+  if (!token) {
+      return res.status(401).json({ message: "Access token is missing" });
+  }
+
+  try {
+      // Decode and verify the token
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      const { user_role_id, user_type, user_id } = decoded;
+
+      // Log the decoded token for debugging
+      console.log("Decoded Token:", decoded);
+
+      // Check if the user is authorized to create a team
+      if (user_role_id !== 18 || user_type !== "Agency") {
+          return res.status(403).json({ message: "Unauthorized: Insufficient permissions" });
+      }
+
+      // Fetch the agency_id using the user_id
+      const agencyQuery = `SELECT agency_id FROM agency WHERE user_id = ?`;
+      const agencyResult = await execute(agencyQuery, [user_id]);
+
+      if (agencyResult.length === 0) {
+          return res.status(404).json({ message: "Agency not found for the current user" });
+      }
+
+      const agency_id = agencyResult[0].agency_id;
+
+      // Extract team details from request body
+      const {
+          manager_id,
+          team_title_id,
+          department_id,
+          team_name,
+          team_description,
+          team_status,
+      } = req.body;
+
+      // Validate required fields
+      if (!manager_id || !team_title_id || !department_id || !team_name || !team_status) {
+          return res.status(400).json({
+              message: "manager_id, team_title_id, department_id, team_name, and team_status are required.",
+          });
+      }
+
+      // Insert the new team into the `team` table
+      const createTeamQuery = `
+          INSERT INTO team (manager_id, team_title_id, department_id, team_name, team_description, team_status, creation_date)
+          VALUES (?, ?, ?, ?, ?, ?, CURDATE())
+      `;
+      const result = await execute(createTeamQuery, [
+          manager_id,
+          team_title_id,
+          department_id,
+          team_name,
+          team_description || null,
+          team_status,
+      ]);
+
+      // Return success response
+      res.status(201).json({
+          message: "Team created successfully",
+          team_id: result.insertId,
+      });
+  } catch (error) {
+      console.error("Error creating Team:", error);
+      if (error.name === "JsonWebTokenError" || error.name === "TokenExpiredError") {
+          return res.status(401).json({ message: "Invalid or expired token" });
+      }
+      res.status(500).json({
+          message: "Failed to create Team",
+          error: error.message,
+      });
+  }
+});
 
 
 
