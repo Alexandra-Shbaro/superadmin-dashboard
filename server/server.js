@@ -1579,6 +1579,55 @@ app.post("/api/campaigns", async (req, res) => {
   }
 });
 
+//View All Campaigns
+app.get("/api/campaigns", async (req, res) => {
+  const token = req.headers.authorization?.split(" ")[1];
+  if (!token) {
+      return res.status(401).json({ message: "Access token is missing" });
+  }
+
+  try {
+      // Decode and verify the token
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      const { user_role_id, user_type, user_id } = decoded;
+
+      // Check if the user is authorized
+      if (user_role_id !== 18 || user_type !== "Agency") {
+          return res.status(403).json({ message: "Unauthorized: Insufficient permissions" });
+      }
+
+      // Fetch the agency_id using the user_id
+      const agencyQuery = `SELECT agency_id FROM agency WHERE user_id = ?`;
+      const agencyResult = await execute(agencyQuery, [user_id]);
+
+      if (agencyResult.length === 0) {
+          return res.status(404).json({ message: "Agency not found for the current user" });
+      }
+
+      const agency_id = agencyResult[0].agency_id;
+
+      // Fetch all campaigns for the agency
+      const campaignsQuery = `
+          SELECT 
+              c.campaign_id, c.campaign_title, c.campaign_description, 
+              c.campaign_start_date, c.campaign_end_date, c.total_budget, 
+              c.campaign_activity, c.campaign_status, c.campaign_phase
+          FROM 
+              campaign c
+          INNER JOIN 
+              client cl ON c.client_id = cl.client_id
+          WHERE 
+              cl.agency_id = ?;
+      `;
+      const campaigns = await execute(campaignsQuery, [agency_id]);
+
+      res.status(200).json(campaigns);
+  } catch (error) {
+      console.error("Error fetching campaigns:", error);
+      res.status(500).json({ message: "Failed to fetch campaigns", error: error.message });
+  }
+});
+
 
 app.use("/api/auth", authRoutes);
 app.use("/api/agency", agencyRoutes);
