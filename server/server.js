@@ -245,8 +245,6 @@ app.post("/api/platform-managers", async (req, res) => {
 });
 
 
-
-
 app.use("/api/auth", authRoutes);
 app.use("/api/agency", agencyRoutes);
 
