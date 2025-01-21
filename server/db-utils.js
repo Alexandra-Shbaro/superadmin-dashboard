@@ -9,7 +9,7 @@ const pool = mysql.createPool({
     user: "root",
     password: process.env.DB_PASS,
     database: "lumii",
-    port: "3307",
+    port: "3306",
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0,
